@@ -1,18 +1,13 @@
 package eu.telecomnancy.labfx.Controller;
 
-<<<<<<< HEAD
-import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import eu.telecomnancy.labfx.Connect;
-=======
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
->>>>>>> refs/remotes/origin/master
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -21,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class CreationController {
