@@ -1,6 +1,8 @@
 package eu.telecomnancy.labfx;
 
 import java.io.IOException;
+
+import eu.telecomnancy.labfx.Controller.HeaderController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -20,7 +22,7 @@ public class Main extends Application {
 
         BorderPane root = new BorderPane();
 
-        Header header = new Header();
+        HeaderController header = new HeaderController();
         root.setTop(header);
 
         primaryStage.setTitle("TelecomNancy DirectDealing");

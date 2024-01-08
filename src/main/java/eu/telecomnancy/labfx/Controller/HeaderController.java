@@ -1,10 +1,10 @@
-package eu.telecomnancy.labfx;
+package eu.telecomnancy.labfx.Controller;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-public class Header extends HBox {
-    public Header() {
+public class HeaderController extends HBox {
+    public HeaderController() {
         Label titleLabel = new Label("Ici le header");
         getChildren().add(titleLabel);
     }
