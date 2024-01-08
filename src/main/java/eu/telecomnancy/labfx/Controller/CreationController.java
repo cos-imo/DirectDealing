@@ -1,10 +1,18 @@
 package eu.telecomnancy.labfx.Controller;
 
+import java.io.IOException;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class CreationController {
     @FXML
@@ -16,9 +24,9 @@ public class CreationController {
     @FXML
     private TextField emailConfirmField;
     @FXML
-    private PasswordField passwordField;
+    private PasswordField mdpField;
     @FXML
-    private PasswordField passwordConfirmField;
+    private PasswordField mdpConfirmField;
     @FXML
     private Button createAccount;
     @FXML
@@ -27,16 +35,36 @@ public class CreationController {
     private Label errorLabel;
 
     @FXML
-    private void setCreateAccountBtn(){
-        String prenom = prenomField.getText();
-        String nom = nomField.getText();
-        String email = emailField.getText();
-        String emailConfirm = emailConfirmField.getText();
-        String password = passwordField.getText();
-        String passwordConfirm = passwordConfirmField.getText();
-        if (infosValid(prenom, nom, email, emailConfirm, password, passwordConfirm)){
-            //TODO : create account
+    private void setGoToConnectBtn(ActionEvent event){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Connexion.fxml"));
+
+        Scene scene;
+        try {
+            scene = new Scene(loader.load(), 1080, 720);
+            Node source = (Node) event.getSource();
+            Stage primaryStage = (Stage) source.getScene().getWindow();
+
+            primaryStage.setTitle("TelecomNancy DirectDealing");
+
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
+    }
+    @FXML
+    private void setCreateAccountBtn(){
+        // String prenom = prenomField.getText();
+        // String nom = nomField.getText();
+        // String email = emailField.getText();
+        // String emailConfirm = emailConfirmField.getText();
+        // String password = mdpField.getText();
+        // String passwordConfirm = mdpConfirmField.getText();
+        // if (infosValid(prenom, nom, email, emailConfirm, password, passwordConfirm)){
+        //     //TODO : create account
+        // }
     }
     
     private boolean infosValid(String prenom, String nom, String email, String emailConfirm, String password, String passwordConfirm){
