@@ -43,12 +43,12 @@ public class ConnexionController {
             e.printStackTrace();
         }
     }
-    
+
     @FXML
     private void setConnectAccountBtn(Event event){
         String email = emailField.getText();
         String password = mdpField.getText();
-        if ((email.equals("a")&& password.equals("a")) || infosExist(email, password)){
+        if (infosExist(email, password)){
             BorderPane root = new BorderPane();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
 
@@ -79,23 +79,24 @@ public class ConnexionController {
         try {
             connect = new Connect();
             Connection connection = connect.getConnection();
-            Statement stmt = connection.createStatement();
+            statement = connection.createStatement();
             String query = """
-                    SELECT * FROM users WHERE email = ? AND password = ?;
+                    SELECT * FROM User WHERE Mail = ? AND Password = ?;
                     """;
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, email);
             pstmt.setString(2, password);
 
             ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                res = true;
+            if (!rs.isClosed()){ //Se ferme si la requête est vide
+                pstmt.close();
+                connection.close();
+                return true;
             }
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-        connect.close();
         return res;   
     }
 

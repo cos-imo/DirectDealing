@@ -28,12 +28,4 @@ public class Connect {
         connection.setAutoCommit(false);
         return connection;
     }
-
-    public void close() {
-        try {
-            this.getConnection().close();
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la fermeture de la connexion : " + e.getMessage());
-        }
-    }
 }
