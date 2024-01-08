@@ -69,7 +69,7 @@ goto fail
 @rem Setup the command line
 
 set CLASSPATH=
-set MODULE_PATH=%APP_HOME%\lib\labfx-1.0-SNAPSHOT.jar;%APP_HOME%\lib\javafx-fxml-17-mac.jar;%APP_HOME%\lib\javafx-controls-17-mac.jar;%APP_HOME%\lib\javafx-graphics-17-mac.jar;%APP_HOME%\lib\javafx-base-17-mac.jar
+set MODULE_PATH=%APP_HOME%\lib\labfx-1.0-SNAPSHOT.jar;%APP_HOME%\lib\javafx-fxml-17-linux.jar;%APP_HOME%\lib\javafx-controls-17-linux.jar;%APP_HOME%\lib\javafx-graphics-17-linux.jar;%APP_HOME%\lib\javafx-base-17-linux.jar
 
 @rem Execute labfx
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %LABFX_OPTS%  -classpath "%CLASSPATH%" --module-path "%MODULE_PATH%" --module eu.telecomnancy.labfx/eu.telecomnancy.labfx.Main %*

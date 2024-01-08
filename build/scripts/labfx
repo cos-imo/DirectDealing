@@ -114,7 +114,7 @@ esac
 
 CLASSPATH="\\\"\\\""
 
-MODULE_PATH=$APP_HOME/lib/labfx-1.0-SNAPSHOT.jar:$APP_HOME/lib/javafx-fxml-17-mac.jar:$APP_HOME/lib/javafx-controls-17-mac.jar:$APP_HOME/lib/javafx-graphics-17-mac.jar:$APP_HOME/lib/javafx-base-17-mac.jar
+MODULE_PATH=$APP_HOME/lib/labfx-1.0-SNAPSHOT.jar:$APP_HOME/lib/javafx-fxml-17-linux.jar:$APP_HOME/lib/javafx-controls-17-linux.jar:$APP_HOME/lib/javafx-graphics-17-linux.jar:$APP_HOME/lib/javafx-base-17-linux.jar
 
 
 # Determine the Java command to use to start the JVM.
