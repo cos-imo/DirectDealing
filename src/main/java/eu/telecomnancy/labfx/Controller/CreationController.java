@@ -38,6 +38,7 @@ public class CreationController {
             //TODO : create account
         }
     }
+    
     private boolean infosValid(String prenom, String nom, String email, String emailConfirm, String password, String passwordConfirm){
         if (isNameValid(prenom) && isNameValid(nom)) {
             if (isEmailValid(email) && email.equals(emailConfirm)){
@@ -60,8 +61,8 @@ public class CreationController {
             else{
                 errorLabel.setText("Le nom et le prénom doivent être composés uniquement de lettres");
             }
-            errorLabel.setVisible(true);
-            return false;
+        errorLabel.setVisible(true);
+        return false;
     }
 
     private boolean isNameValid(String name){
