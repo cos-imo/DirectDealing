@@ -26,7 +26,7 @@
                <graphic>
                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                     <Image url="https://cdn-icons-png.flaticon.com/512/5777/5777935.png" />
+                     <Image url="@../images/calendar.png" />
                   </image>
                </ImageView>
                </graphic>
@@ -41,7 +41,7 @@
                <graphic>
                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                     <Image url="https://cdn-icons-png.flaticon.com/512/1369/1369860.png" />
+                     <Image url="@../images/coin.png" />
                   </image>
                </ImageView>
                </graphic>
@@ -51,7 +51,7 @@
                <graphic>
                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                     <Image url="https://cdn-icons-png.flaticon.com/512/61/61205.png" />
+                     <Image url="@../images/account.png" />
                   </image>
                </ImageView>
                </graphic>
