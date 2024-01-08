@@ -25,7 +25,7 @@ public class Connect {
         } catch (Exception e) {
             System.out.println("Erreur de connexion à la base de données : " + e.getMessage());
         }
-
+        connection.setAutoCommit(false);
         return connection;
     }
 

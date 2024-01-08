@@ -1,5 +1,6 @@
 package eu.telecomnancy.labfx.Controller;
 
+import javafx.concurrent.Worker.State;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,7 +48,6 @@ public class ConnexionController {
             try {
                 root.setCenter(loader.load());
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
@@ -63,9 +63,28 @@ public class ConnexionController {
     }
     private boolean infosExist(String email, String password){
         boolean res = false;
-        Connect connection = new Connect();
-        //TODO: SQL request to check if email and password exist
-        connection.close();
+        Connect connect = null;
+        Statement statement = null;
+        try {
+            connect = new Connect();
+            Connection connection = connect.getConnection();
+            Statement stmt = connection.createStatement();
+            String query = """
+                    SELECT * FROM users WHERE email = ? AND password = ?;
+                    """;
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                res = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        connect.close();
         return res;   
     }
 
