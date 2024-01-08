@@ -1,0 +1,93 @@
+@startuml
+class User {
++User_id: int
++First_Name: String
++Last_Name: String
++Mail: Mail
++Password: String
++Photo_profil: Image
++note: int
+}
+
+class Florain {
++florain: int
+}
+
+class Calendrier {
++DateDebut: Date
+}
+
+
+
+
+class Event {
++Name: String
++note: int
++DateDebut: Date
++DateFin: Date
+}
+
+enum Recurrence {
+NON
+QUOTIDIEN
+HEBDO
+MENSUEL
+}
+
+enum EventType {
+PRÊTSERVICE
+PRÊTOBJET
+EMPRUNTSERVICE
+EMPRUNTOBJET
+}
+
+
+class Message {
++DateEnvoi: Date
++Contenu: String
+}
+
+abstract class Ressource {
++Name: String
++Desc: String
++DateDebut: Date
++DateFin: Date
++Localisation: (int,int)
+}
+
+class Service {
+}
+
+class Objet {}
+
+enum ModeAffichage {
+JOUR
+SEMAINE
+MOIS
+}
+
+Event "2" --> "0-*" User : prêteur, emprunteur
+Event "1" --> Recurrence : reccurence
+Event "1" --> EventType : type
+Event "1" --> Ressource : ressource
+
+Service --|> Ressource
+
+Objet --|> Ressource
+
+Ressource "1" --> Recurrence
+Ressource "1" --> Florain : prix
+
+Calendrier --> User
+Calendrier "1" --> ModeAffichage
+
+Message --> Ressource : ressource
+Message "2" --> User
+
+User "0-*" --> Ressource
+User "1" --> Florain : Wallet
+
+
+
+
+@enduml
