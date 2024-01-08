@@ -32,6 +32,10 @@ public class Main extends Application {
         FXMLLoader accueilLoader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
         BorderPane accueilContent = accueilLoader.load();
 
+<<<<<<< HEAD
+=======
+        Scene scene = new Scene(loader.load(), 1080, 720);
+>>>>>>> refs/remotes/origin/master
 
 
         AccueilController accueilController = accueilLoader.getController();
