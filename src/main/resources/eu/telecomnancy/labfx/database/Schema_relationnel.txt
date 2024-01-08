@@ -41,11 +41,11 @@ Table Message:
 
 CREATE TABLE User (
     User_id INTEGER PRIMARY KEY,
-    First_Name TEXT,
-    Name TEXT,
-    Mail TEXT,
-    Password TEXT,
-    Photo_profil BLOB, -- Assumption: Image data is stored as BLOB
+    First_Name TEXT NOT NULL,
+    Name TEXT NOT NULL,
+    Mail TEXT NOT NULL,
+    Password TEXT NOT NULL,
+    Photo_profil BLOB DEFAULT , -- Assumption: Image data is stored as BLOB
     Wallet INTEGER
 );
 
