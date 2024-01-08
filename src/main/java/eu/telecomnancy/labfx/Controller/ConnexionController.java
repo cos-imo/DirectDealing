@@ -38,14 +38,18 @@ public class ConnexionController {
         String password = mdpField.getText();
         if ((email.equals("a")&& password.equals("a")) || infosExist(email, password)){
             BorderPane root = new BorderPane();
-            System.out.println("Connexion réussie !");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
 
             Scene scene = new Scene(root, 1080, 720);
 
             HeaderController header = new HeaderController();
             root.setTop(header);
-            root.setCenter(loader.getRoot());
+            try {
+                root.setCenter(loader.load());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
             Node source = (Node) event.getSource();
             Stage primaryStage = (Stage) source.getScene().getWindow();
