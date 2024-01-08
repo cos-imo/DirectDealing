@@ -10,6 +10,7 @@
          <top>
            <HBox prefHeight="100.0" prefWidth="1080.0" BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1"> 
              <fx:include source="Header.fxml"/> 
+             <Button fx:id="btnOpenCalendar" text="Ouvrir le calendrier" onAction="#openCalendar"/>
            </HBox>
          </top>
       </BorderPane>
