@@ -59,7 +59,7 @@ public class CreationController {
 
     }
     @FXML
-    private void setCreateAccountBtn(){
+    private void setCreateAccountBtn() throws SQLException{
         String prenom = prenomField.getText();
         String nom = nomField.getText();
         String email = emailField.getText();
