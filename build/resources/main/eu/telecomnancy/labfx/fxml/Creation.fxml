@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.ConnexionController">
+   <children>
+      <GridPane layoutX="-1.0" layoutY="-1.0" prefHeight="720.0" prefWidth="1080.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="354.0" minWidth="0.0" prefWidth="192.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="950.0" minWidth="10.0" prefWidth="657.5" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="243.5" minWidth="0.0" prefWidth="208.5" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="233.0" minHeight="0.0" prefHeight="36.5" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="667.0" minHeight="10.0" prefHeight="618.5" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="79.5" minHeight="0.0" prefHeight="48.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="9.0" prefHeight="58.0" prefWidth="951.0" text="Créer votre compte" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="102.0" prefWidth="307.0">
+                           <children>
+                              <Label prefHeight="34.0" prefWidth="329.0" text="Prénom :" />
+                              <TextField fx:id="prenomField" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="98.0" prefWidth="360.0">
+                           <children>
+                              <Label contentDisplay="RIGHT" prefHeight="34.0" prefWidth="329.0" text="Nom :">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="prenomField" prefHeight="25.0" prefWidth="285.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <padding>
+                              <Insets left="40.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="102.0" prefWidth="307.0">
+                           <children>
+                              <Label prefHeight="34.0" prefWidth="329.0" text="Email :" />
+                              <TextField fx:id="emailField" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="98.0" prefWidth="360.0">
+                           <children>
+                              <Label contentDisplay="RIGHT" prefHeight="34.0" prefWidth="329.0" text="Confirmation de votre Email :">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="emailConfirmField">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets left="40.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="102.0" prefWidth="307.0">
+                           <children>
+                              <Label prefHeight="34.0" prefWidth="329.0" text="Mot de passe :" />
+                              <PasswordField fx:id="mdpField" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="100.0" prefWidth="347.0">
+                           <children>
+                              <Label prefHeight="34.0" prefWidth="329.0" text="Confirmation mot de passe :">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Label>
+                              <PasswordField fx:id="mdpConfirmField" />
+                           </children>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <padding>
+                              <Insets left="40.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Label fx:id="errorLabel" disable="true" prefHeight="16.0" prefWidth="299.0" text="Label" textFill="RED">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="createAccount" alignment="CENTER" mnemonicParsing="false" onAction="#setCreateAccountBtn" text="Créer" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Label prefHeight="40.0" prefWidth="118.0" text="Déjà un compte ?" />
+                  <Button fx:id="goToConnect" mnemonicParsing="false" text="Se connecter" />
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+   </children>
+</Pane>

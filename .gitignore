@@ -3,3 +3,7 @@
 .ideas
 .vscode
 /build
+*.Class
+*.bin
+*.lock
+
