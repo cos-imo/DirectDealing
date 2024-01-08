@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.application.Platform;
 
 public class Main extends Application {
@@ -16,19 +17,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        primaryStage.setTitle("JavaFx Demo");
 
-        Button button = new Button("Click Me!");
+        BorderPane root = new BorderPane();
 
-        ImageView imageView = new ImageView(getClass().getResource("/eu/telecomnancy/labfx/images/kawai.png").toExternalForm());
-        button.setGraphic(imageView);
+        Header header = new Header();
+        root.setTop(header);
 
-        button.setOnAction(e -> {
-            System.out.println("Bye!");
-            Platform.exit();
-        });
+        primaryStage.setTitle("TelecomNancy DirectDealing");
 
-        Scene scene = new Scene(button, 400, 400);
+        Scene scene = new Scene(root, 400, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
