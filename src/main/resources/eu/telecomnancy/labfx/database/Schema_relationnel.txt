@@ -93,3 +93,5 @@ DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Ressource;
 DROP TABLE IF EXISTS Event;
 DROP TABLE IF EXISTS Message;
+
+INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("a", "a", "a", "a");
