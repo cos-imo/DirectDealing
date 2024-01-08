@@ -23,8 +23,6 @@ public class Main extends Application {
 
         BorderPane root = new BorderPane();
 
-
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
 
         Scene scene = new Scene(loader.load(), 1080, 720);
