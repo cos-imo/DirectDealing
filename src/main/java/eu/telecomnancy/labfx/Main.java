@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import eu.telecomnancy.labfx.Controller.HeaderController;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -22,12 +23,17 @@ public class Main extends Application {
 
         BorderPane root = new BorderPane();
 
+
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
+
+        Scene scene = new Scene(loader.load(), 400, 400);
+
         HeaderController header = new HeaderController();
         root.setTop(header);
 
         primaryStage.setTitle("TelecomNancy DirectDealing");
 
-        Scene scene = new Scene(root, 400, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
