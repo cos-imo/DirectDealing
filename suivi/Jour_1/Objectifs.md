@@ -11,12 +11,12 @@ Réaliser un livrable permettant de créer un compte ou de se connecter à un co
 5. Implémenter l'accès à la base de données en Java
 6. Créer une interface graphique en JavaFXML
 7. Implémenter l'interface graphique en Java
-8. Relier l'interface graphique à la base de données
+8. Relier le programme à la base de données
 
 ## Tâches effectuées :
 
-1,2,3,4,6,7
+1,2,3,4,5,6,7
 
 ## Tâches restantes :
 
-5,8
+8

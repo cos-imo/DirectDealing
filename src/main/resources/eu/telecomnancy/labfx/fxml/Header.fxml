@@ -31,7 +31,9 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button minWidth="-Infinity" mnemonicParsing="false" text="100.00">
+            <VBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="-3.0" prefHeight="20.0" prefWidth="70.0">
+            <Label alignment="TOP_RIGHT" minWidth="-Infinity" text="NOM Prénom" />
+            <Label text="100" prefWidth="100.0">
                <graphic>
                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
@@ -39,8 +41,8 @@
                   </image>
                </ImageView>
                </graphic>
-            </Button>
-            <Label alignment="TOP_RIGHT" minWidth="-Infinity" text="NOM Prénom" />
+            </Label>
+            </VBox>
             <Button minWidth="-Infinity" mnemonicParsing="false" text="Mon Compte">
                <graphic>
                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">

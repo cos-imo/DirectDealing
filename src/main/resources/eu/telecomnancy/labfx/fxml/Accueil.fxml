@@ -3,9 +3,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.fxml.FXMLLoader?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-
+<?import javafx.fxml.FXMLLoader?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="1080.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
       <BorderPane prefHeight="200.0" prefWidth="200.0">
@@ -14,5 +19,40 @@
              <fx:include source="Header.fxml"/> 
            </HBox>
          </top>
+      <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+        <children>
+          <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+            <children>
+                  <VBox alignment="CENTER" layoutY="-1.0" prefHeight="720.0" prefWidth="1080.0">
+                    <children>
+                    <Label alignment="CENTER" style="&#10;" text="DirectDealing" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
+                      <font>
+                        <Font size="50.0" />
+                      </font>
+                    </Label>
+                        <Label alignment="CENTER" style="&#10;" text="v 0.1" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
+                          <font>
+                              <Font size="14.0" />
+                          </font>
+                          <VBox.margin>
+                              <Insets top="10.0" />
+                          </VBox.margin>
+                        </Label>
+                        <TextField maxWidth="200.0" minWidth="200.0" prefWidth="200.0">
+                          <VBox.margin>
+                              <Insets top="10.0" />
+                          </VBox.margin></TextField>
+                        <Button mnemonicParsing="false" text="Proposer">
+                          <VBox.margin>
+                              <Insets top="10.0" />
+                          </VBox.margin>
+                        </Button>
+                    </children>
+                  </VBox>
+            </children>
+          </AnchorPane>
+            <TextField />
+        </children>
+      </VBox>
       </BorderPane>
 </AnchorPane>

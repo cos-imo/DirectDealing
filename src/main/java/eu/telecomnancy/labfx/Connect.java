@@ -16,15 +16,10 @@ public class Connect {
         Connection connection = null;
 
         try {
-            String dbPath = Paths.get("src", "main", "resources", "eu", "telecomnancy", "labfx", "database", "data.db").toAbsolutePath().toString();
+            String dbPath = Paths.get("src","main","resources","eu", "telecomnancy", "labfx", "database", "data.db").toAbsolutePath().toString();
 
             // Charger le pilote JDBC SQLite
             Class.forName("org.sqlite.JDBC");
-
-            // Créer une connexion à la base de données
-            connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-
-            // Créer une connexion à la base de données
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
             System.out.println("Connexion à la base de données réussie !");
         } catch (Exception e) {
@@ -32,5 +27,13 @@ public class Connect {
         }
 
         return connection;
+    }
+
+    public void close() {
+        try {
+            this.getConnection().close();
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la fermeture de la connexion : " + e.getMessage());
+        }
     }
 }
