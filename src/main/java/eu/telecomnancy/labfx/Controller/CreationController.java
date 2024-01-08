@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class CreationController {
@@ -59,7 +60,7 @@ public class CreationController {
 
     }
     @FXML
-    private void setCreateAccountBtn() throws SQLException{
+    private void setCreateAccountBtn(ActionEvent event) throws SQLException{
         String prenom = prenomField.getText();
         String nom = nomField.getText();
         String email = emailField.getText();
@@ -69,6 +70,7 @@ public class CreationController {
         if (infosValid(prenom, nom, email, emailConfirm, password, passwordConfirm)){
             if (createAccount(prenom, nom, email, password)){
                 System.out.println("Compte créé");
+                redirectToAccueil(event);
             }
             else{
                 System.out.println("Erreur lors de la création du compte");
@@ -134,5 +136,28 @@ public class CreationController {
     }
     private boolean isPasswordValid(String name){
         return name.matches("[a-zA-Z0-9]+");
+    }
+    private void redirectToAccueil(ActionEvent event){
+        
+        BorderPane root = new BorderPane();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
+
+        Scene scene = new Scene(root, 1080, 720);
+
+        HeaderController header = new HeaderController();
+        root.setTop(header);
+        try {
+            root.setCenter(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Node source = (Node) event.getSource();
+        Stage primaryStage = (Stage) source.getScene().getWindow();
+
+        primaryStage.setTitle("TelecomNancy DirectDealing");
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }
