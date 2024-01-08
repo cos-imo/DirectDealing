@@ -19,4 +19,4 @@ Réaliser un livrable permettant de créer un compte ou de se connecter à un co
 
 ## Tâches restantes :
 
-5,8
+8
