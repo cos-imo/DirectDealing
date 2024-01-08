@@ -58,10 +58,11 @@ CREATE TABLE Ressource (
     Desc TEXT NOT NULL,
     DateDebut DATE NOT NULL,
     DateFin DATE NOT NULL,
-    Localisation (float,float) NOT NULL,
+    LocalisationLongitude float NOT NULL,
+    LocalisationLatitude float NOT NULL,
     type INTEGER NOT NULL, -- Assumption: 0 = service, 1 = prêt
     Prix INTEGER NOT NULL
-)
+);
 -- EVENT --
 
 CREATE TABLE Event (

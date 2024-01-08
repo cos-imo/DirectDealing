@@ -52,7 +52,8 @@ abstract class Ressource {
 +Desc: String
 +DateDebut: Date
 +DateFin: Date
-+Localisation: (int,int)
++LocalisationLongitude: int
++LocalisationLatitude: int
 }
 
 class Service {
