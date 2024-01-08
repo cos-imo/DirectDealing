@@ -1,6 +1,7 @@
 package eu.telecomnancy.labfx.Controller;
 
 import javafx.concurrent.Worker.State;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,9 +31,19 @@ public class ConnexionController {
     private Label errorLabel;
     
     @FXML
-    private void setGoToCreateBtn(){
-        //TODO : go to create account page
+    private void setGoToCreateBtn(ActionEvent event){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Creation.fxml"));
+        Scene scene;
+        try {
+            scene = new Scene(loader.load(), 1080, 720);
+            Node source = (Node) event.getSource();
+            Stage primaryStage = (Stage) source.getScene().getWindow();
+            primaryStage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+    
     @FXML
     private void setConnectAccountBtn(Event event){
         String email = emailField.getText();

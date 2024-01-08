@@ -13,8 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.ConnexionController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.CreationController">
    <children>
       <GridPane layoutX="-1.0" layoutY="-1.0" prefHeight="720.0" prefWidth="1080.0">
         <columnConstraints>
@@ -53,7 +52,7 @@
                                     <Insets left="10.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextField fx:id="prenomField" prefHeight="25.0" prefWidth="285.0">
+                              <TextField fx:id="nomField" prefHeight="25.0" prefWidth="285.0">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
@@ -138,7 +137,7 @@
                      </font>
                   </Button>
                   <Label prefHeight="40.0" prefWidth="118.0" text="Déjà un compte ?" />
-                  <Button fx:id="goToConnect" mnemonicParsing="false" text="Se connecter" />
+                  <Button fx:id="goToConnect" mnemonicParsing="false" onAction="#setGoToConnectBtn" text="Se connecter" />
                </children>
             </VBox>
          </children>
