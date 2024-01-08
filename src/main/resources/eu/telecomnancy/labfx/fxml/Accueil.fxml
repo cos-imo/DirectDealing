@@ -42,11 +42,11 @@
                           <VBox.margin>
                               <Insets top="10.0" />
                           </VBox.margin></TextField>
-                        <Button mnemonicParsing="false" text="Proposer">
-                          <VBox.margin>
+                        <!-- <Button mnemonicParsing="false" text="Proposer" fx:controller="eu.telecomnancy.labfx.Controller.AccueilController" onAction="chargerProposer()"> -->
+                          <!-- <VBox.margin>
                               <Insets top="10.0" />
                           </VBox.margin>
-                        </Button>
+                        </Button> -->
                     </children>
                   </VBox>
             </children>
