@@ -88,7 +88,9 @@ public class CreationController {
 
             // Requête d'insertion
             int rowsAffected = preparedStatement.executeUpdate();
-
+            preparedStatement.close();
+            connection.commit();
+            connection.close();
             // Retourner vrai si une ligne a été insérée, faux sinon
             return rowsAffected > 0;
             }
