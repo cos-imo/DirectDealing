@@ -36,29 +36,24 @@ public class ConnexionController {
     private void setConnectAccountBtn(Event event){
         String email = emailField.getText();
         String password = mdpField.getText();
-        if ((email == "a" && password == "a") || infosExist(email, password)){
+        if ((email.equals("a")&& password.equals("a")) || infosExist(email, password)){
             BorderPane root = new BorderPane();
             System.out.println("Connexion réussie !");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
 
-            Scene scene;
-            try {
-                scene = new Scene(loader.load(), 1080, 720);
+            Scene scene = new Scene(root, 1080, 720);
 
-                HeaderController header = new HeaderController();
-                root.setTop(header);
+            HeaderController header = new HeaderController();
+            root.setTop(header);
+            root.setCenter(loader.getRoot());
 
-                Node source = (Node) event.getSource();
-                Stage primaryStage = (Stage) source.getScene().getWindow();
+            Node source = (Node) event.getSource();
+            Stage primaryStage = (Stage) source.getScene().getWindow();
 
-                primaryStage.setTitle("TelecomNancy DirectDealing");
+            primaryStage.setTitle("TelecomNancy DirectDealing");
 
-                primaryStage.setScene(scene);
-                primaryStage.show();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            primaryStage.setScene(scene);
+            primaryStage.show();
 
         }
     }
