@@ -66,15 +66,20 @@ public class CreationController {
     }
     @FXML
     private void setCreateAccountBtn(){
-        // String prenom = prenomField.getText();
-        // String nom = nomField.getText();
-        // String email = emailField.getText();
-        // String emailConfirm = emailConfirmField.getText();
-        // String password = mdpField.getText();
-        // String passwordConfirm = mdpConfirmField.getText();
-        // if (infosValid(prenom, nom, email, emailConfirm, password, passwordConfirm)){
-        //     //TODO : create account
-        // }
+        String prenom = prenomField.getText();
+        String nom = nomField.getText();
+        String email = emailField.getText();
+        String emailConfirm = emailConfirmField.getText();
+        String password = mdpField.getText();
+        String passwordConfirm = mdpConfirmField.getText();
+        if (infosValid(prenom, nom, email, emailConfirm, password, passwordConfirm)){
+            if (createAccount(prenom, nom, email, password)){
+                System.out.println("Compte créé");
+            }
+            else{
+                System.out.println("Erreur lors de la création du compte");
+            }
+        }
     }
 
     private boolean createAccount(String prenom, String nom, String email, String password) throws SQLException{
