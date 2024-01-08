@@ -40,47 +40,54 @@ Table Message:
 -- USER --
 
 CREATE TABLE User (
-    User_id INTEGER PRIMARY KEY,
-    First_Name TEXT,
-    Name TEXT,
-    Mail TEXT,
-    Password TEXT,
-    Photo_profil BLOB, -- Assumption: Image data is stored as BLOB
-    Wallet INTEGER
+    User_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    First_Name TEXT NOT NULL,
+    Name TEXT NOT NULL,
+    Mail TEXT NOT NULL,
+    Password TEXT NOT NULL,
+    Photo_profil BLOB DEFAULT "/Users/gabrieldecave/Telecom/2A/PCD/CodingWeek/codingweek-24/src/main/resources/eu/telecomnancy/labfx/images/avatar_default.avif", -- Assumption: Image data is stored as BLOB
+    Wallet INTEGER DEFAULT 0
 );
 
 -- EVENT --
 
 CREATE TABLE Event (
-    Event_id INTEGER PRIMARY KEY,
-    type INTEGER, -- Assumption: 0 = service, 1 = prêt
-    Name TEXT,
-    preteur_id INTEGER REFERENCES User(User_id),
+    Event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type INTEGER NOT NULL, -- Assumption: 0 = service, 1 = prêt
+    Name TEXT NOT NULL,
+    preteur_id INTEGER REFERENCES User(User_id) NOT NULL,
     acheteur_id INTEGER REFERENCES User(User_id),
-    Recurrence INTEGER, -- Assumption: 0 = non, 1 = quotidien, 2 = mensuel, 3 = hebdomadaire
+    Recurrence INTEGER NOT NULL, -- Assumption: 0 = non, 1 = quotidien, 2 = mensuel, 3 = hebdomadaire
     Localisation TEXT,
-    Duree REAL, -- en heure
-    Couleur INTEGER, -- Assumption: 0 = Blanc(rien), 1 = Couleur1(prêteur dispo), 2 = Couleur2(prêteur avec créneau réservé), 3 = Couleur3(client avec créneau réservé)
-    Prix INTEGER
+    Duree REAL, -- en minute
+    Couleur INTEGER DEFAULT 0, -- Assumption: 0 = Blanc(rien), 1 = Couleur1(prêteur dispo), 2 = Couleur2(prêteur avec créneau réservé), 3 = Couleur3(client avec créneau réservé)
+    Prix INTEGER NOT NULL
 );
 
 -- AVIS --
 
 CREATE TABLE Avis (
-    Avis_id INTEGER PRIMARY KEY,
-    Note INTEGER,
+    Avis_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Note INTEGER NOT NULL,
     Commentaire TEXT,
-    Auteur_id INTEGER REFERENCES User(User_id),
-    Receveur_id INTEGER REFERENCES User(User_id),
-    Date DATE
+    Auteur_id INTEGER REFERENCES User(User_id) NOT NULL,
+    Receveur_id INTEGER REFERENCES User(User_id) NOT NULL,
+    Date DATE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- MESSAGE -- 
 
 CREATE TABLE Message (
-    Message_id INTEGER PRIMARY KEY,
-    Event_lie_id INTEGER REFERENCES Event(Event_id),
-    Sender_id INTEGER REFERENCES User(User_id),
-    Receiver_id INTEGER REFERENCES User(User_id),
-    Contenu TEXT
+    Message_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Event_lie_id INTEGER REFERENCES Event(Event_id) NOT NULL,
+    Sender_id INTEGER REFERENCES User(User_id) NOT NULL,
+    Receiver_id INTEGER REFERENCES User(User_id) NOT NULL,
+    Contenu TEXT NOT NULL
 );
+
+--------------- CODE POUR RESET LA BASE ---------------
+
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Event;
+DROP TABLE IF EXISTS Avis;
+DROP TABLE IF EXISTS Message;

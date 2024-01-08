@@ -27,7 +27,7 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
 
-        Scene scene = new Scene(loader.load(), 400, 400);
+        Scene scene = new Scene(loader.load(), 1080, 720);
 
         HeaderController header = new HeaderController();
         root.setTop(header);
