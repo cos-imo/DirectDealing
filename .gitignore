@@ -1,7 +1,7 @@
 **/.DS_Store
-.gradle
-.ideas
-.vscode
+/.gradle
+/.ideas
+/.vscode
 /build
 *.Class
 *.bin
