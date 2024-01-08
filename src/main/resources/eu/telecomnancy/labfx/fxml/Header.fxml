@@ -19,7 +19,7 @@
          <children>
             <HBox prefHeight="720.0" prefWidth="1000.0">
                <children>
-                  <Button mnemonicParsing="false" text="DirectDealing" />
+                  <Button text="DirectDealing" onAction="#GoHome"/>
                </children>
             </HBox>
             <Button minWidth="-Infinity" mnemonicParsing="false" text="Calendrier" fx:id="btnOpenCalendar" onAction="#OpenCalendar">
@@ -43,7 +43,7 @@
                </graphic>
             </Label>
             </VBox>
-            <Button minWidth="-Infinity" mnemonicParsing="false" text="Mon Compte">
+            <Button minWidth="-Infinity" mnemonicParsing="false" text="Mon Compte" onAction="#MonCompte">
                <graphic>
                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>

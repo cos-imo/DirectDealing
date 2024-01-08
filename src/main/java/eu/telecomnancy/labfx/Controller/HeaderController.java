@@ -35,5 +35,15 @@ public class HeaderController extends HBox {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void MonCompte(){
+        System.out.println("Accès à mon compte");
+    }
+
+    @FXML
+    public void GoHome(){
+        System.out.println("Retour à l'accueil");
+    }
     
 }
