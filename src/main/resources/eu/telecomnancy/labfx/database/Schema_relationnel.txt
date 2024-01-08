@@ -76,17 +76,6 @@ CREATE TABLE Event (
     Prix INTEGER NOT NULL
 );
 
--- AVIS --
-
-CREATE TABLE Avis (
-    Avis_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    Note INTEGER NOT NULL,
-    Commentaire TEXT,
-    Auteur_id INTEGER REFERENCES User(User_id) NOT NULL,
-    Receveur_id INTEGER REFERENCES User(User_id) NOT NULL,
-    Date DATE DEFAULT CURRENT_TIMESTAMP
-);
-
 -- MESSAGE -- 
 
 CREATE TABLE Message (
@@ -100,6 +89,6 @@ CREATE TABLE Message (
 --------------- CODE POUR RESET LA BASE ---------------
 
 DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Ressource;
 DROP TABLE IF EXISTS Event;
-DROP TABLE IF EXISTS Avis;
 DROP TABLE IF EXISTS Message;
