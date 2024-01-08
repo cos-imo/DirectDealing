@@ -2,4 +2,4 @@
 .gradle
 .ideas
 .vscode
-./build
+/build
