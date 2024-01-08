@@ -2,7 +2,6 @@ package eu.telecomnancy.labfx;
 
 import java.io.IOException;
 
-import eu.telecomnancy.labfx.Controller.AccueilController;
 import eu.telecomnancy.labfx.Controller.HeaderController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,11 +9,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 
 public class Main extends Application {
 
@@ -29,24 +25,15 @@ public class Main extends Application {
 
 
 
-        FXMLLoader accueilLoader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
-        BorderPane accueilContent = accueilLoader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
 
+        Scene scene = new Scene(loader.load(), 1080, 720);
 
-        AccueilController accueilController = accueilLoader.getController();
-
-        
-
-        HeaderController header = (HeaderController) accueilLoader.getController();
+        HeaderController header = new HeaderController();
         root.setTop(header);
-        
-        accueilController.setMainRoot(root);
 
-        root.setCenter(accueilContent);
-
-
-        Scene scene = new Scene(root, 400, 400);
         primaryStage.setTitle("TelecomNancy DirectDealing");
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }

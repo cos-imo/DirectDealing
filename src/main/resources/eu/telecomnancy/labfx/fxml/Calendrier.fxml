@@ -7,6 +7,6 @@
 <GridPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.controller.CalendrierController">
     <children>
         <DatePicker fx:id="datePicker" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <Button text="Ajouter" GridPane.columnIndex="1" GridPane.rowIndex="0" onAction="#ajouterEvenement" />
+        <!-- Button text="Ajouter" GridPane.columnIndex="1" GridPane.rowIndex="0" onAction="#ajouterEvenement" / -->
     </children>
 </GridPane>
