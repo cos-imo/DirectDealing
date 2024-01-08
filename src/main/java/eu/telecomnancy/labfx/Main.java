@@ -1,6 +1,7 @@
 package eu.telecomnancy.labfx;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import eu.telecomnancy.labfx.Controller.HeaderController;
 import javafx.application.Application;
@@ -34,5 +35,12 @@ public class Main extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+        Connect connection = new Connect();
+        try {
+            connection.getConnection();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
