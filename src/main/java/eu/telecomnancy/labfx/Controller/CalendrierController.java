@@ -1,6 +1,10 @@
 package eu.telecomnancy.labfx.Controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import java.time.YearMonth;
@@ -9,13 +13,20 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.DayOfWeek;
 import java.util.Locale;
+import javafx.scene.input.MouseEvent;
 
 public class CalendrierController {
 
     @FXML
     private GridPane calendarGrid;
     @FXML
-    private Label monthYearLabel;
+    private Label monthLabel;
+    @FXML
+    private Label yearLabel;
+    @FXML
+    private ComboBox<String> monthPicker;
+    @FXML
+    private ComboBox<Integer> yearPicker;
     private YearMonth currentYearMonth;
 
     @FXML
@@ -43,10 +54,11 @@ public class CalendrierController {
     }
 
     public void initialize() {
-        Locale.setDefault(Locale.FRANCE); // Set the locale for France
-        currentYearMonth = YearMonth.now(); 
+        currentYearMonth = YearMonth.now();
         fillCalendar(currentYearMonth);
         updateMonthYearDisplay(currentYearMonth);
+        initializeMonthPicker();
+        initializeYearPicker();
     }
     
 
@@ -86,8 +98,61 @@ public class CalendrierController {
         }
     }
 
+    private void initializeMonthPicker() {
+        ObservableList<String> months = FXCollections.observableArrayList(
+            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        );
+        monthPicker.setItems(months);
+        monthPicker.setVisible(false); // Le ComboBox est initialement caché
+    }
+
+    private void initializeYearPicker() {
+        int currentYear = YearMonth.now().getYear();
+        yearPicker.getItems().clear(); // Nettoyer les anciennes données avant de remplir
+        for (int year = currentYear - 5; year <= currentYear + 5; year++) {
+            yearPicker.getItems().add(year);
+        }
+        yearPicker.setVisible(false); // Assurez-vous que le ComboBox est initialement caché
+        yearPicker.setValue(currentYear); // Sélectionnez l'année actuelle par défaut
+    }
+
+    @FXML
+    private void showMonthPicker(MouseEvent event) {
+        monthPicker.show(); // Affiche le ComboBox lors du clic sur le label
+    }
+
+    @FXML
+    private void showYearPicker() {
+        yearPicker.show(); // Montrez le ComboBox lorsque l'utilisateur clique sur le label
+    }
+
+    @FXML
+    private void handleMonthPicker(ActionEvent event) {
+        if (monthPicker.getValue() != null) {
+            int month = monthPicker.getItems().indexOf(monthPicker.getValue()) + 1;
+            currentYearMonth = YearMonth.of(currentYearMonth.getYear(), month);
+            fillCalendar(currentYearMonth);
+            updateMonthYearDisplay(currentYearMonth);
+        }
+    }
+
+    @FXML
+    private void handleYearPicker() {
+        Integer selectedYear = yearPicker.getValue();
+        if (selectedYear != null) {
+            currentYearMonth = YearMonth.of(selectedYear, currentYearMonth.getMonthValue());
+            fillCalendar(currentYearMonth);
+            updateMonthYearDisplay(currentYearMonth);
+        }
+    }
+
+
+
     private void updateMonthYearDisplay(YearMonth yearMonth) {
-        String monthYear = yearMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.FRANCE));
-        monthYearLabel.setText(monthYear.substring(0, 1).toUpperCase(Locale.FRANCE) + monthYear.substring(1));
+        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.FRANCE);
+        DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yyyy", Locale.FRANCE);
+        monthLabel.setText(yearMonth.format(monthFormatter).substring(0, 1).toUpperCase(Locale.FRANCE) + yearMonth.format(monthFormatter).substring(1));
+        yearLabel.setText(yearMonth.format(yearFormatter));
     }
 }

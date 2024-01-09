@@ -3,6 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.collections.*?>
+
+
 
 <AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.CalendrierController">
     <children>
@@ -10,7 +14,15 @@
             <fx:include source="Header.fxml" VBox.vgrow="NEVER"/>
             <HBox alignment="CENTER" spacing="10">
                 <Button fx:id="previousMonthButton" text="Mois précédent" onAction="#previousMonth"/>
-                <Label fx:id="monthYearLabel" text="Mois Année" style="-fx-font-size: 24px;"/>
+                <StackPane fx:id="monthStackPane" alignment="CENTER">
+                    <Label fx:id="monthLabel" text="Mois" style="-fx-font-size: 24px;" onMouseClicked="#showMonthPicker"/>
+                    <ComboBox fx:id="monthPicker" onAction="#handleMonthPicker" visible="false"/>
+                </StackPane>
+                <StackPane>
+                    <Label fx:id="yearLabel" text="Année" style="-fx-font-size: 24px;" onMouseClicked="#showYearPicker"/>
+                    <ComboBox fx:id="yearPicker" visible="false" onAction="#handleYearPicker"/>
+                </StackPane>
+
                 <Button fx:id="currentMonthButton" text="•" onAction="#currentMonth"/>
                 <Button fx:id="nextMonthButton" text="Mois suivant" onAction="#nextMonth"/>
             </HBox>
