@@ -26,6 +26,8 @@ public class HeaderController extends HBox {
     private ImageView imageViewPdp;
     @FXML
     private Label labelFlorain;
+    @FXML
+    private Button disconnectBtn;
     
     // Le BorderPane racine de la scène principale
     private BorderPane mainRoot;
@@ -56,6 +58,11 @@ public class HeaderController extends HBox {
     @FXML
     private void afficherMonCompte(ActionEvent event){
             loadPage("MonCompte", event);
+    }
+    @FXML
+    private void setDisconnectBtn(ActionEvent event){
+        Session.getInstance().setCurrentUser(null);
+        loadPage("Connexion", event);
     }
 
     private void loadPage(String PageName, ActionEvent event){

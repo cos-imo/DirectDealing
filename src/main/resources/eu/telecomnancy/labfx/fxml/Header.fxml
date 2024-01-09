@@ -10,13 +10,22 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.HeaderController">
    <children>
-      <HBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="-3.0" prefHeight="50.0" prefWidth="1080.0">
+      <HBox alignment="CENTER" layoutX="-1.0" layoutY="-3.0" prefHeight="50.0" prefWidth="1080.0">
          <children>
-            <HBox maxHeight="-Infinity" prefHeight="50.0" prefWidth="1000.0">
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="50.0" prefWidth="1000.0">
                <children>
                   <Button onAction="#retourAccueil" text="DirectDealing" />
                </children>
             </HBox>
+            <Button fx:id="disconnectBtn" ellipsisString="" mnemonicParsing="false" onAction="#setDisconnectBtn" text="Button">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/deconnexion.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
             <Button fx:id="btnOpenCalendar" minWidth="-Infinity" mnemonicParsing="false" onAction="#OpenCalendar" text="Calendrier">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -26,7 +35,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <VBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="-3.0" maxHeight="-Infinity" prefHeight="50.0" prefWidth="70.0">
+            <VBox alignment="CENTER" layoutX="-1.0" layoutY="-3.0" maxHeight="-Infinity" prefHeight="50.0" prefWidth="70.0">
             <Label fx:id="labelNames" alignment="TOP_RIGHT" minWidth="-Infinity" text="NOM Prénom" />
             <Label fx:id="labelFlorain" prefWidth="100.0" text="100">
                <graphic>
