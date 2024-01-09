@@ -18,16 +18,27 @@ public class AccueilController {
 
     @FXML
     public void OpenProposer(ActionEvent event){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/AjoutItem.fxml"));
-        Scene scene;
-        try {
-            scene = new Scene(loader.load(), 1080, 720);
+            BorderPane root = new BorderPane();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/AjoutItem.fxml"));
+
+            Scene scene = new Scene(root, 1080, 720);
+
+            HeaderController header = new HeaderController();
+            root.setTop(header);
+
+            try {
+                root.setTop(loader.load());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             Node source = (Node) event.getSource();
             Stage primaryStage = (Stage) source.getScene().getWindow();
+
+            primaryStage.setTitle("TelecomNancy DirectDealing");
+
             primaryStage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }    
+            primaryStage.show();
 
     }
     
