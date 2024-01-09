@@ -63,7 +63,6 @@ public class User {
         Statement statement = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, mail);
-        System.out.println("Passe par ici");
         ResultSet resultSet = preparedStatement.executeQuery();
         if (!resultSet.isClosed()){
             String email = resultSet.getString("Mail");
