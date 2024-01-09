@@ -13,6 +13,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.DayOfWeek;
 import java.util.Locale;
+import java.util.Map;
+
+
 import javafx.scene.input.MouseEvent;
 
 public class CalendrierController {
@@ -31,15 +34,14 @@ public class CalendrierController {
 
     @FXML
     private void previousMonth() {
-        System.out.println("Previous month");
         currentYearMonth = currentYearMonth.minusMonths(1);
+        
         fillCalendar(currentYearMonth);
         updateMonthYearDisplay(currentYearMonth);
     }
 
     @FXML
     private void currentMonth() {
-        System.out.println("Current month");
         currentYearMonth = YearMonth.now();
         fillCalendar(currentYearMonth);
         updateMonthYearDisplay(currentYearMonth);
@@ -47,7 +49,6 @@ public class CalendrierController {
 
     @FXML
     private void nextMonth() {
-        System.out.println("Next month");
         currentYearMonth = currentYearMonth.plusMonths(1);
         fillCalendar(currentYearMonth);
         updateMonthYearDisplay(currentYearMonth);
@@ -59,7 +60,7 @@ public class CalendrierController {
         updateMonthYearDisplay(currentYearMonth);
         initializeMonthPicker();
         initializeYearPicker();
-    }
+    }    
     
 
     private void fillCalendar(YearMonth yearMonth) {
@@ -80,7 +81,8 @@ public class CalendrierController {
             lblDay.getStyleClass().add("calendar-day-header");
             calendarGrid.add(lblDay, i, 0);
 }
-        while (date.getMonthValue() <= yearMonth.getMonthValue()) {
+
+        while (date.getMonthValue() <= yearMonth.getMonthValue() | currentYearMonth.getMonthValue() == YearMonth.now().getMonthValue()) {
             for (int j = 0; j < 7; j++) { // Weekday columns
                 Label dayLabel = new Label(String.valueOf(date.getDayOfMonth()));
                 dayLabel.getStyleClass().add("calendar-day-label");
@@ -127,32 +129,65 @@ public class CalendrierController {
         yearPicker.show(); // Montrez le ComboBox lorsque l'utilisateur clique sur le label
     }
 
+    
+
+    private int mapMonthNameToNumber(String monthName) {
+        Map<String, Integer> monthNames = Map.ofEntries(
+            Map.entry("Janvier", 1),
+            Map.entry("Février", 2),
+            Map.entry("Mars", 3),
+            Map.entry("Avril", 4),
+            Map.entry("Mai", 5),
+            Map.entry("Juin", 6),
+            Map.entry("Juillet", 7),
+            Map.entry("Août", 8),
+            Map.entry("Septembre", 9),
+            Map.entry("Octobre", 10),
+            Map.entry("Novembre", 11),
+            Map.entry("Décembre", 12)
+        );
+        return monthNames.getOrDefault(monthName, currentYearMonth.getMonthValue());
+    }
+    
     @FXML
     private void handleMonthPicker(ActionEvent event) {
-        if (monthPicker.getValue() != null) {
-            int month = monthPicker.getItems().indexOf(monthPicker.getValue()) + 1;
-            currentYearMonth = YearMonth.of(currentYearMonth.getYear(), month);
+        String selectedMonthName = monthPicker.getValue();
+        if (selectedMonthName != null) {
+            int monthNumber = mapMonthNameToNumber(selectedMonthName);
+            // Change to selected month while keeping the current year
+            YearMonth selectedMonth = YearMonth.of(currentYearMonth.getYear(), monthNumber);
+            currentYearMonth = selectedMonth;
             fillCalendar(currentYearMonth);
+            // changeYearMonth(selectedMonth);
             updateMonthYearDisplay(currentYearMonth);
         }
     }
 
     @FXML
-    private void handleYearPicker() {
+    private void handleYearPicker(ActionEvent event) {
         Integer selectedYear = yearPicker.getValue();
         if (selectedYear != null) {
+            // Change to selected year while keeping the current month
             currentYearMonth = YearMonth.of(selectedYear, currentYearMonth.getMonthValue());
+            YearMonth selectedYearMonth = YearMonth.of(selectedYear, currentYearMonth.getMonthValue());
+            currentYearMonth = selectedYearMonth;
             fillCalendar(currentYearMonth);
             updateMonthYearDisplay(currentYearMonth);
         }
     }
 
+    // private void changeYearMonth(YearMonth yearMonth) {
+    //     currentYearMonth = yearMonth;
+    //     fillCalendar(currentYearMonth);
+    //     updateMonthYearDisplay(currentYearMonth);
+    // }
 
 
     private void updateMonthYearDisplay(YearMonth yearMonth) {
         DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.FRANCE);
         DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yyyy", Locale.FRANCE);
         monthLabel.setText(yearMonth.format(monthFormatter).substring(0, 1).toUpperCase(Locale.FRANCE) + yearMonth.format(monthFormatter).substring(1));
+        // monthLabel.setText(yearMonth.format(monthFormatter));
         yearLabel.setText(yearMonth.format(yearFormatter));
     }
 }
