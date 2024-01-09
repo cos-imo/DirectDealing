@@ -57,6 +57,9 @@ public class MonCompteController {
                 LabelEmail.setText(rs.getString("Mail"));
                 LabelWallet.setText(rs.getString("Wallet"));
                 LabelNote.setText(rs.getString("Note"));
+                if (rs.getBytes("Photo_profil") != null) {
+                    PhotoProfil.setImage(new Image(new ByteArrayInputStream(rs.getBytes("Photo_profil"))));
+                }
                 pstmt.close();
                 connection.commit();
                 connection.close();
@@ -86,6 +89,8 @@ public class MonCompteController {
                     pstmt.close();
                     connection.commit();
                     connection.close();
+                    Session.getInstance().setCurrentUser(User.newUserFromId(user_id));
+                    initialize();
                 }
             }
             catch (Exception e) {
