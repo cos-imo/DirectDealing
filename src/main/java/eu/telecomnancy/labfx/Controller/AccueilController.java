@@ -17,7 +17,7 @@ import java.io.IOException;
 public class AccueilController {
 
     @FXML
-    public void OpenProposer(ActionEvent event){
+    private void OpenProposer(ActionEvent event){
             BorderPane root = new BorderPane();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/AjoutItem.fxml"));
 
