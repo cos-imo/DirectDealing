@@ -1,19 +1,14 @@
 package eu.telecomnancy.labfx.Controller;
 
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import eu.telecomnancy.labfx.Connect;
-import eu.telecomnancy.labfx.Florain;
 import eu.telecomnancy.labfx.Session;
 import eu.telecomnancy.labfx.User;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -73,8 +68,8 @@ public class CreationController {
         String nom = nomField.getText();
         String email = emailField.getText();
         String emailConfirm = emailConfirmField.getText();
-        String password = getHashedPassword(mdpField.getText());
-        String passwordConfirm = getHashedPassword(mdpConfirmField.getText());
+        String password = User.getHashedPassword(mdpField.getText());
+        String passwordConfirm = User.getHashedPassword(mdpConfirmField.getText());
         if (infosValid(prenom, nom, email, emailConfirm, password, passwordConfirm)){
             if (createAccount(prenom, nom, email, password)){
                 System.out.println("Compte créé");
@@ -171,28 +166,4 @@ public class CreationController {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-    private String getHashedPassword(String pass){
-         String password = pass;
-
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-            md.update(password.getBytes());
-    
-            byte byteData[] = md.digest();
-    
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < byteData.length;i++) {
-            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        System.out.println("Hex format : " + sb.toString());
-        return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-
 }

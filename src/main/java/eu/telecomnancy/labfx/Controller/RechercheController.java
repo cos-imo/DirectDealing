@@ -9,8 +9,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import eu.telecomnancy.labfx.Connect;
-import eu.telecomnancy.labfx.Session;
-import eu.telecomnancy.labfx.User;
 
 import java.sql.*;
 
