@@ -43,7 +43,15 @@
                </graphic>
             </Label>
             </VBox>
-            <Button minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" text="Mon Compte" />
+            <Button minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" text="Mon Compte" onAction="#afficherMonCompte">
+               <graphic>
+               <ImageView fx:id="imageViewPdp" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../images/account.png" />
+                  </image>
+               </ImageView>
+               </graphic>
+            </Button>
          </children>
       </HBox>
    </children>
