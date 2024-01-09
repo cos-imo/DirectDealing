@@ -48,6 +48,15 @@ public class MonCompteController {
     @FXML
     ImageView PhotoProfil;
 
+    @FXML
+    TextField TextFieldPassword;
+
+    @FXML
+    TextField TextFieldConfirmPassword;
+
+    @FXML
+    Button BtnChangePassword;
+
     private int user_id;
 
     public void initialize() throws SQLException{
@@ -211,5 +220,14 @@ public class MonCompteController {
 
     private boolean isEmailValid(String name){
         return name.matches("[a-zA-Z0-9]+.?[a-zA-Z0-9]+@[a-zA-Z]+.?[a-zA-Z]+");
+    }
+
+    @FXML
+    private void setChangePassword() {
+        String password = TextFieldPassword.getText();
+        String passwordConfirm = TextFieldConfirmPassword.getText();
+        if (password.equals(passwordConfirm)) {
+
+        }
     }
 }

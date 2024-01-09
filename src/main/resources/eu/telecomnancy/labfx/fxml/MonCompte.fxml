@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -37,17 +38,24 @@
                            <VBox.margin>
                               <Insets bottom="30.0" />
                            </VBox.margin></Button>
-                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
+                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="537.0">
                            <center>
-                              <VBox maxHeight="-Infinity" prefHeight="90.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <VBox maxHeight="-Infinity" prefHeight="122.0" prefWidth="373.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <HBox prefHeight="50.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
                                        <children>
                                           <TextField fx:id="TextFieldFirstName" alignment="CENTER" onAction="#setFirstName" />
                                           <TextField fx:id="TextFieldLastName" alignment="CENTER" onAction="#setLastName" />
                                        </children>
                                     </HBox>
-                                    <TextField fx:id="TextFieldEmail" alignment="CENTER" onAction="#setEmail" />
+                                    <TextField fx:id="TextFieldEmail" onAction="#setEmail" prefHeight="26.0" prefWidth="90.0" />
+                                    <ButtonBar prefHeight="40.0" prefWidth="396.0">
+                                      <buttons>
+                                          <TextField fx:id="TextFieldPassword" onAction="#setNewPassword" />
+                                          <TextField fx:id="TextFieldConfirmPassword" onAction="#setConfirmPassword" />
+                                        <Button fx:id="BtnChangerMdp" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#setChangerMdp" prefHeight="26.0" prefWidth="80.0" text="Changer de mot de passe" />
+                                      </buttons>
+                                    </ButtonBar>
                                  </children>
                               </VBox>
                            </center>
