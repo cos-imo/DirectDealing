@@ -52,6 +52,7 @@ public class ConnexionController {
         String email = emailField.getText();
         String password = mdpField.getText();
         if (infosExist(email, password)){
+            System.out.println("Connexion réussie");
             BorderPane root = new BorderPane();
             
             Scene scene = new Scene(root, 1080, 720);
