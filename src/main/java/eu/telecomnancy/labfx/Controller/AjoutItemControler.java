@@ -1,6 +1,5 @@
 package eu.telecomnancy.labfx.Controller;
 
-import javafx.application.Application;
 
 import javafx.fxml.FXML;
 import javafx.event.Event;
@@ -14,10 +13,6 @@ import javafx.stage.FileChooser;
 import java.time.LocalDate;
 import javafx.stage.Stage;
 import eu.telecomnancy.labfx.Connect;
-import eu.telecomnancy.labfx.Session;
-import eu.telecomnancy.labfx.User;
-import java.sql.Date;
-import java.time.LocalDate;
 
 import java.io.File;
 import java.util.List;
