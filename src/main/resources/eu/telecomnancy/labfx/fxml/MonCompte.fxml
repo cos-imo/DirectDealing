@@ -51,9 +51,9 @@
                                     <TextField fx:id="TextFieldEmail" onAction="#setEmail" prefHeight="26.0" prefWidth="90.0" />
                                     <ButtonBar prefHeight="40.0" prefWidth="396.0">
                                       <buttons>
-                                          <TextField fx:id="TextFieldPassword" onAction="#setNewPassword" />
-                                          <TextField fx:id="TextFieldConfirmPassword" onAction="#setConfirmPassword" />
-                                        <Button fx:id="BtnChangerMdp" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#setChangerMdp" prefHeight="26.0" prefWidth="80.0" text="Changer de mot de passe" />
+                                          <TextField fx:id="TextFieldPassword" />
+                                          <TextField fx:id="TextFieldConfirmPassword" />
+                                        <Button fx:id="BtnChangePassword" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#setChangePassword" prefHeight="26.0" prefWidth="80.0" text="Changer de mot de passe" />
                                       </buttons>
                                     </ButtonBar>
                                  </children>
