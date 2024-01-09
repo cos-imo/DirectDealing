@@ -44,5 +44,6 @@
             </VBox>
          </center>
       </BorderPane>
+      <fx:include source="Header.fxml" />
    </children>
 </AnchorPane>
