@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.HeaderController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.HeaderController">
    <children>
-      <HBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="-3.0" prefHeight="720.0" prefWidth="1080.0">
+      <HBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="-3.0" prefHeight="50.0" prefWidth="1080.0">
          <children>
-            <HBox prefHeight="720.0" prefWidth="1000.0">
+            <HBox maxHeight="-Infinity" prefHeight="50.0" prefWidth="1000.0">
                <children>
-                  <Button text="DirectDealing"/>
+                  <Button onAction="#retourAccueil" text="DirectDealing" />
                </children>
             </HBox>
-            <Button minWidth="-Infinity" mnemonicParsing="false" text="Calendrier" fx:id="btnOpenCalendar" onAction="#OpenCalendar">
+            <Button fx:id="btnOpenCalendar" minWidth="-Infinity" mnemonicParsing="false" onAction="#OpenCalendar" text="Calendrier">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -31,9 +26,9 @@
                   </ImageView>
                </graphic>
             </Button>
-            <VBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="-3.0" prefHeight="20.0" prefWidth="70.0">
+            <VBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="-3.0" maxHeight="-Infinity" prefHeight="50.0" prefWidth="70.0">
             <Label alignment="TOP_RIGHT" minWidth="-Infinity" text="NOM Prénom" />
-            <Label text="100" prefWidth="100.0">
+            <Label prefWidth="100.0" text="100">
                <graphic>
                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
@@ -43,7 +38,7 @@
                </graphic>
             </Label>
             </VBox>
-            <Button minWidth="-Infinity" mnemonicParsing="false" text="Mon Compte">
+            <Button minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" text="Mon Compte">
                <graphic>
                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>

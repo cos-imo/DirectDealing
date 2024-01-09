@@ -17,14 +17,14 @@ import java.io.IOException;
 public class AccueilController {
 
     @FXML
-    public void OpenProposer(ActionEvent event){
+    private void OpenProposer(ActionEvent event){
             BorderPane root = new BorderPane();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/AjoutItem.fxml"));
 
             Scene scene = new Scene(root, 1080, 720);
 
-            HeaderController header = new HeaderController();
-            root.setTop(header);
+            // HeaderController header = new HeaderController();
+            // root.setTop(header);
 
             try {
                 root.setTop(loader.load());
