@@ -77,5 +77,29 @@ public class HeaderController extends HBox {
             primaryStage.setScene(scene);
             primaryStage.show();
     }
+
+    @FXML
+    private void afficherMonCompte(ActionEvent event){
+            BorderPane root = new BorderPane();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/MonCompte.fxml"));
+
+            Scene scene = new Scene(root, 1080, 720);
+
+            // HeaderController header = new HeaderController();
+            // root.setTop(header);
+            try {
+                root.setCenter(loader.load());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Node source = (Node) event.getSource();
+            Stage primaryStage = (Stage) source.getScene().getWindow();
+
+            primaryStage.setTitle("TelecomNancy DirectDealing");
+
+            primaryStage.setScene(scene);
+            primaryStage.show();
+    }
     
 }
