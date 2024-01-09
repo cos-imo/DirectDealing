@@ -41,61 +41,25 @@ public class HeaderController extends HBox {
     }
     @FXML
     private void OpenCalendar(ActionEvent event) {
-            BorderPane root = new BorderPane();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Calendrier.fxml"));
-
-            Scene scene = new Scene(root, 1080, 720);
-
-            // HeaderController header = new HeaderController();
-            // root.setTop(header);
-            try {
-                root.setCenter(loader.load());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Node source = (Node) event.getSource();
-            Stage primaryStage = (Stage) source.getScene().getWindow();
-
-            primaryStage.setTitle("TelecomNancy DirectDealing");
-
-            primaryStage.setScene(scene);
-            primaryStage.show();
+            loadPage("Calendrier", event);
     }
 
     @FXML
     private void retourAccueil(ActionEvent event){
-            BorderPane root = new BorderPane();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
-
-            Scene scene = new Scene(root, 1080, 720);
-
-            // HeaderController header = new HeaderController();
-            // root.setTop(header);
-            try {
-                root.setCenter(loader.load());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Node source = (Node) event.getSource();
-            Stage primaryStage = (Stage) source.getScene().getWindow();
-
-            primaryStage.setTitle("TelecomNancy DirectDealing");
-
-            primaryStage.setScene(scene);
-            primaryStage.show();
+            loadPage("Accueil", event);
     }
 
     @FXML
     private void afficherMonCompte(ActionEvent event){
-            BorderPane root = new BorderPane();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/MonCompte.fxml"));
+            loadPage("MonCompte", event);
+    }
+
+    private void loadPage(String PageName, ActionEvent event){
+        BorderPane root = new BorderPane();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/" + PageName + ".fxml"));
 
             Scene scene = new Scene(root, 1080, 720);
 
-            // HeaderController header = new HeaderController();
-            // root.setTop(header);
             try {
                 root.setCenter(loader.load());
             } catch (IOException e) {
