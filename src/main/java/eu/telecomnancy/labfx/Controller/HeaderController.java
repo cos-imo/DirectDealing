@@ -44,7 +44,7 @@ public class HeaderController extends HBox {
 
     @FXML
     private void afficherMessagerie(ActionEvent event){
-        System.out.println("Et là la messagerie s'ouvre ;)");
+        LoadPage.loadPage("Messagerie", event, getClass());
     }
 
     @FXML

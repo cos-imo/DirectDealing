@@ -19,7 +19,8 @@ CREATE TABLE User (
     Password TEXT NOT NULL,
     Photo_profil BLOB,
     Wallet INTEGER DEFAULT 100,
-    Note INTEGER
+    Note INTEGER,
+    VuePref TEXT CHECK (VuePref IN ('Mois', 'Semaine', 'Jour')) DEFAULT 'Mois'
 );
 
 CREATE TABLE Ressource (

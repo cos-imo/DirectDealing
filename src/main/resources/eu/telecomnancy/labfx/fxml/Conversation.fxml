@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="109.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.ConversationController">
+<Separator prefWidth="700.0" />
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+    <children>
+        <HBox prefHeight="104.0" prefWidth="584.0">
+            <children>
+            <ImageView fitHeight="105.0" fitWidth="148.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image fx:id="image_objet" url="@../images/account.png" />
+                    </image>
+                </ImageView>
+            <VBox prefHeight="105.0" prefWidth="715.0">
+                <children>
+                    <Label fx:id="label_nom" text="Contact">
+                        <font>
+                        <Font size="30.0" />
+                        </font>
+                    </Label>
+                    <Label fx:id="label_heure" text="Heure" textFill="#7c7c7c">
+                        <font>
+                        <Font size="10.0" />
+                        </font>
+                    </Label>
+                    <Label fx:id="label_content" text="Contenu du message">
+                        <font>
+                        <Font size="15.0" />
+                        </font>
+                    </Label>
+                </children>
+            </VBox>
+            </children>
+        </HBox>
+    </children>
+</VBox>
+<Separator prefWidth="700.0" />
+</AnchorPane>
