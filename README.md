@@ -8,7 +8,7 @@
 1. Sommaire
 2. Présentation
 3. Installation
-4. Organisation du dépôt et informations complémentaires
+4. Utilisation
 
 ## Présentation
 Projet développé dans le cadre de notre scolarité à [Télécom Nancy](https://telecomnancy.univ-lorraine.fr) (2ème année - 1er semestre).  
@@ -43,3 +43,25 @@ Depuis la racine du projet (dossier `codingweek-24`) exécuter gradlew:
 ```
 ./gradlew run
 ```
+
+## Utilisation
+### Connexion
+Lors de son exécution, l'application s'ouvre sur une page de connexion. Afin de tester l'application, vous pouvez vous connecter à l'aide du couple adresse email `a` et du mot de passe `a`.
+### Création de compte
+Vous pouvez créer un compte depuis la page d'accueil.   
+Chaque nouveau se verra crédité d'un solde de 100 florains.
+### Déconnexion
+Vous pouvez vous déconnecter de l'application à l'aide du bouton présent sur le menu
+### Onglet 'Mon Compte'
+Un Onglet `Mon Compte` est disponible dans la barre de menu. Celui-ci donne accès à un menu permettant de modifier et d'afficher ses informations personnelles
+### Ajout d'un Objet/Services
+Afin d'ajouter un Objet à prêter ou de proposer un service, vous pouvez vous servir du bouton `Proposer` de la page d'accueil.  
+Note: Il n'est pas encore possible d'ajouter/modifier la ou les photos d'une annonce.
+### Visualisation des annonces
+Afin de visualiser la liste des annonces déjà publiées, vous pouvez consulter la liste des annnonces depuis le bouton `Rechercher` de la page d'accueil.  
+Note: La base de donnée présente sur le dépôt ne contient actuellement pas d'annonces
+### Messagerie
+Une messagerie est disponible sur l'application. S'il n'est pas encore possible d'envoyer/recevoir des messages, vous pouvez d'ores et déjà consulter la liste des messages existants depuis l'onglet (enveloppe).  
+Note: La base de données ne contient pas de message. Vous pouvez en ajouter à l'aide de sqlite.
+### Calendrier (visualisation)
+Il est possible de visualiser le calendrier (bien que celui-ci ne soit pas fonctionnel) depuis l'onglet correspondant.
