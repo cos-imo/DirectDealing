@@ -59,9 +59,12 @@ public class ConnexionController {
             // HeaderController header = new HeaderController();
             // root.setTop(header);
             try {
-                root.setCenter(loader.load());
                 User currentUser = User.newUserFromMail(email);
+                if (currentUser == null){
+                    System.out.println("Erreur lors de la récupération de l'utilisateur");
+                }
                 Session.getInstance().setCurrentUser(currentUser);
+                root.setCenter(loader.load());
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
             }
