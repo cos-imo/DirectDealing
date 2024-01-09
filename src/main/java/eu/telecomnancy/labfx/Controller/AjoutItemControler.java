@@ -27,6 +27,8 @@ import java.sql.*;
 
 public class AjoutItemControler {
 
+    private byte[] image;
+
     @FXML
     private TextArea DescriptionField;
 
@@ -48,6 +50,10 @@ public class AjoutItemControler {
     @FXML
     private ImageView image_annonce;
 
+    private void setImage(byte[] img){
+        this.image = img;
+    }
+
     @FXML
     private void ajouterPhotos(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
@@ -57,6 +63,7 @@ public class AjoutItemControler {
             try {
                 byte[] imageBytes = Files.readAllBytes(selectedFile.toPath());
                 image_annonce.setImage(new Image(new ByteArrayInputStream(imageBytes)));
+                setImage(imageBytes);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -67,7 +74,7 @@ public class AjoutItemControler {
     private boolean insertDatabase(String Name, String Desc, java.sql.Date DateDebut, java.sql.Date DateFin, float LocalisationLongitude, float LocalisationLatitude, int type, int Prix) throws SQLException{
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
-        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Illustration, Owner_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, getMaxId());
             preparedStatement.setString(2, Name);
@@ -78,6 +85,7 @@ public class AjoutItemControler {
             preparedStatement.setFloat(7, LocalisationLatitude);
             preparedStatement.setInt(8, type);
             preparedStatement.setInt(9, Prix);
+            preparedStatement.setBytes(10, this.image);
 
             // Requête d'insertion
             int rowsAffected = preparedStatement.executeUpdate();
