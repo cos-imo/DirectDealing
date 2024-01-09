@@ -1,6 +1,15 @@
 package eu.telecomnancy.labfx;
 
+import java.io.ByteArrayInputStream;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javafx.scene.image.Image;
+
 
 public class User {
     private String email;
@@ -46,5 +55,36 @@ public class User {
     }
     public int getNote() {
         return note;
+    }
+    public static User newUserFromMail(String mail) throws SQLException{
+        Connect connect = new Connect();
+        Connection connection = connect.getConnection(); 
+        String sql = "SELECT * FROM User WHERE Mail = ?";
+        Statement statement = connection.createStatement();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, mail);
+        System.out.println("Passe par ici");
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (!resultSet.isClosed()){
+            String email = resultSet.getString("Mail");
+            String password = resultSet.getString("Password");
+            String nom = resultSet.getString("Last_Name");
+            String prenom = resultSet.getString("First_Name");
+            int id = resultSet.getInt("User_ID");
+            int wallet = resultSet.getInt("Wallet");
+            int note = resultSet.getInt("Note");
+            byte[] imagebyte = resultSet.getBytes("Photo_profil");
+            if (imagebyte != null && imagebyte.length > 0) {
+                Image pdp = (new Image(new ByteArrayInputStream(imagebyte)));
+                User user = new User(email, password, nom, prenom,pdp, id, wallet, note);
+                preparedStatement.close();
+                connection.commit();
+                connection.close();
+                System.out.println("User créé");
+                return user;
+            }
+        }
+        connection.close();
+        return null;
     }
 }

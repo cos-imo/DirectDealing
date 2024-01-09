@@ -1,10 +1,16 @@
 package eu.telecomnancy.labfx.Controller;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import eu.telecomnancy.labfx.Connect;
+import eu.telecomnancy.labfx.Florain;
+import eu.telecomnancy.labfx.Session;
+import eu.telecomnancy.labfx.User;
+
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -70,6 +76,9 @@ public class CreationController {
         if (infosValid(prenom, nom, email, emailConfirm, password, passwordConfirm)){
             if (createAccount(prenom, nom, email, password)){
                 System.out.println("Compte créé");
+
+                User currentUser = User.newUserFromMail(email);
+                Session.getInstance().setCurrentUser(currentUser);
                 redirectToAccueil(event);
             }
             else{
@@ -160,4 +169,6 @@ public class CreationController {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
+
 }

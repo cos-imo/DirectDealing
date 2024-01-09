@@ -14,6 +14,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import eu.telecomnancy.labfx.Connect;
+import eu.telecomnancy.labfx.Session;
+import eu.telecomnancy.labfx.User;
 
 import java.io.IOException;
 import java.sql.*;
@@ -58,7 +60,9 @@ public class ConnexionController {
             // root.setTop(header);
             try {
                 root.setCenter(loader.load());
-            } catch (IOException e) {
+                User currentUser = User.newUserFromMail(email);
+                Session.getInstance().setCurrentUser(currentUser);
+            } catch (IOException | SQLException e) {
                 e.printStackTrace();
             }
 
