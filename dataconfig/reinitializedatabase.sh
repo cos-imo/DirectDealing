@@ -54,7 +54,7 @@ CREATE TABLE Message (
     Contenu TEXT NOT NULL
 );
 
-INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("a", "a", "a", "a");
+INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("a", "a", "a", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb");
 
 .exit
 EOF
