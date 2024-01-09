@@ -1,17 +1,12 @@
 package eu.telecomnancy.labfx.Controller;
 
-import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import eu.telecomnancy.labfx.Connect;
 import java.io.IOException;
 
 public class AccueilController {
