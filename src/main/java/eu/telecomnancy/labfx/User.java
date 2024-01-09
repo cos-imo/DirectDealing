@@ -57,49 +57,26 @@ public class User {
         return note;
     }
     public static User newUserFromMail(String mail) throws SQLException{
+        String sql = "SELECT * FROM User WHERE Mail = '"+mail+"';";
+        return newUserFromAttribute(sql);
+        
+    }
+    public static User newUserFromId(int id) throws SQLException{
+        String sql = "SELECT * FROM User WHERE User_id = "+id+";";
+        return newUserFromAttribute(sql);
+    }
+    public static User newUserFromAttribute(String sql) throws SQLException {
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
-        String sql = "SELECT * FROM User WHERE Mail = ?";
-        Statement statement = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, mail);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (!resultSet.isClosed()){
+            System.out.println("User trouvé");
             String email = resultSet.getString("Mail");
             String password = resultSet.getString("Password");
             String nom = resultSet.getString("Last_Name");
             String prenom = resultSet.getString("First_Name");
             int id = resultSet.getInt("User_id");
-            int wallet = resultSet.getInt("Wallet");
-            int note = resultSet.getInt("Note");
-            byte[] imagebyte = resultSet.getBytes("Photo_profil");
-            Image pdp = null;
-            if (imagebyte != null && imagebyte.length > 0) {
-                pdp = (new Image(new ByteArrayInputStream(imagebyte)));
-            }
-            User user = new User(email, password, nom, prenom,pdp, id, wallet, note);
-            preparedStatement.close();
-            connection.commit();
-            connection.close();
-            System.out.println("User créé");
-            return user;
-        }
-        connection.close();
-        return null;
-    }
-    public static User newUserFromId(int id) throws SQLException{
-        Connect connect = new Connect();
-        Connection connection = connect.getConnection(); 
-        String sql = "SELECT * FROM User WHERE User_id = ?";
-        Statement statement = connection.createStatement();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1, id);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if (!resultSet.isClosed()){
-            String email = resultSet.getString("Mail");
-            String password = resultSet.getString("Password");
-            String nom = resultSet.getString("Last_Name");
-            String prenom = resultSet.getString("First_Name");
             int wallet = resultSet.getInt("Wallet");
             int note = resultSet.getInt("Note");
             byte[] imagebyte = resultSet.getBytes("Photo_profil");
