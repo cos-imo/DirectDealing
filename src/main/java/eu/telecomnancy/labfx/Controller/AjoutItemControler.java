@@ -12,7 +12,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.stage.FileChooser;
 import java.time.LocalDate;
 import javafx.stage.Stage;
+import javafx.scene.control.Slider;
 import eu.telecomnancy.labfx.Connect;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.io.File;
 import java.util.List;
@@ -25,6 +27,9 @@ public class AjoutItemControler {
 
     @FXML
     private TextField NomAnnonce;
+
+    @FXML
+    private TextField prix_florain;
 
     @FXML
     private DatePicker DatePickerDebut;
@@ -112,10 +117,11 @@ public class AjoutItemControler {
         LocalDate DateFin = DatePickerFin.getValue();
         String selectedValue = choixType.getValue();
         String Nom = NomAnnonce.getText();
+        int Prix = Integer.valueOf(prix_florain.getText());
         java.sql.Date sqlDateDebut = java.sql.Date.valueOf(DateDebut);
         java.sql.Date sqlDateFin = java.sql.Date.valueOf(DateFin);
         try {
-            this.insertDatabase(Nom, Description, sqlDateDebut, sqlDateFin, 0.0f, 0.0f, 1, 20);
+            this.insertDatabase(Nom, Description, sqlDateDebut, sqlDateFin, 0.0f, 0.0f, Prix, 20);
         } catch (SQLException e) {
             e.printStackTrace();
         }

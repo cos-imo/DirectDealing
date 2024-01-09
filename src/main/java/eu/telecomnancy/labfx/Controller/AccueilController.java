@@ -7,6 +7,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import java.util.List;
+import java.lang.Object;
+import eu.telecomnancy.labfx.Connect;
 import java.io.IOException;
 
 public class AccueilController {
@@ -38,6 +41,7 @@ public class AccueilController {
     }
 
     public void Recherche(ActionEvent event){
+
             BorderPane root = new BorderPane();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Recherche.fxml"));
 

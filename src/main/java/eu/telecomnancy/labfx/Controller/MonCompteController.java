@@ -42,6 +42,15 @@ public class MonCompteController {
     @FXML
     ImageView PhotoProfil;
 
+    @FXML
+    TextField TextFieldPassword;
+
+    @FXML
+    TextField TextFieldConfirmPassword;
+
+    @FXML
+    Button BtnChangePassword;
+
     private int user_id;
 
     public void initialize() throws SQLException{
@@ -138,7 +147,7 @@ public class MonCompteController {
             try (PreparedStatement pstmt = connection.prepareStatement(query)) {
                 pstmt.setString(1, email);
                 ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
+                if (!rs.next()) {
                     pstmt.close();
                     connection.commit();
                     connection.close();
@@ -205,5 +214,56 @@ public class MonCompteController {
 
     private boolean isEmailValid(String name){
         return name.matches("[a-zA-Z0-9]+.?[a-zA-Z0-9]+@[a-zA-Z]+.?[a-zA-Z]+");
+    }
+
+    @FXML
+    private void setChangePassword(ActionEvent event) {
+        String password = TextFieldPassword.getText();
+        String passwordConfirm = TextFieldConfirmPassword.getText();
+        if (password.equals(passwordConfirm)){
+            String query = "SELECT Password FROM User WHERE User_id = ?";
+            try {
+                Connect connect = new Connect();
+                Connection connection = connect.getConnection();
+                try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+                    pstmt.setInt(1, user_id);
+                    ResultSet rs = pstmt.executeQuery();
+                    System.out.println(rs);
+                    if (!rs.next()) {
+                        pstmt.close();
+                        connection.commit();
+                        connection.close();
+                        LoadPage.loadPage("MonCompte", event,getClass());
+                    }
+                    else {
+                        if (!rs.getString("Password").equals(User.getHashedPassword(password))) {
+                            String stmt = "UPDATE User SET Password = ? WHERE User_id = ?";
+                            try(PreparedStatement pstmt2 = connection.prepareStatement(stmt)) {
+                                pstmt2.setString(1, User.getHashedPassword(password));
+                                pstmt2.setInt(2, user_id);
+                                pstmt2.executeUpdate();
+                                pstmt2.close();
+                                connection.commit();
+                                connection.close();
+                                Session.getInstance().setCurrentUser(User.newUserFromId(user_id));
+                                LoadPage.loadPage("MonCompte", event,getClass());
+                            }
+                        }
+                        else {
+                            pstmt.close();
+                            connection.commit();
+                            connection.close();
+                            LoadPage.loadPage("MonCompte", event,getClass());
+                        }
+                    }
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            LoadPage.loadPage("MonCompte", event,getClass());
+        }
     }
 }

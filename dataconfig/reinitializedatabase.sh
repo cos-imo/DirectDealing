@@ -18,7 +18,8 @@ CREATE TABLE User (
     Password TEXT NOT NULL,
     Photo_profil BLOB,
     Wallet INTEGER DEFAULT 100,
-    Note INTEGER
+    Note INTEGER,
+    VuePref TEXT CHECK (VuePref IN ('Mois', 'Semaine', 'Jour')) DEFAULT 'Mois'
 );
 
 CREATE TABLE Ressource (
@@ -33,6 +34,7 @@ CREATE TABLE Ressource (
     LocalisationLatitude FLOAT NOT NULL,
     type BOOLEAN NOT NULL,
     Prix INTEGER NOT NULL,
+    Image BLOB,
     FOREIGN KEY (Owner_id) REFERENCES User(User_id)
 );
 
@@ -58,6 +60,8 @@ CREATE TABLE Message (
     Event_lie_id INTEGER REFERENCES Event(Event_id) NOT NULL,
     Sender_id INTEGER REFERENCES User(User_id) NOT NULL,
     Receiver_id INTEGER REFERENCES User(User_id) NOT NULL,
+    Date DATE NOT NULL,
+    Heure TIME NOT NULL,
     Contenu TEXT NOT NULL
 );
 
@@ -67,5 +71,6 @@ INSERT INTO Ressource (Owner_id, Name, Desc, DateDebut, DateFin, LocalisationLon
 INSERT INTO Ressource (Owner_id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix) VALUES (2, "aide pendant la coding week", "aide pendant la coding week", "2024-01-08", "2024-01-12", 0, 0, 0, 100);
 INSERT INTO Event (isObjet, Name, preteur_id, acheteur_id, Recurrence, DateDebut, DateFin, Prix, Ressource_id) VALUES (0, "aide pendant la coding week", 1, 2, 0, "2024-01-08", "2024-01-12", 100, 2);
 INSERT INTO Event (isObjet, Name, preteur_id, acheteur_id, Recurrence, DateDebut, DateFin, Prix, Ressource_id) VALUES (1, "ordi", 2, 1, 0, "2024-01-13", "2024-01-15", 20, 1);
+
 .exit
 EOF

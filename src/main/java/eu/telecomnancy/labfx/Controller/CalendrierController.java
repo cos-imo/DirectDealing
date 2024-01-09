@@ -4,9 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
+
 import java.time.YearMonth;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +19,7 @@ import java.time.format.TextStyle;
 import java.time.DayOfWeek;
 import java.util.Locale;
 import java.util.Map;
+
 
 
 import javafx.scene.input.MouseEvent;
@@ -27,10 +33,20 @@ public class CalendrierController {
     @FXML
     private Label yearLabel;
     @FXML
+    private Label viewLabel;
+    @FXML
+    private Integer weekNumber;
+    @FXML
     private ComboBox<String> monthPicker;
     @FXML
     private ComboBox<Integer> yearPicker;
+    @FXML
+    private ComboBox<String> viewSelector;
+
     private YearMonth currentYearMonth;
+    private String lastSelectedView = "Mois";
+
+
 
     @FXML
     private void previousMonth() {
@@ -54,13 +70,50 @@ public class CalendrierController {
         updateMonthYearDisplay(currentYearMonth);
     }
 
+    @FXML
+    private void handleViewSelector(ActionEvent event) {
+        String selectedView = viewSelector.getValue();
+        if (selectedView != null) {
+            viewLabel.setText(selectedView);
+            lastSelectedView = selectedView; // Mise à jour de la variable globale
+            changeView(selectedView);
+        }
+    }
+    
+    private void changeView(String selectedView) {
+        lastSelectedView = selectedView;
+        switch (selectedView) {
+            case "Mois":
+                System.err.println("Logique pour afficher la vue mensuelle");
+                fillCalendar(currentYearMonth);
+                
+
+                break;
+            case "Semaine":
+                System.err.println("Logique pour afficher la vue hebdomadaire");
+                break;
+            case "Jour":
+                System.err.println("Logique pour afficher la vue quotidienne");
+                break;
+        }
+    }
+
+
+
+
+    
+
     public void initialize() {
         currentYearMonth = YearMonth.now();
+        viewSelector.getItems().addAll("Mois", "Semaine", "Jour");
+        viewLabel.setText(lastSelectedView);
         fillCalendar(currentYearMonth);
         updateMonthYearDisplay(currentYearMonth);
+        changeView(lastSelectedView);
         initializeMonthPicker();
         initializeYearPicker();
     }    
+
     
 
     private void fillCalendar(YearMonth yearMonth) {
@@ -78,20 +131,30 @@ public class CalendrierController {
         for (int i = 0; i < days.length; i++) {
             String dayDisplayName = days[i].getDisplayName(TextStyle.FULL, Locale.FRENCH);
             Label lblDay = new Label(dayDisplayName.substring(0, 1).toUpperCase() + dayDisplayName.substring(1)); // Capitalize the first letter
-            lblDay.getStyleClass().add("calendar-day-header");
-            calendarGrid.add(lblDay, i, 0);
+            lblDay.setAlignment(Pos.CENTER); // Centrer le texte dans le Label
+            lblDay.setMaxWidth(Double.MAX_VALUE); // Permettre au Label de s'étendre à la largeur maximale
+            lblDay.setStyle("-fx-background-color: grey; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5;");
+            calendarGrid.add(lblDay, i, 0); // Ajoutez au GridPane
+            GridPane.setHgrow(lblDay, Priority.ALWAYS); // Permettre au Label de croître horizontalement
+            GridPane.setFillWidth(lblDay, true); // Le Label occupe toute la largeur de la cellule
+
+
+        
 }
 
-        while (date.getMonthValue() <= yearMonth.getMonthValue() | currentYearMonth.getMonthValue() == YearMonth.now().getMonthValue()) {
-            for (int j = 0; j < 7; j++) { // Weekday columns
-                Label dayLabel = new Label(String.valueOf(date.getDayOfMonth()));
-                dayLabel.getStyleClass().add("calendar-day-label");
-                if(date.getMonthValue() != yearMonth.getMonthValue()) {
-                    dayLabel.getStyleClass().add("calendar-day-label-inactive");
-                }
-                calendarGrid.add(dayLabel, j, weekRow);
-                date = date.plusDays(1);
+    while (date.getMonthValue() <= yearMonth.getMonthValue() | currentYearMonth.getMonthValue() == YearMonth.now().getMonthValue()) {
+        for (int j = 0; j < 7; j++) { // Weekday columns
+            Label dayLabel = new Label(String.valueOf(date.getDayOfMonth()));
+            dayLabel.setAlignment(Pos.TOP_LEFT); // Aligner le texte en haut à gauche
+            dayLabel.setContentDisplay(ContentDisplay.TOP); // Positionner le texte au-dessus de tout autre contenu graphique
+            dayLabel.setGraphicTextGap(0.0); // Pas d'écart entre le texte et le graphique (si vous en utilisez un)
+            dayLabel.setStyle("-fx-border-color: black; -fx-background-color: white; -fx-padding: 5; -fx-pref-width: 400px; -fx-pref-height: 300px;");            
+            if(date.getMonthValue() != yearMonth.getMonthValue()) {
+                dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
             }
+            calendarGrid.add(dayLabel, j, weekRow);
+            date = date.plusDays(1);
+        }
             // If the row is completely in the next month, remove it
             if (date.getMonthValue() != yearMonth.getMonthValue() && date.getDayOfWeek() == DayOfWeek.MONDAY) {
                 break;
@@ -115,7 +178,7 @@ public class CalendrierController {
         for (int year = currentYear - 5; year <= currentYear + 5; year++) {
             yearPicker.getItems().add(year);
         }
-        yearPicker.setVisible(false); // Assurez-vous que le ComboBox est initialement caché
+        yearPicker.setVisible(false);
         yearPicker.setValue(currentYear); // Sélectionnez l'année actuelle par défaut
     }
 
@@ -126,9 +189,13 @@ public class CalendrierController {
 
     @FXML
     private void showYearPicker() {
-        yearPicker.show(); // Montrez le ComboBox lorsque l'utilisateur clique sur le label
+        yearPicker.show(); // Montrer le ComboBox lorsque l'utilisateur clique sur le label
     }
 
+    @FXML
+    private void showViewSelector() {
+        viewSelector.show();
+    }
     
 
     private int mapMonthNameToNumber(String monthName) {
@@ -176,11 +243,7 @@ public class CalendrierController {
         }
     }
 
-    // private void changeYearMonth(YearMonth yearMonth) {
-    //     currentYearMonth = yearMonth;
-    //     fillCalendar(currentYearMonth);
-    //     updateMonthYearDisplay(currentYearMonth);
-    // }
+
 
 
     private void updateMonthYearDisplay(YearMonth yearMonth) {

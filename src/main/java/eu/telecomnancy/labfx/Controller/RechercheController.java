@@ -5,11 +5,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import java.util.List;
+import java.lang.Object;
 import eu.telecomnancy.labfx.Connect;
-
+import java.io.IOException;
 import java.sql.*;
 
 public class RechercheController {
@@ -17,67 +22,52 @@ public class RechercheController {
     @FXML
     private VBox searchListContainer;
 
-    public void initialize(){
-
+    public void initialize() throws SQLException {
+        getElements();
     }
     
-    private void addElementToSearchList(String imageUrl, String nomAnnonce, String type, String nomPreteur, String localisation, String prix) {
+    private void addElementToSearchList(String name, String desc, String type, String Prix) throws SQLException{
+        try {
 
-        ImageView imageView = new ImageView();
-        imageView.setFitHeight(105.0);
-        imageView.setFitWidth(148.0);
-        imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(imageUrl));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/ListObject.fxml"));
+            Node content = loader.load();
 
-        Label labelNom = new Label(nomAnnonce);
-        labelNom.setFont(new Font(30.0));
+            ListObjectController objectController = loader.getController();
 
-        Label labelType = new Label(type);
-        labelType.setFont(new Font(10.0));
-        labelType.setTextFill(javafx.scene.paint.Color.web("#7c7c7c"));
+            objectController.setElementData(name, desc, type, Prix);
 
-        Label labelNomPreteur = new Label(nomPreteur);
-        labelNomPreteur.setFont(new Font(15.0));
-
-        Label labelLocalisation = new Label(localisation);
-        labelLocalisation.setFont(new Font(10.0));
-        labelLocalisation.setTextFill(javafx.scene.paint.Color.web("#7c7c7c"));
-
-        Label labelPrix = new Label(prix);
-
-        HBox elementBox = new HBox();
-        elementBox.setPrefHeight(104.0);
-        elementBox.setPrefWidth(584.0);
-        elementBox.getChildren().addAll(imageView, createVBox(labelNom, labelType, labelNomPreteur), createVBox(labelLocalisation, labelPrix));
-
-        Separator separator = new Separator();
-        separator.setPrefWidth(200.0);
-
-        searchListContainer.getChildren().addAll(elementBox, separator);
-    }
-
-    private VBox createVBox(Label... labels) {
-        VBox vbox = new VBox();
-        vbox.setPrefHeight(105.0);
-        vbox.setPrefWidth(535.0);
-        vbox.getChildren().addAll(labels);
-        return vbox;
+            searchListContainer.getChildren().addAll(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private int getElements() throws SQLException{
-        int max_id = 0;
 
         Connect connect = new Connect();
         try (Connection connection = connect.getConnection()){
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Ressource");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Ressource;");
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            System.out.println(resultSet);
+             while (resultSet.next()) {
+                // System.out.print(resultSet.getString(2) + "\t");
+                // System.out.print(resultSet.getString(3) + "\t");
+                // System.out.print(resultSet.getString(8) + "\t");
+                // System.out.print(resultSet.getString(9) + "\t");
+
+
+                String name = resultSet.getString(2);
+                String desc = resultSet.getString(3);
+                String type = resultSet.getBoolean(8) ? "Object" : "Service";
+                String Prix = resultSet.getString(9);
+                addElementToSearchList(name, desc, type, Prix);
+            }
+            resultSet.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-        return 1;
+        return 0;
     }
-    
+
 }
