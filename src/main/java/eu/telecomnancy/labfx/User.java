@@ -73,15 +73,16 @@ public class User {
             int wallet = resultSet.getInt("Wallet");
             int note = resultSet.getInt("Note");
             byte[] imagebyte = resultSet.getBytes("Photo_profil");
+            Image pdp = null;
             if (imagebyte != null && imagebyte.length > 0) {
-                Image pdp = (new Image(new ByteArrayInputStream(imagebyte)));
-                User user = new User(email, password, nom, prenom,pdp, id, wallet, note);
-                preparedStatement.close();
-                connection.commit();
-                connection.close();
-                System.out.println("User créé");
-                return user;
+                pdp = (new Image(new ByteArrayInputStream(imagebyte)));
             }
+            User user = new User(email, password, nom, prenom,pdp, id, wallet, note);
+            preparedStatement.close();
+            connection.commit();
+            connection.close();
+            System.out.println("User créé");
+            return user;
         }
         connection.close();
         return null;

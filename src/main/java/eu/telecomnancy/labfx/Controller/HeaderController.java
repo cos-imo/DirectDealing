@@ -33,12 +33,14 @@ public class HeaderController extends HBox {
     private void setMainRoot(BorderPane mainRoot) {
         this.mainRoot = mainRoot;
     }
-        public void initialize() {
+    public void initialize() {
         User currentUser = Session.getInstance().getCurrentUser();
         labelNames.setText(currentUser.getPrenom() + " " + currentUser.getNom());
-        imageViewPdp.setImage(currentUser.getPdp());
-        imageViewPdp.setFitWidth(30);
-        imageViewPdp.setFitHeight(30);
+        if (currentUser.getPdp() != null) {
+            imageViewPdp.setImage(currentUser.getPdp());
+            imageViewPdp.setFitWidth(30);
+            imageViewPdp.setFitHeight(30);
+        }
         labelFlorain.setText(String.valueOf(currentUser.getWallet().getFlorain()));
     }
     @FXML
