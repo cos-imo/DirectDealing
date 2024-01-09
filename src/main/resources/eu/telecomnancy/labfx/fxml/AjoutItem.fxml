@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.media.MediaView?>
+<!-- ?import javafx.scene.media.MediaView? -->
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.AjoutItemControler">
    <children>
       <HBox layoutX="-3.0" layoutY="1.0" prefHeight="400.0" prefWidth="607.0">
          <children>
@@ -25,8 +25,8 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <MediaView fitHeight="200.0" fitWidth="200.0" />
-                        <Button mnemonicParsing="false" text="Ajouter plus de photos" />
+                        <!-- <MediaView fitHeight="200.0" fitWidth="200.0" /> -->
+                        <Button mnemonicParsing="false" text="Ajouter plus de photos" onAction="#ajouterPhotos" />
                      </children>
                   </HBox>
                   <Separator prefWidth="200.0" />
