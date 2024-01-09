@@ -4,9 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
+
 import java.time.YearMonth;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +19,7 @@ import java.time.format.TextStyle;
 import java.time.DayOfWeek;
 import java.util.Locale;
 import java.util.Map;
+
 
 
 import javafx.scene.input.MouseEvent;
@@ -30,6 +36,8 @@ public class CalendrierController {
     private ComboBox<String> monthPicker;
     @FXML
     private ComboBox<Integer> yearPicker;
+    @FXML
+    private ComboBox<String> viewSelector;
     private YearMonth currentYearMonth;
 
     @FXML
@@ -61,6 +69,22 @@ public class CalendrierController {
         initializeMonthPicker();
         initializeYearPicker();
     }    
+
+    public void handleChangeView(ActionEvent event) {
+        String selectedView = viewSelector.getValue();
+        switch (selectedView) {
+            case "Mois":
+                // Logique pour afficher la vue mensuelle
+                break;
+            case "Semaine":
+                // Logique pour afficher la vue hebdomadaire
+                break;
+            case "Jour":
+                // Logique pour afficher la vue quotidienne
+                break;
+        }
+    }
+    
     
 
     private void fillCalendar(YearMonth yearMonth) {
@@ -78,22 +102,30 @@ public class CalendrierController {
         for (int i = 0; i < days.length; i++) {
             String dayDisplayName = days[i].getDisplayName(TextStyle.FULL, Locale.FRENCH);
             Label lblDay = new Label(dayDisplayName.substring(0, 1).toUpperCase() + dayDisplayName.substring(1)); // Capitalize the first letter
+            lblDay.setAlignment(Pos.CENTER); // Centrer le texte dans le Label
+            lblDay.setMaxWidth(Double.MAX_VALUE); // Permettre au Label de s'étendre à la largeur maximale
             lblDay.setStyle("-fx-background-color: grey; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5;");
-            calendarGrid.add(lblDay, i, 0);
+            calendarGrid.add(lblDay, i, 0); // Ajoutez au GridPane
+            GridPane.setHgrow(lblDay, Priority.ALWAYS); // Permettre au Label de croître horizontalement
+            GridPane.setFillWidth(lblDay, true); // Le Label occupe toute la largeur de la cellule
+
 
         
 }
 
-        while (date.getMonthValue() <= yearMonth.getMonthValue() | currentYearMonth.getMonthValue() == YearMonth.now().getMonthValue()) {
-            for (int j = 0; j < 7; j++) { // Weekday columns
-                Label dayLabel = new Label(String.valueOf(date.getDayOfMonth()));
-                dayLabel.setStyle("-fx-border-color: black; -fx-background-color: white; -fx-padding: 5;");
-                if(date.getMonthValue() != yearMonth.getMonthValue()) {
-                    dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
-                }
-                calendarGrid.add(dayLabel, j, weekRow);
-                date = date.plusDays(1);
+    while (date.getMonthValue() <= yearMonth.getMonthValue() | currentYearMonth.getMonthValue() == YearMonth.now().getMonthValue()) {
+        for (int j = 0; j < 7; j++) { // Weekday columns
+            Label dayLabel = new Label(String.valueOf(date.getDayOfMonth()));
+            dayLabel.setAlignment(Pos.TOP_LEFT); // Aligner le texte en haut à gauche
+            dayLabel.setContentDisplay(ContentDisplay.TOP); // Positionner le texte au-dessus de tout autre contenu graphique
+            dayLabel.setGraphicTextGap(0.0); // Pas d'écart entre le texte et le graphique (si vous en utilisez un)
+            dayLabel.setStyle("-fx-border-color: black; -fx-background-color: white; -fx-padding: 5; -fx-pref-width: 400px; -fx-pref-height: 300px;");            
+            if(date.getMonthValue() != yearMonth.getMonthValue()) {
+                dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
             }
+            calendarGrid.add(dayLabel, j, weekRow);
+            date = date.plusDays(1);
+        }
             // If the row is completely in the next month, remove it
             if (date.getMonthValue() != yearMonth.getMonthValue() && date.getDayOfWeek() == DayOfWeek.MONDAY) {
                 break;
@@ -117,7 +149,7 @@ public class CalendrierController {
         for (int year = currentYear - 5; year <= currentYear + 5; year++) {
             yearPicker.getItems().add(year);
         }
-        yearPicker.setVisible(false); // Assurez-vous que le ComboBox est initialement caché
+        yearPicker.setVisible(false);
         yearPicker.setValue(currentYear); // Sélectionnez l'année actuelle par défaut
     }
 
@@ -128,7 +160,7 @@ public class CalendrierController {
 
     @FXML
     private void showYearPicker() {
-        yearPicker.show(); // Montrez le ComboBox lorsque l'utilisateur clique sur le label
+        yearPicker.show(); // Montrer le ComboBox lorsque l'utilisateur clique sur le label
     }
 
     
@@ -177,6 +209,7 @@ public class CalendrierController {
             updateMonthYearDisplay(currentYearMonth);
         }
     }
+    
 
     // private void changeYearMonth(YearMonth yearMonth) {
     //     currentYearMonth = yearMonth;
