@@ -21,17 +21,17 @@ import java.io.IOException;
 
 public class HeaderController extends HBox {
     @FXML
-    public Button btnOpenCalendar;
+    private Button btnOpenCalendar;
     
     // Le BorderPane racine de la scène principale
     private BorderPane mainRoot;
 
-    public void setMainRoot(BorderPane mainRoot) {
+    private void setMainRoot(BorderPane mainRoot) {
         this.mainRoot = mainRoot;
     }
 
     @FXML
-    public void OpenCalendar(ActionEvent event) {
+    private void OpenCalendar(ActionEvent event) {
             BorderPane root = new BorderPane();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Calendrier.fxml"));
 
@@ -55,7 +55,7 @@ public class HeaderController extends HBox {
     }
 
     @FXML
-    public void retourAccueil(ActionEvent event){
+    private void retourAccueil(ActionEvent event){
             BorderPane root = new BorderPane();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
 
