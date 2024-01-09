@@ -17,7 +17,7 @@ CREATE TABLE User (
     Last_Name TEXT NOT NULL,
     Mail TEXT NOT NULL,
     Password TEXT NOT NULL,
-    Photo_profil BLOB DEFAULT "/Users/gabrieldecave/Telecom/2A/PCD/CodingWeek/codingweek-24/src/main/resources/eu/telecomnancy/labfx/images/account.png",
+    Photo_profil BLOB,
     Wallet INTEGER DEFAULT 0,
     Note INTEGER
 );
