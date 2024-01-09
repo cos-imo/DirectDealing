@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import eu.telecomnancy.labfx.Connect;
+import eu.telecomnancy.labfx.Session;
+import eu.telecomnancy.labfx.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -40,8 +42,9 @@ public class MonCompteController {
 
     private int user_id;
 
-    public void initialize(int user_id) throws SQLException{
-        this.user_id = user_id;
+    public void initialize() throws SQLException{
+        User currentUser = Session.getInstance().getCurrentUser();
+        this.user_id = currentUser.getId();
         Connect connect = new Connect();
         Connection connection = connect.getConnection();
         String query = "SELECT * FROM User WHERE User_id = ?";
