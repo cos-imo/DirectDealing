@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.CalendrierController">
     <children>
@@ -14,11 +16,12 @@
                 </HBox>
             </top>
             <center>
-                <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <children>
-                        <Rectangle width="100" height="100" fill="blue"/>
-                    </children>
-                </HBox>
+                <VBox alignment="CENTER" spacing="10">
+                    <Label fx:id="monthLabel" text="Mois" />
+                    <GridPane fx:id="calendarGrid" vgap="10" hgap="10">
+                        <!-- Les jours du calendrier seront ajoutés ici dynamiquement -->
+                    </GridPane>
+                </VBox>
             </center>
         </BorderPane>
     </children>
