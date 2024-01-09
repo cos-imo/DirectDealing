@@ -14,7 +14,7 @@
          <children>
             <HBox maxHeight="-Infinity" prefHeight="50.0" prefWidth="1000.0">
                <children>
-                  <Button text="DirectDealing" />
+                  <Button text="DirectDealing" onAction="#retourAccueil"/>
                </children>
             </HBox>
             <Button fx:id="btnOpenCalendar" minWidth="-Infinity" mnemonicParsing="false" onAction="#OpenCalendar" text="Calendrier">
