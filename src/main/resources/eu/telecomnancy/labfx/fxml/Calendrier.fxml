@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.CalendrierController">
     <children>
-        <BorderPane prefHeight="200.0" prefWidth="200.0">
+        <BorderPane prefHeight="720.0" prefWidth="1080.0" style="-fx-background-color: white;">
             <top>
-                <HBox prefHeight="100.0" prefWidth="1080.0" BorderPane.alignment="CENTER"> 
-                    <fx:include source="Header.fxml"/> 
-                </HBox>
+                <fx:include source="Header.fxml"/>
             </top>
             <center>
-                <VBox alignment="CENTER" spacing="10">
-                    <Label fx:id="monthLabel" text="Mois" />
-                    <GridPane fx:id="calendarGrid" vgap="10" hgap="10">
+                <VBox>
+                    <HBox style="-fx-background-color: #ececec; -fx-padding: 10;">
+                        <Label fx:id="monthLabel" text="Mois" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #333333;" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                    <GridPane fx:id="calendarGrid" vgap="10" hgap="10" style="-fx-padding: 20; -fx-alignment: center;">
                         <!-- Les jours du calendrier seront ajoutés ici dynamiquement -->
                     </GridPane>
                 </VBox>

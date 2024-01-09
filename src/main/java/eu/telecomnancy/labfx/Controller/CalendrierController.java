@@ -23,17 +23,23 @@ public class CalendrierController {
 
     private void fillCalendar(YearMonth month) {
         LocalDate date = month.atDay(1);
-        int dayOfWeek = date.getDayOfWeek().getValue() % 7; // Lundi est 1, Dimanche est 0
-
+        int dayOfWeek = date.getDayOfWeek().getValue() % 7;
+        String[] daysOfWeek = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"};
         monthLabel.setText(month.getMonth().getDisplayName(TextStyle.FULL, Locale.FRENCH) + " " + month.getYear());
-
-        // Effacer le contenu précédent
         calendarGrid.getChildren().clear();
 
-        // Remplir les jours
+        // Ajouter les en-têtes de jour
+        for (int i = 0; i < daysOfWeek.length; i++) {
+            Label lbl = new Label(daysOfWeek[i]);
+            lbl.setStyle("-fx-font-weight: bold; -fx-padding: 5; -fx-text-fill: #666;");
+            calendarGrid.add(lbl, i, 0);
+        }
+
+        // Ajouter les jours
         for (int i = 0; i < month.lengthOfMonth(); i++) {
             Label dayLabel = new Label(Integer.toString(i + 1));
-            calendarGrid.add(dayLabel, (dayOfWeek + i) % 7, (dayOfWeek + i) / 7);
+            dayLabel.setStyle("-fx-border-color: lightgray; -fx-padding: 5;");
+            calendarGrid.add(dayLabel, (dayOfWeek + i) % 7, (dayOfWeek + i) / 7 + 1);
         }
     }
 }
