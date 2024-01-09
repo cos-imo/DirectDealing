@@ -54,8 +54,8 @@ public class ConnexionController {
 
             Scene scene = new Scene(root, 1080, 720);
 
-            HeaderController header = new HeaderController();
-            root.setTop(header);
+            // HeaderController header = new HeaderController();
+            // root.setTop(header);
             try {
                 root.setCenter(loader.load());
             } catch (IOException e) {
