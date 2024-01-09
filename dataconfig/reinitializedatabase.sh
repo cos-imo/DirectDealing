@@ -35,6 +35,7 @@ CREATE TABLE Ressource (
     LocalisationLatitude FLOAT NOT NULL,
     type BOOLEAN NOT NULL,
     Prix INTEGER NOT NULL,
+    Image BLOB,
     FOREIGN KEY (Owner_id) REFERENCES User(User_id)
 );
 
