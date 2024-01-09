@@ -2,6 +2,7 @@ package eu.telecomnancy.labfx.Controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,12 +12,18 @@ import java.sql.SQLException;
 import eu.telecomnancy.labfx.Connect;
 import eu.telecomnancy.labfx.Session;
 import eu.telecomnancy.labfx.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class MonCompteController {
     @FXML
@@ -71,7 +78,7 @@ public class MonCompteController {
     }
 
     @FXML
-    private void setLoadImage() {
+    private void setLoadImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir une image");
         File selectedFile = fileChooser.showOpenDialog(BtnLoadImage.getScene().getWindow());
@@ -90,12 +97,33 @@ public class MonCompteController {
                     connection.commit();
                     connection.close();
                     Session.getInstance().setCurrentUser(User.newUserFromId(user_id));
-                    initialize();
+                    loadPage("MonCompte", event);
                 }
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void loadPage(String PageName, ActionEvent event){
+        BorderPane root = new BorderPane();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/" + PageName + ".fxml"));
+
+            Scene scene = new Scene(root, 1080, 720);
+
+            try {
+                root.setCenter(loader.load());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Node source = (Node) event.getSource();
+            Stage primaryStage = (Stage) source.getScene().getWindow();
+
+            primaryStage.setTitle("TelecomNancy DirectDealing");
+
+            primaryStage.setScene(scene);
+            primaryStage.show();
     }
 }
