@@ -37,6 +37,8 @@ public class HeaderController extends HBox {
         User currentUser = Session.getInstance().getCurrentUser();
         labelNames.setText(currentUser.getPrenom() + " " + currentUser.getNom());
         imageViewPdp.setImage(currentUser.getPdp());
+        imageViewPdp.setFitWidth(30);
+        imageViewPdp.setFitHeight(30);
         labelFlorain.setText(String.valueOf(currentUser.getWallet().getFlorain()));
     }
     @FXML
