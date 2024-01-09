@@ -78,16 +78,18 @@ public class CalendrierController {
         for (int i = 0; i < days.length; i++) {
             String dayDisplayName = days[i].getDisplayName(TextStyle.FULL, Locale.FRENCH);
             Label lblDay = new Label(dayDisplayName.substring(0, 1).toUpperCase() + dayDisplayName.substring(1)); // Capitalize the first letter
-            lblDay.getStyleClass().add("calendar-day-header");
+            lblDay.setStyle("-fx-background-color: grey; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5;");
             calendarGrid.add(lblDay, i, 0);
+
+        
 }
 
         while (date.getMonthValue() <= yearMonth.getMonthValue() | currentYearMonth.getMonthValue() == YearMonth.now().getMonthValue()) {
             for (int j = 0; j < 7; j++) { // Weekday columns
                 Label dayLabel = new Label(String.valueOf(date.getDayOfMonth()));
-                dayLabel.getStyleClass().add("calendar-day-label");
+                dayLabel.setStyle("-fx-border-color: black; -fx-background-color: white; -fx-padding: 5;");
                 if(date.getMonthValue() != yearMonth.getMonthValue()) {
-                    dayLabel.getStyleClass().add("calendar-day-label-inactive");
+                    dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
                 }
                 calendarGrid.add(dayLabel, j, weekRow);
                 date = date.plusDays(1);
