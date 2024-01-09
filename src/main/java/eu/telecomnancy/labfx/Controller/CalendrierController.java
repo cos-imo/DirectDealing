@@ -33,58 +33,61 @@ public class CalendrierController {
     @FXML
     private Label yearLabel;
     @FXML
+    private Label viewLabel;
+    @FXML
+    private Integer weekNumber;
+    @FXML
     private ComboBox<String> monthPicker;
     @FXML
     private ComboBox<Integer> yearPicker;
     @FXML
     private ComboBox<String> viewSelector;
+
     private YearMonth currentYearMonth;
 
-    @FXML
-    private void previousMonth() {
-        currentYearMonth = currentYearMonth.minusMonths(1);
-        
-        fillCalendar(currentYearMonth);
-        updateMonthYearDisplay(currentYearMonth);
+
+
+
+       @FXML
+    private void handleViewSelector(ActionEvent event) {
+        String selectedView = viewSelector.getValue();
+        if (selectedView != null) {
+            viewLabel.setText(selectedView);
+            changeView(selectedView);
+        }
+    }
+    
+    private void changeView(String selectedView) {
+        switch (selectedView) {
+            case "Mois":
+                System.err.println("Logique pour afficher la vue mensuelle");
+                
+
+                break;
+            case "Semaine":
+                System.err.println("Logique pour afficher la vue hebdomadaire");
+                break;
+            case "Jour":
+                System.err.println("Logique pour afficher la vue quotidienne");
+                break;
+        }
     }
 
-    @FXML
-    private void currentMonth() {
-        currentYearMonth = YearMonth.now();
-        fillCalendar(currentYearMonth);
-        updateMonthYearDisplay(currentYearMonth);
-    }
 
-    @FXML
-    private void nextMonth() {
-        currentYearMonth = currentYearMonth.plusMonths(1);
-        fillCalendar(currentYearMonth);
-        updateMonthYearDisplay(currentYearMonth);
-    }
+
+
+    
 
     public void initialize() {
         currentYearMonth = YearMonth.now();
+        viewSelector.getItems().addAll("▼ Mois", "▼ Semaine", "▼ Jour");
+        viewLabel.setText("▼ Mois");
         fillCalendar(currentYearMonth);
         updateMonthYearDisplay(currentYearMonth);
         initializeMonthPicker();
         initializeYearPicker();
     }    
 
-    public void handleChangeView(ActionEvent event) {
-        String selectedView = viewSelector.getValue();
-        switch (selectedView) {
-            case "Mois":
-                // Logique pour afficher la vue mensuelle
-                break;
-            case "Semaine":
-                // Logique pour afficher la vue hebdomadaire
-                break;
-            case "Jour":
-                // Logique pour afficher la vue quotidienne
-                break;
-        }
-    }
-    
     
 
     private void fillCalendar(YearMonth yearMonth) {
@@ -163,6 +166,10 @@ public class CalendrierController {
         yearPicker.show(); // Montrer le ComboBox lorsque l'utilisateur clique sur le label
     }
 
+    @FXML
+    private void showViewSelector() {
+        viewSelector.show();
+    }
     
 
     private int mapMonthNameToNumber(String monthName) {
@@ -209,7 +216,8 @@ public class CalendrierController {
             updateMonthYearDisplay(currentYearMonth);
         }
     }
-    
+
+ 
 
     // private void changeYearMonth(YearMonth yearMonth) {
     //     currentYearMonth = yearMonth;
