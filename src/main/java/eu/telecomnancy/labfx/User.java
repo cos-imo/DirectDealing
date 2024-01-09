@@ -57,12 +57,20 @@ public class User {
         return note;
     }
     public static User newUserFromMail(String mail) throws SQLException{
+        String sql = "SELECT * FROM User WHERE Mail = "+mail;
+        return newUserFromAttribute(sql);
+    }
+
+    public static User newUserFromId(int id) throws SQLException {
+        String sql = "SELECT * FROM User WHERE User_id = "+id;
+        return newUserFromAttribute(sql);
+    } 
+
+    private static User newUserFromAttribute(String sql) throws SQLException{
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
-        String sql = "SELECT * FROM User WHERE Mail = ?";
         Statement statement = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, mail);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (!resultSet.isClosed()){
             String email = resultSet.getString("Mail");
