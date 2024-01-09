@@ -30,13 +30,13 @@ CREATE TABLE Ressource (
     DateFin DATE NOT NULL,
     LocalisationLongitude FLOAT NOT NULL,
     LocalisationLatitude FLOAT NOT NULL,
-    type INTEGER NOT NULL,
+    type BOOLEAN NOT NULL,
     Prix INTEGER NOT NULL
 );
 
 CREATE TABLE Event (
     Event_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type INTEGER NOT NULL,
+    type BOOLEAN NOT NULL,
     Name TEXT NOT NULL,
     preteur_id INTEGER REFERENCES User(User_id) NOT NULL,
     acheteur_id INTEGER REFERENCES User(User_id),
@@ -55,6 +55,9 @@ CREATE TABLE Message (
 );
 
 INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("a", "a", "a", "a");
+INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("b", "b", "b", "b");
+INSERT INTO Event (type, Name, preteur_id, acheteur_id, Recurrence, DateDebut, DateFin, Prix) VALUES (0, "aide pendant la coding week", 1, 2, 0, "2024-01-08", "2024-01-12", 100);
+INSERT INTO Event (type, Name, preteur_id, acheteur_id, Recurrence, DateDebut, DateFin, Prix) VALUES (1, "ordi", 2, 1, 0, "2024-01-13", "2024-01-15", 20);
 
 .exit
 EOF

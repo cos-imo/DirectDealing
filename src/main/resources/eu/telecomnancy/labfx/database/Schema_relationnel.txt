@@ -60,14 +60,14 @@ CREATE TABLE Ressource (
     DateFin DATE NOT NULL,
     LocalisationLongitude float NOT NULL,
     LocalisationLatitude float NOT NULL,
-    type INTEGER NOT NULL, -- Assumption: 0 = service, 1 = prêt
+    type BOOLEAN NOT NULL, -- Assumption: 0 = service, 1 = prêt
     Prix INTEGER NOT NULL
 );
 -- EVENT --
 
 CREATE TABLE Event (
     Event_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type INTEGER NOT NULL, -- Assumption: 0 = prêt service, 1 = prêt objet, 2 = emprunt service, 3 = emprunt objet
+    type BOOLEAN NOT NULL, -- Assumption: 0 = service, 1 = objet
     Name TEXT NOT NULL,
     preteur_id INTEGER REFERENCES User(User_id) NOT NULL,
     acheteur_id INTEGER REFERENCES User(User_id),
