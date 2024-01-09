@@ -26,6 +26,7 @@ CREATE TABLE Ressource (
     Ressource_id INTEGER PRIMARY KEY AUTOINCREMENT,
     Name TEXT NOT NULL,
     Desc TEXT NOT NULL,
+    Illustration BLOB,
     DateDebut DATE NOT NULL,
     DateFin DATE NOT NULL,
     LocalisationLongitude FLOAT NOT NULL,
