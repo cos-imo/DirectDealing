@@ -1,10 +1,8 @@
 package eu.telecomnancy.labfx.Controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import java.time.YearMonth;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,72 +16,78 @@ public class CalendrierController {
     private GridPane calendarGrid;
     @FXML
     private Label monthYearLabel;
+    private YearMonth currentYearMonth;
+
+    @FXML
+    private void previousMonth() {
+        System.out.println("Previous month");
+        currentYearMonth = currentYearMonth.minusMonths(1);
+        fillCalendar(currentYearMonth);
+        updateMonthYearDisplay(currentYearMonth);
+    }
+
+    @FXML
+    private void currentMonth() {
+        System.out.println("Current month");
+        currentYearMonth = YearMonth.now();
+        fillCalendar(currentYearMonth);
+        updateMonthYearDisplay(currentYearMonth);
+    }
+
+    @FXML
+    private void nextMonth() {
+        System.out.println("Next month");
+        currentYearMonth = currentYearMonth.plusMonths(1);
+        fillCalendar(currentYearMonth);
+        updateMonthYearDisplay(currentYearMonth);
+    }
 
     public void initialize() {
-        Locale.setDefault(new Locale("fr", "FR"));
-        YearMonth currentYearMonth = YearMonth.now();
+        Locale.setDefault(Locale.FRANCE); // Set the locale for France
+        currentYearMonth = YearMonth.now(); 
         fillCalendar(currentYearMonth);
+        updateMonthYearDisplay(currentYearMonth);
     }
-    private void updateMonthYearDisplay(YearMonth yearMonth) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy").withLocale(Locale.FRENCH);
-        String monthYear = yearMonth.format(formatter);
-        monthYearLabel.setText(monthYear.substring(0, 1).toUpperCase() + monthYear.substring(1)); // Capitalize the first letter
-    }
+    
 
     private void fillCalendar(YearMonth yearMonth) {
-        // Clear existing calendar
+        // Clear previous calendar entries
         calendarGrid.getChildren().clear();
-        calendarGrid.getColumnConstraints().clear();
-        calendarGrid.getRowConstraints().clear();
-
-        // Configure grid size
-        int totalColumns = DayOfWeek.values().length; // 7 days in a week
-        for (int i = 0; i < totalColumns; i++) {
-            ColumnConstraints column = new ColumnConstraints(100); // Column width
-            calendarGrid.getColumnConstraints().add(column);
-        }
-
         
+        // Determine the starting day for the calendar
+        LocalDate calendarStart = yearMonth.atDay(1).minusDays(yearMonth.atDay(1).getDayOfWeek().getValue() - DayOfWeek.MONDAY.getValue());
+        
+        // Fill the calendar with days
+        LocalDate date = calendarStart;
+        int weekRow = 1;
 
-        // Add day of week headers
         DayOfWeek[] days = DayOfWeek.values();
         for (int i = 0; i < days.length; i++) {
             String dayDisplayName = days[i].getDisplayName(TextStyle.FULL, Locale.FRENCH);
             Label lblDay = new Label(dayDisplayName.substring(0, 1).toUpperCase() + dayDisplayName.substring(1)); // Capitalize the first letter
             lblDay.getStyleClass().add("calendar-day-header");
             calendarGrid.add(lblDay, i, 0);
-        }
-
-        // Fill days
-        LocalDate calendarDate = yearMonth.atDay(1);
-        while (calendarDate.getDayOfWeek() != DayOfWeek.MONDAY) {
-            calendarDate = calendarDate.minusDays(1);
-        }
-
-        int rowCounter = 1;
-        while (rowCounter <= 6) {
-            boolean isRowEmpty = true;
-            for (int i = 0; i < totalColumns; i++) {
-                Label lblDay = new Label(String.valueOf(calendarDate.getDayOfMonth()));
-                lblDay.getStyleClass().add("calendar-day-cell");
-                if (calendarDate.getMonthValue() == yearMonth.getMonthValue()) {
-                    lblDay.getStyleClass().add("calendar-day-cell-active");
-                    isRowEmpty = false;
-                } else {
-                    lblDay.getStyleClass().add("calendar-day-cell-inactive");
+}
+        while (date.getMonthValue() <= yearMonth.getMonthValue()) {
+            for (int j = 0; j < 7; j++) { // Weekday columns
+                Label dayLabel = new Label(String.valueOf(date.getDayOfMonth()));
+                dayLabel.getStyleClass().add("calendar-day-label");
+                if(date.getMonthValue() != yearMonth.getMonthValue()) {
+                    dayLabel.getStyleClass().add("calendar-day-label-inactive");
                 }
-                calendarGrid.add(lblDay, i, rowCounter);
-                calendarDate = calendarDate.plusDays(1);
+                calendarGrid.add(dayLabel, j, weekRow);
+                date = date.plusDays(1);
             }
-            if (isRowEmpty && calendarDate.getMonthValue() != yearMonth.getMonthValue()) {
-                // Remove the last row if it contains only days of the next month
-                if (!calendarGrid.getRowConstraints().isEmpty()) {
-                    calendarGrid.getRowConstraints().remove(calendarGrid.getRowConstraints().size() - 1);
-                }
+            // If the row is completely in the next month, remove it
+            if (date.getMonthValue() != yearMonth.getMonthValue() && date.getDayOfWeek() == DayOfWeek.MONDAY) {
                 break;
             }
-            rowCounter++;
+            weekRow++;
         }
-        updateMonthYearDisplay(yearMonth);
+    }
+
+    private void updateMonthYearDisplay(YearMonth yearMonth) {
+        String monthYear = yearMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.FRANCE));
+        monthYearLabel.setText(monthYear.substring(0, 1).toUpperCase(Locale.FRANCE) + monthYear.substring(1));
     }
 }

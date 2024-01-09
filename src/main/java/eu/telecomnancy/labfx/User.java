@@ -76,7 +76,6 @@ public class User {
             String password = resultSet.getString("Password");
             String nom = resultSet.getString("Last_Name");
             String prenom = resultSet.getString("First_Name");
-            int id = resultSet.getInt("User_id");
             int wallet = resultSet.getInt("Wallet");
             int note = resultSet.getInt("Note");
             byte[] imagebyte = resultSet.getBytes("Photo_profil");
