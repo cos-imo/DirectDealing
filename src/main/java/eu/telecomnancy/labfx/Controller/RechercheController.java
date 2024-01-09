@@ -42,7 +42,7 @@ public class RechercheController {
         }
     }
 
-    private ResultSet getElements() throws SQLException{
+    private int getElements() throws SQLException{
 
         Connect connect = new Connect();
         try (Connection connection = connect.getConnection()){
@@ -62,13 +62,12 @@ public class RechercheController {
                 String Prix = resultSet.getString(9);
                 addElementToSearchList(name, desc, type, Prix);
             }
-
-            return resultSet;
+            resultSet.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return 0;
     }
 
 }
