@@ -13,9 +13,15 @@ import javafx.scene.control.ChoiceBox;
 import javafx.stage.FileChooser;
 import java.time.LocalDate;
 import javafx.stage.Stage;
+import eu.telecomnancy.labfx.Connect;
+import eu.telecomnancy.labfx.Session;
+import eu.telecomnancy.labfx.User;
+import java.sql.Date;
+import java.time.LocalDate;
 
 import java.io.File;
 import java.util.List;
+import java.sql.*;
 
 public class AjoutItemControler {
 
@@ -55,12 +61,68 @@ public class AjoutItemControler {
         }
     }
 
+    private boolean insertDatabase(String Name, String Desc, java.sql.Date DateDebut, java.sql.Date DateFin, float LocalisationLongitude, float LocalisationLatitude, int type, int Prix) throws SQLException{
+        Connect connect = new Connect();
+        Connection connection = connect.getConnection(); 
+        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, getMaxId());
+            preparedStatement.setString(2, Name);
+            preparedStatement.setString(3, Desc);
+            preparedStatement.setDate(4, DateDebut);
+            preparedStatement.setDate(5, DateFin);
+            preparedStatement.setFloat(6, LocalisationLongitude);
+            preparedStatement.setFloat(7, LocalisationLatitude);
+            preparedStatement.setInt(8, type);
+            preparedStatement.setInt(9, Prix);
+
+            // Requête d'insertion
+            int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.commit();
+            connection.close();
+            // Retourner vrai si une ligne a été insérée, faux sinon
+            System.out.println("Ok");
+            return rowsAffected > 0;
+            }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private int getMaxId() throws SQLException{
+        int max_id = 0;
+
+        Connect connect = new Connect();
+        try (Connection connection = connect.getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT MAX(Ressource_id) FROM Ressource");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                max_id = resultSet.getInt(1);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(max_id+1);
+        return max_id+1;
+    }
+
     @FXML   
-    private void ajouterItem(Event event){
+    private void ajouterItem(Event event) {
         String Description = DescriptionField.getText();
         LocalDate DateDebut = DatePickerDebut.getValue();
         LocalDate DateFin = DatePickerFin.getValue();
         String selectedValue = choixType.getValue();
         String Nom = NomAnnonce.getText();
+        java.sql.Date sqlDateDebut = java.sql.Date.valueOf(DateDebut);
+        java.sql.Date sqlDateFin = java.sql.Date.valueOf(DateFin);
+        try {
+            this.insertDatabase(Nom, Description, sqlDateDebut, sqlDateFin, 0.0f, 0.0f, 1, 20);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
