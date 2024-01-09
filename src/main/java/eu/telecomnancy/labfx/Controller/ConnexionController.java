@@ -52,10 +52,9 @@ public class ConnexionController {
         String password = mdpField.getText();
         if (infosExist(email, password)){
             BorderPane root = new BorderPane();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
-
+            
             Scene scene = new Scene(root, 1080, 720);
-
+            
             // HeaderController header = new HeaderController();
             // root.setTop(header);
             try {
@@ -64,6 +63,7 @@ public class ConnexionController {
                     System.out.println("Erreur lors de la récupération de l'utilisateur");
                 }
                 Session.getInstance().setCurrentUser(currentUser);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Accueil.fxml"));
                 root.setCenter(loader.load());
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
