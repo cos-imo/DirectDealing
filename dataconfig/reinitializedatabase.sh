@@ -59,6 +59,8 @@ CREATE TABLE Message (
     Event_lie_id INTEGER REFERENCES Event(Event_id) NOT NULL,
     Sender_id INTEGER REFERENCES User(User_id) NOT NULL,
     Receiver_id INTEGER REFERENCES User(User_id) NOT NULL,
+    Date DATE NOT NULL,
+    Heure TIME NOT NULL,
     Contenu TEXT NOT NULL
 );
 
