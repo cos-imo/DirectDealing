@@ -97,33 +97,12 @@ public class MonCompteController {
                     connection.commit();
                     connection.close();
                     Session.getInstance().setCurrentUser(User.newUserFromId(user_id));
-                    loadPage("MonCompte", event);
+                    LoadPage.loadPage("MonCompte", event,getClass());
                 }
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void loadPage(String PageName, ActionEvent event){
-        BorderPane root = new BorderPane();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/" + PageName + ".fxml"));
-
-            Scene scene = new Scene(root, 1080, 720);
-
-            try {
-                root.setCenter(loader.load());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Node source = (Node) event.getSource();
-            Stage primaryStage = (Stage) source.getScene().getWindow();
-
-            primaryStage.setTitle("TelecomNancy DirectDealing");
-
-            primaryStage.setScene(scene);
-            primaryStage.show();
     }
 }
