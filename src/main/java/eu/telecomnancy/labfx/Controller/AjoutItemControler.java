@@ -4,6 +4,11 @@ package eu.telecomnancy.labfx.Controller;
 import javafx.fxml.FXML;
 import javafx.event.Event;
 import javafx.scene.control.DatePicker;
+import java.io.File;
+import java.nio.file.Files;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import java.io.ByteArrayInputStream;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -41,23 +46,21 @@ public class AjoutItemControler {
     private ChoiceBox<String> choixType;
 
     @FXML
+    private ImageView image_annonce;
+
+    @FXML
     private void ajouterPhotos(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select Images");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif", "*.bmp"));
-
-        Node source = (Node) event.getSource();
-        Stage primaryStage = (Stage) source.getScene().getWindow();
-
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(primaryStage);
-
-        if (selectedFiles != null) {
-            System.out.println("Selected Images:");
-            for (File file : selectedFiles) {
-                System.out.println(file.getAbsolutePath());
+        fileChooser.setTitle("Choisir une image");
+        File selectedFile = fileChooser.showOpenDialog(image_annonce.getScene().getWindow());
+        if (selectedFile != null) {
+            try {
+                byte[] imageBytes = Files.readAllBytes(selectedFile.toPath());
+                image_annonce.setImage(new Image(new ByteArrayInputStream(imageBytes)));
             }
-        } else {
-            System.out.println("No images selected.");
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
