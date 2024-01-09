@@ -6,12 +6,19 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <!-- ?import javafx.scene.media.MediaView? -->
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.AjoutItemControler">
    <children>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+      <top>
+         <HBox prefHeight="100.0" prefWidth="1080.0" BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1"> 
+            <fx:include source="Header.fxml"/> 
+         </HBox>
+      </top>
       <HBox layoutX="-3.0" layoutY="1.0" prefHeight="400.0" prefWidth="607.0">
          <children>
             <VBox alignment="CENTER" prefHeight="272.0" prefWidth="140.0">
@@ -38,5 +45,6 @@
             </VBox>
          </children>
       </HBox>
+      </BorderPane>
    </children>
 </AnchorPane>
