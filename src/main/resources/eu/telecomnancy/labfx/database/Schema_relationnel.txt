@@ -9,7 +9,7 @@ Table User:
 
 Table Event:
     Event_id (Primary Key)
-    type
+    isObjet
     Name
     preteur_id (Foreign Key -> User)
     acheteur_id (Foreign Key -> User)
@@ -67,7 +67,7 @@ CREATE TABLE Ressource (
 
 CREATE TABLE Event (
     Event_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type BOOLEAN NOT NULL, -- Assumption: 0 = service, 1 = objet
+    isObjet BOOLEAN NOT NULL, -- Assumption: 0 = service, 1 = objet
     Name TEXT NOT NULL,
     preteur_id INTEGER REFERENCES User(User_id) NOT NULL,
     acheteur_id INTEGER REFERENCES User(User_id),

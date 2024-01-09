@@ -24,6 +24,7 @@ CREATE TABLE User (
 
 CREATE TABLE Ressource (
     Ressource_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Owner_id INTEGER NOT NULL,
     Name TEXT NOT NULL,
     Desc TEXT NOT NULL,
     Illustration BLOB,
@@ -32,20 +33,26 @@ CREATE TABLE Ressource (
     LocalisationLongitude FLOAT NOT NULL,
     LocalisationLatitude FLOAT NOT NULL,
     type BOOLEAN NOT NULL,
-    Prix INTEGER NOT NULL
+    Prix INTEGER NOT NULL,
+    FOREIGN KEY (Owner_id) REFERENCES User(User_id)
 );
 
 CREATE TABLE Event (
     Event_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type BOOLEAN NOT NULL,
+    Ressource_id INTEGER NOT NULL,
+    isObjet BOOLEAN NOT NULL,
     Name TEXT NOT NULL,
-    preteur_id INTEGER REFERENCES User(User_id) NOT NULL,
-    acheteur_id INTEGER REFERENCES User(User_id),
+    preteur_id INTEGER NOT NULL,
+    acheteur_id INTEGER,
     Recurrence INTEGER NOT NULL,
     DateDebut DATE NOT NULL,
     DateFin DATE NOT NULL,
-    Prix INTEGER NOT NULL
+    Prix INTEGER NOT NULL,
+    FOREIGN KEY (Ressource_id) REFERENCES Ressource(Ressource_id),
+    FOREIGN KEY (preteur_id) REFERENCES User(User_id),
+    FOREIGN KEY (acheteur_id) REFERENCES User(User_id)
 );
+
 
 CREATE TABLE Message (
     Message_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,8 +64,10 @@ CREATE TABLE Message (
 
 INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("a", "a", "a", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb");
 INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("b", "b", "b", "b");
-INSERT INTO Event (type, Name, preteur_id, acheteur_id, Recurrence, DateDebut, DateFin, Prix) VALUES (0, "aide pendant la coding week", 1, 2, 0, "2024-01-08", "2024-01-12", 100);
-INSERT INTO Event (type, Name, preteur_id, acheteur_id, Recurrence, DateDebut, DateFin, Prix) VALUES (1, "ordi", 2, 1, 0, "2024-01-13", "2024-01-15", 20);
+INSERT INTO Ressource (Owner_id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix) VALUES (1, "ordinateur", "un ordinateur", "2024-01-13", "2024-01-15", 0, 0, 1, 20);
+INSERT INTO Ressource (Owner_id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix) VALUES (2, "aide pendant la coding week", "aide pendant la coding week", "2024-01-08", "2024-01-12", 0, 0, 0, 100);
+INSERT INTO Event (isObjet, Name, preteur_id, acheteur_id, Recurrence, DateDebut, DateFin, Prix, Ressource_id) VALUES (0, "aide pendant la coding week", 1, 2, 0, "2024-01-08", "2024-01-12", 100, 2);
+INSERT INTO Event (isObjet, Name, preteur_id, acheteur_id, Recurrence, DateDebut, DateFin, Prix, Ressource_id) VALUES (1, "ordi", 2, 1, 0, "2024-01-13", "2024-01-15", 20, 1);
 
 .exit
 EOF
