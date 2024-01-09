@@ -18,7 +18,11 @@ import eu.telecomnancy.labfx.Session;
 import eu.telecomnancy.labfx.User;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+
+// import com.google.common.hash.Hashing;
 
 public class ConnexionController {
     @FXML
@@ -83,6 +87,8 @@ public class ConnexionController {
         boolean res = false;
         Connect connect = null;
         Statement statement = null;
+        String pass = getHashedPassword(password);
+        // final String hashed = Hashing.sha256().hashString("your input", StandardCharsets.UTF_8).toString();
         try {
             connect = new Connect();
             Connection connection = connect.getConnection();
@@ -92,7 +98,7 @@ public class ConnexionController {
                     """;
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, email);
-            pstmt.setString(2, password);
+            pstmt.setString(2, pass);
 
             ResultSet rs = pstmt.executeQuery();
             if (!rs.isClosed()){ //Se ferme si la requête est vide
@@ -107,4 +113,27 @@ public class ConnexionController {
         return res;   
     }
 
+
+    private String getHashedPassword(String pass){
+         String password = pass;
+
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+            md.update(password.getBytes());
+    
+            byte byteData[] = md.digest();
+    
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < byteData.length;i++) {
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        System.out.println("Hex format : " + sb.toString());
+        return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return "";
+    }
 }

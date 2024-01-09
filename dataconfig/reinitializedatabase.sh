@@ -26,6 +26,7 @@ CREATE TABLE Ressource (
     Ressource_id INTEGER PRIMARY KEY AUTOINCREMENT,
     Name TEXT NOT NULL,
     Desc TEXT NOT NULL,
+    Illustration BLOB,
     DateDebut DATE NOT NULL,
     DateFin DATE NOT NULL,
     LocalisationLongitude FLOAT NOT NULL,
@@ -54,7 +55,7 @@ CREATE TABLE Message (
     Contenu TEXT NOT NULL
 );
 
-INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("a", "a", "a", "a");
+INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("a", "a", "a", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb");
 INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("b", "b", "b", "b");
 INSERT INTO Event (type, Name, preteur_id, acheteur_id, Recurrence, DateDebut, DateFin, Prix) VALUES (0, "aide pendant la coding week", 1, 2, 0, "2024-01-08", "2024-01-12", 100);
 INSERT INTO Event (type, Name, preteur_id, acheteur_id, Recurrence, DateDebut, DateFin, Prix) VALUES (1, "ordi", 2, 1, 0, "2024-01-13", "2024-01-15", 20);
