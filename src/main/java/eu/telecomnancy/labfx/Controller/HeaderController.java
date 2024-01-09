@@ -2,26 +2,30 @@ package eu.telecomnancy.labfx.Controller;
 
 import java.io.IOException;
 
+import eu.telecomnancy.labfx.Session;
+import eu.telecomnancy.labfx.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
 
 public class HeaderController extends HBox {
     @FXML
     private Button btnOpenCalendar;
+    @FXML 
+    private Label labelNames;
+    @FXML
+    private ImageView imageViewPdp;
+    @FXML
+    private Label labelFlorain;
     
     // Le BorderPane racine de la scène principale
     private BorderPane mainRoot;
@@ -29,7 +33,12 @@ public class HeaderController extends HBox {
     private void setMainRoot(BorderPane mainRoot) {
         this.mainRoot = mainRoot;
     }
-
+        public void initialize() {
+        User currentUser = Session.getInstance().getCurrentUser();
+        labelNames.setText(currentUser.getPrenom() + " " + currentUser.getNom());
+        imageViewPdp.setImage(currentUser.getPdp());
+        labelFlorain.setText(String.valueOf(currentUser.getWallet().getFlorain()));
+    }
     @FXML
     private void OpenCalendar(ActionEvent event) {
             BorderPane root = new BorderPane();
