@@ -18,7 +18,7 @@ CREATE TABLE User (
     Mail TEXT NOT NULL,
     Password TEXT NOT NULL,
     Photo_profil BLOB,
-    Wallet INTEGER DEFAULT 0,
+    Wallet INTEGER DEFAULT 100,
     Note INTEGER
 );
 
