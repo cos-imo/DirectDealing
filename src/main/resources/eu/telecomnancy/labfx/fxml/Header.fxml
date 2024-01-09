@@ -26,6 +26,15 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Button fx:id="messagerie" minWidth="-Infinity" mnemonicParsing="false" onAction="#afficherMessagerie">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/enveloppe.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
             <Button fx:id="btnOpenCalendar" minWidth="-Infinity" mnemonicParsing="false" onAction="#OpenCalendar" text="Calendrier">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
