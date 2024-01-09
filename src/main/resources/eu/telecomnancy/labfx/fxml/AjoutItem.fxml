@@ -10,6 +10,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 
 <!-- ?import javafx.scene.media.MediaView? -->
 
@@ -34,17 +36,25 @@
                   </children>
                </HBox>
                <Separator prefWidth="200.0" />
-               <DatePicker />
-               <DatePicker />
+               <DatePicker fx:id="DatePickerDebut" />
+               <DatePicker fx:id="DatePickerFin" />
                <Separator prefWidth="200.0" />
-               <TextArea prefHeight="200.0" prefWidth="200.0" text="Description&#10;" />
+               <TextArea prefHeight="200.0" prefWidth="200.0" fx:id="DescriptionField" text="Description&#10;" />
                <VBox alignment="CENTER" prefHeight="272.0" prefWidth="140.0">
                   <children>
-                     <TextField />
-                     <ChoiceBox prefWidth="150.0" />
+                     <TextField prefWidth="400.0" fx:id="NomAnnonce" text="Nom"/>
+                           <ChoiceBox fx:id="choixType">
+                              <items>
+                                 <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Objet"/>
+                                    <String fx:value="Service"/>
+                                 </FXCollections>
+                              </items>
+                           </ChoiceBox>
                   </children>
                </VBox>
             </children>
+            <Button alignment="CENTER" fx:id="BoutonDeConfirmation" onAction="#ajouterItem" text="[+] Ajouter" />
          </VBox>
          </center>
       </BorderPane>
