@@ -44,23 +44,48 @@ public class CalendrierController {
     private ComboBox<String> viewSelector;
 
     private YearMonth currentYearMonth;
+    private String lastSelectedView = "Mois";
 
 
 
+    @FXML
+    private void previousMonth() {
+        currentYearMonth = currentYearMonth.minusMonths(1);
+        
+        fillCalendar(currentYearMonth);
+        updateMonthYearDisplay(currentYearMonth);
+    }
 
-       @FXML
+    @FXML
+    private void currentMonth() {
+        currentYearMonth = YearMonth.now();
+        fillCalendar(currentYearMonth);
+        updateMonthYearDisplay(currentYearMonth);
+    }
+
+    @FXML
+    private void nextMonth() {
+        currentYearMonth = currentYearMonth.plusMonths(1);
+        fillCalendar(currentYearMonth);
+        updateMonthYearDisplay(currentYearMonth);
+    }
+
+    @FXML
     private void handleViewSelector(ActionEvent event) {
         String selectedView = viewSelector.getValue();
         if (selectedView != null) {
             viewLabel.setText(selectedView);
+            lastSelectedView = selectedView; // Mise à jour de la variable globale
             changeView(selectedView);
         }
     }
     
     private void changeView(String selectedView) {
+        lastSelectedView = selectedView;
         switch (selectedView) {
             case "Mois":
                 System.err.println("Logique pour afficher la vue mensuelle");
+                fillCalendar(currentYearMonth);
                 
 
                 break;
@@ -80,10 +105,11 @@ public class CalendrierController {
 
     public void initialize() {
         currentYearMonth = YearMonth.now();
-        viewSelector.getItems().addAll("▼ Mois", "▼ Semaine", "▼ Jour");
-        viewLabel.setText("▼ Mois");
+        viewSelector.getItems().addAll("Mois", "Semaine", "Jour");
+        viewLabel.setText(lastSelectedView);
         fillCalendar(currentYearMonth);
         updateMonthYearDisplay(currentYearMonth);
+        changeView(lastSelectedView);
         initializeMonthPicker();
         initializeYearPicker();
     }    
@@ -217,13 +243,7 @@ public class CalendrierController {
         }
     }
 
- 
 
-    // private void changeYearMonth(YearMonth yearMonth) {
-    //     currentYearMonth = yearMonth;
-    //     fillCalendar(currentYearMonth);
-    //     updateMonthYearDisplay(currentYearMonth);
-    // }
 
 
     private void updateMonthYearDisplay(YearMonth yearMonth) {
