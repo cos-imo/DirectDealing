@@ -37,7 +37,7 @@ dependencies {
 	testImplementation(platform('org.junit:junit-bom:${junitVersion}'))
 	testImplementation('org.junit.jupiter:junit-jupiter')
     implementation 'org.xerial:sqlite-jdbc:3.36.0.1'
-    implementation("com.google.guava:guava:33.0.0-jre")
+    implementation 'joda-time:joda-time:2.12.6'
 }
 
 test {

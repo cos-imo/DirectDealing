@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javafx.scene.image.Image;
 
@@ -20,6 +21,7 @@ public class User {
     private int id;
     private Florain wallet;
     private int note;
+    private ArrayList<Ressource> ressources;
 
     public User(String email, String password, String nom, String prenom, Image pdp, int id, int wallet, int note) {
         this.email = email;
@@ -55,6 +57,9 @@ public class User {
     }
     public int getNote() {
         return note;
+    }
+    public ArrayList<Ressource> getRessources() {
+        return ressources;
     }
     public static User newUserFromMail(String mail) throws SQLException{
         String sql = "SELECT * FROM User WHERE Mail = '"+mail+"';";
@@ -114,5 +119,27 @@ public class User {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public ArrayList<EventRessource> getEventRessource() throws SQLException {
+        ArrayList<EventRessource> eventRessources = new ArrayList<EventRessource>();
+        Connect connect = new Connect();
+        Connection connection = connect.getConnection(); 
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Event WHERE User_id = "+this.id+";");
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            int id = resultSet.getInt("Event_id");
+            int idRessource = resultSet.getInt("Ressource_id");
+            int idUmprunteur = resultSet.getInt("User_id");
+            Ressource ressource = Ressource.newRessourceFromId(idRessource);
+            if (ressource != null){
+                EventRessource eventRessource = new EventRessource(ressource, id, idUmprunteur, resultSet.getDate("Date_debut"), resultSet.getDate("Date_fin"));
+                eventRessources.add(eventRessource);
+            }
+        }
+        preparedStatement.close();
+        connection.commit();
+        connection.close();
+        return eventRessources;
     }
 }

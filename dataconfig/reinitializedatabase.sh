@@ -10,7 +10,6 @@ DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Ressource;
 DROP TABLE IF EXISTS Event;
 DROP TABLE IF EXISTS Message;
-
 CREATE TABLE User (
     User_id INTEGER PRIMARY KEY AUTOINCREMENT,
     First_Name TEXT NOT NULL,
@@ -28,7 +27,6 @@ CREATE TABLE Ressource (
     Owner_id INTEGER NOT NULL,
     Name TEXT NOT NULL,
     Desc TEXT NOT NULL,
-    Illustration BLOB,
     DateDebut DATE NOT NULL,
     DateFin DATE NOT NULL,
     LocalisationLongitude FLOAT NOT NULL,

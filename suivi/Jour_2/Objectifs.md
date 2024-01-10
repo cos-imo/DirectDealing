@@ -13,4 +13,4 @@ Réaliser un livrable permettant d'ajouter une ressource (= service ou objet) à
 
 ## Tâches effectuées :
 
-0, 1, 2, 3, 4,
+0, 1, 2, 3, 4, 5
