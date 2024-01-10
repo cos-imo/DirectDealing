@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
@@ -20,7 +23,7 @@
                         <Image fx:id="image_objet" url="@../images/Ducky.jpeg" />
                     </image>
                 </ImageView>
-            <VBox prefHeight="105.0" prefWidth="535.0">
+            <VBox prefHeight="105.0" prefWidth="412.0">
                 <children>
                     <Label fx:id="label_nom" text="Nom du truc">
                         <font>
@@ -55,6 +58,19 @@
                         </ImageView>
                         <Label fx:id="prix_florains" alignment="CENTER_RIGHT" text="1000.0" />
                     </HBox>
+                     <HBox prefHeight="100.0" prefWidth="200.0">
+                        <children>
+                           <DatePicker fx:id="DatePickerDebut" promptText="Date début" />
+                           <DatePicker fx:id="DatePickerFin" promptText="Date de fin" />
+                        </children>
+                     </HBox>
+                     <HBox prefHeight="100.0" prefWidth="200.0">
+                        <ComboBox fx:id="hourDebutComboBox" onAction="#setHourDebutComboBox" />
+                        <ComboBox fx:id="minuteDebutComboBox" onAction="#setMinuteDebutComboBox" />
+                        <ComboBox fx:id="hourFinComboBox" onAction="#setHourFinComboBox" prefWidth="150.0" />
+                        <ComboBox fx:id="minuteFinComboBox" onAction="#setMinuteFinComboBox" prefWidth="150.0" />
+                        </HBox>
+                     <Button fx:id="BtnReserver" mnemonicParsing="false" onAction="#setBtnReserver" prefHeight="26.0" prefWidth="100.0" text="Réserver" />
                 </children>
             </VBox>
             </children>
