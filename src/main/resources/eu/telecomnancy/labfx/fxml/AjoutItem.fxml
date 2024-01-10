@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -16,6 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+
 
 <!-- ?import javafx.scene.media.MediaView? -->
 
@@ -29,40 +29,37 @@
                </children> 
          </HBox>
       </top>
-      <HBox layoutX="-3.0" layoutY="1.0" prefHeight="400.0" prefWidth="607.0" />
          <center>
-         <VBox prefHeight="253.0" prefWidth="319.0" BorderPane.alignment="CENTER">
-            <children>
-            <TextField prefWidth="100.0" fx:id="NomAnnonce" promptText="Nom"/>
-               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                  <children>
-                  <VBox>
-                        <ImageView fx:id="image_annonce" fitHeight="150.0" fitWidth="150.0">
-                              <image>
-                                 <Image url="@../images/calendar.png"/>
-                              </image>
-                        </ImageView>
-                     <!-- <MediaView fitHeight="200.0" fitWidth="200.0" /> -->
-                     <Button mnemonicParsing="false" onAction="#ajouterPhotos" text="Ajouter plus de photos" />
-                     </VBox>
-                  </children>
-               </HBox>
-               <Separator prefWidth="200.0" />
-               <HBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField fx:id="NomAnnonce" />
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <ImageView fx:id="image_annonce" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/kawai.png" />
+                                 </image>
+                              </ImageView>
+                              <Button mnemonicParsing="false" onAction="#ajouterPhotos" text="Button" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0" />
                   <DatePicker fx:id="DatePickerDebut" />
                   <DatePicker fx:id="DatePickerFin" />
-                  <HBox spacing="10.0" alignment="CENTER">
-                     <Label text="Prix:"/>
-
-                     <TextField fx:id="prix_florain" promptText="50" />
-                     
-                     <!-- <Slider fx:id="integerSlider" min="0" max="100" value="50" snapToTicks="true" blockIncrement="1" showTickLabels="true" showTickMarks="true" majorTickUnit="10" minorTickCount="1" /> -->
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="31.0" prefWidth="46.0" text="Prix : " />
+                        <TextField fx:id="prix_florain" />
+                     </children>
                   </HBox>
-               </HBox>
-               <Separator prefWidth="200.0" />
-               <TextArea prefHeight="200.0" prefWidth="200.0" fx:id="DescriptionField" promptText="Description&#10;" />
-               <VBox alignment="CENTER" prefHeight="272.0" prefWidth="140.0">
-                  <children>
+                  <Separator prefWidth="200.0" />
+                  <TextArea fx:id="DescriptionField" prefHeight="200.0" prefWidth="200.0" text="Description" />
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
                            <ChoiceBox fx:id="choixType">
                               <items>
                                  <FXCollections fx:factory="observableArrayList">
@@ -71,11 +68,23 @@
                                  </FXCollections>
                               </items>
                            </ChoiceBox>
-                  </children>
-               </VBox>
-            </children>
-            <Button alignment="CENTER" fx:id="BoutonDeConfirmation" onAction="#ajouterItem" text="[+] Ajouter" />
-         </VBox>
+
+                        <Separator prefWidth="200.0" />
+                        <ChoiceBox fx:id="choixRecurrence">
+                              <items>
+                                 <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Aucune"/>
+                                    <String fx:value="Quotidienne"/>
+                                    <String fx:value="Hebdomadaire"/>
+                                    <String fx:value="Mensuelle"/>
+                                 </FXCollections>
+                              </items>
+                           </ChoiceBox>
+                     </children>
+                  </VBox>
+                  <Button fx:id="BoutonDeConfirmation" mnemonicParsing="false" onAction="#ajouterItem" text="[+] Ajouter" />
+               </children>
+            </VBox>
          </center>
       </BorderPane>
    </children>

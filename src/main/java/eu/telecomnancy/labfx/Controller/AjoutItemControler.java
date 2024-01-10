@@ -48,6 +48,9 @@ public class AjoutItemControler {
     private ChoiceBox<String> choixType;
 
     @FXML
+    private ChoiceBox<String> choixRecurrence;
+
+    @FXML
     private ImageView image_annonce;
 
     private void setImage(byte[] img){
@@ -71,10 +74,10 @@ public class AjoutItemControler {
         }
     }
 
-    private boolean insertDatabase(String Name, String Desc, java.sql.Date DateDebut, java.sql.Date DateFin, float LocalisationLongitude, float LocalisationLatitude, int type, int Prix) throws SQLException{
+    private boolean insertDatabase(String Name, String Desc, java.sql.Date DateDebut, java.sql.Date DateFin, Float LocalisationLongitude, Float LocalisationLatitude, int type, int Prix) throws SQLException{
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
-        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Image, Owner_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2)";
+        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Image, Owner_id,Recurrence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, getMaxId());
             preparedStatement.setString(2, Name);
@@ -86,6 +89,7 @@ public class AjoutItemControler {
             preparedStatement.setInt(8, type);
             preparedStatement.setInt(9, Prix);
             preparedStatement.setBytes(10, this.image);
+            preparedStatement.setInt(11, 1);
 
             // Requête d'insertion
             int rowsAffected = preparedStatement.executeUpdate();
