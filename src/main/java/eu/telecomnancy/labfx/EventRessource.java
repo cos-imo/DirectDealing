@@ -18,6 +18,15 @@ public class EventRessource {
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
     }
+    public EventRessource(EventRessource event, DateTime dateDebut, DateTime dateFin) {
+        this.ressource = event.getRessource();
+        this.id = event.getId();
+        this.idUmprunteur = event.getIdUmprunteur();
+        this.idPreteur = event.getIdPreteur();
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+    }
+
     public int getIdOwner() {
         return ressource.getIdOwner();
     }
@@ -39,7 +48,11 @@ public class EventRessource {
     public int getIdPreteur() {
         return idPreteur;
     }
-
+    public void AfficheEvent(){
+        System.out.println("Nom de la ressource : " + ressource.getName());
+        System.out.println("Date de début de l'évent: " + dateDebut);
+        System.out.println("Date de fin de l'évent : " + dateFin);
+    }
 
 
 }
