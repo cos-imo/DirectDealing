@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import java.io.ByteArrayInputStream;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -29,10 +30,16 @@ public class ListObjectController{
     @FXML
     Label prix_florains;
 
-    public void setElementData(String annonceName, String type, String preteur, String cout){
+    @FXML
+    ImageView image_annonce;
+
+    public void setElementData(String annonceName, String type, String preteur, String cout, Image image){
         label_nom.setText(annonceName);
         label_type.setText(type);
         label_nomPreteur.setText(preteur);
         prix_florains.setText(cout);
+        if (image_annonce!=null){
+            image_annonce.setImage(image);
+        }
     }
 }
