@@ -33,11 +33,15 @@ public class ListObjectController{
     @FXML
     ImageView image_annonce;
 
-    public void setElementData(String annonceName, String type, String preteur, String cout, Image image){
+    @FXML
+    Label label_date;
+
+    public void setElementData(String annonceName, String type, String preteur, String cout, Image image, java.sql.Date dateDebut, java.sql.Date dateFin){
         label_nom.setText(annonceName);
         label_type.setText(type);
         label_nomPreteur.setText(preteur);
         prix_florains.setText(cout);
+        label_date.setText("Du " + dateDebut.toString() + " au " + dateFin);
         if (image_annonce!=null){
             image_annonce.setImage(image);
         }
