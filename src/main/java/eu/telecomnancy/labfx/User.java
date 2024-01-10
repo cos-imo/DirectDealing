@@ -130,7 +130,7 @@ public class User {
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
         String sql = """
-        SELECT e.Event_id as eventId, e.Ressource_id as ressourceId, e.isObjet as isObject, e.Name as eventName, e.preteur_id as preteur_id, e.acheteur_id as acheteur_id, e.Recurrence as Recurrence, e.DateDebut as eventDateDebut, e.DateFin as eventDateFin, r.Owner_id as Owner_id, r.Name as ressourceName, r.Desc as Desc, r.DateDebut as RDateDebut, r.DateFin as RDateFin, r.LocalisationLatitude as LocalisationLatitude, r.LocalisationLongitude as LocalisationLongitude, r.type as Rtype, r.Prix as RPrix, r.Image as RImage
+        SELECT e.Event_id as eventId, e.Ressource_id as ressourceId, e.isObjet as isObject, e.Name as eventName, e.preteur_id as preteur_id, e.acheteur_id as acheteur_id, r.Recurrence as Recurrence, e.DateDebut as eventDateDebut, e.DateFin as eventDateFin, r.Owner_id as Owner_id, r.Name as ressourceName, r.Desc as Desc, r.DateDebut as RDateDebut, r.DateFin as RDateFin, r.LocalisationLatitude as LocalisationLatitude, r.LocalisationLongitude as LocalisationLongitude, r.type as Rtype, r.Prix as RPrix, r.Image as RImage
         FROM Event AS e 
         JOIN Ressource AS r 
         ON e.Ressource_id = r.Ressource_id
