@@ -4,6 +4,11 @@ package eu.telecomnancy.labfx.Controller;
 import javafx.fxml.FXML;
 import javafx.event.Event;
 import javafx.scene.control.DatePicker;
+import java.io.File;
+import java.nio.file.Files;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import java.io.ByteArrayInputStream;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -21,6 +26,8 @@ import java.util.List;
 import java.sql.*;
 
 public class AjoutItemControler {
+
+    private byte[] image;
 
     @FXML
     private TextArea DescriptionField;
@@ -41,30 +48,33 @@ public class AjoutItemControler {
     private ChoiceBox<String> choixType;
 
     @FXML
+    private ImageView image_annonce;
+
+    private void setImage(byte[] img){
+        this.image = img;
+    }
+
+    @FXML
     private void ajouterPhotos(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select Images");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif", "*.bmp"));
-
-        Node source = (Node) event.getSource();
-        Stage primaryStage = (Stage) source.getScene().getWindow();
-
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(primaryStage);
-
-        if (selectedFiles != null) {
-            System.out.println("Selected Images:");
-            for (File file : selectedFiles) {
-                System.out.println(file.getAbsolutePath());
+        fileChooser.setTitle("Choisir une image");
+        File selectedFile = fileChooser.showOpenDialog(image_annonce.getScene().getWindow());
+        if (selectedFile != null) {
+            try {
+                byte[] imageBytes = Files.readAllBytes(selectedFile.toPath());
+                image_annonce.setImage(new Image(new ByteArrayInputStream(imageBytes)));
+                setImage(imageBytes);
             }
-        } else {
-            System.out.println("No images selected.");
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private boolean insertDatabase(String Name, String Desc, java.sql.Date DateDebut, java.sql.Date DateFin, float LocalisationLongitude, float LocalisationLatitude, int type, int Prix) throws SQLException{
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
-        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Illustration, Owner_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, getMaxId());
             preparedStatement.setString(2, Name);
@@ -75,6 +85,7 @@ public class AjoutItemControler {
             preparedStatement.setFloat(7, LocalisationLatitude);
             preparedStatement.setInt(8, type);
             preparedStatement.setInt(9, Prix);
+            preparedStatement.setBytes(10, this.image);
 
             // Requête d'insertion
             int rowsAffected = preparedStatement.executeUpdate();

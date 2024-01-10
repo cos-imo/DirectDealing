@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import java.util.List;
+import java.io.ByteArrayInputStream;
 import java.lang.Object;
 import eu.telecomnancy.labfx.Connect;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class RechercheController {
         getElements();
     }
     
-    private void addElementToSearchList(String name, String desc, String type, String Prix) throws SQLException{
+    private void addElementToSearchList(String name, String desc, String type, String Prix, Image image) throws SQLException{
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/ListObject.fxml"));
@@ -34,7 +35,7 @@ public class RechercheController {
 
             ListObjectController objectController = loader.getController();
 
-            objectController.setElementData(name, desc, type, Prix);
+            objectController.setElementData(name, desc, type, Prix, image);
 
             searchListContainer.getChildren().addAll(content);
         } catch (IOException e) {
@@ -48,19 +49,21 @@ public class RechercheController {
         try (Connection connection = connect.getConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Ressource;");
             ResultSet resultSet = preparedStatement.executeQuery();
+            Image image = null;
 
              while (resultSet.next()) {
-                // System.out.print(resultSet.getString(2) + "\t");
-                // System.out.print(resultSet.getString(3) + "\t");
-                // System.out.print(resultSet.getString(8) + "\t");
-                // System.out.print(resultSet.getString(9) + "\t");
 
+                String name = resultSet.getString("Name");
+                String desc = resultSet.getString("Desc");
+                String type = resultSet.getBoolean("type") ? "Objet" : "Service";
+                String Prix = resultSet.getString("Prix");
+                if (resultSet.getBytes("Illustration") != null) {
+                    image = new Image(new ByteArrayInputStream(resultSet.getBytes("Illustration")));
+                } else {
+                    System.out.println("Image nulle?");
+                }
 
-                String name = resultSet.getString(2);
-                String desc = resultSet.getString(3);
-                String type = resultSet.getBoolean(8) ? "Object" : "Service";
-                String Prix = resultSet.getString(9);
-                addElementToSearchList(name, desc, type, Prix);
+                addElementToSearchList(name, desc, type, Prix, image);
             }
             resultSet.close();
         }
