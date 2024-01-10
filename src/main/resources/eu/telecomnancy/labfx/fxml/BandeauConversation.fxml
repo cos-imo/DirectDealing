@@ -9,8 +9,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="109.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.ConversationController">
-<Separator prefWidth="700.0" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="109.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.BandeauConversationController">
+<Separator prefWidth="598.0" />
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
     <children>
         <HBox prefHeight="104.0" prefWidth="584.0">
@@ -20,28 +20,40 @@
                         <Image fx:id="image_objet" url="@../images/account.png" />
                     </image>
                 </ImageView>
-            <VBox prefHeight="105.0" prefWidth="715.0">
+            <VBox prefHeight="106.0" prefWidth="240.0">
                 <children>
-                    <Label fx:id="label_nom" text="Contact">
+                    <Label fx:id="label_nom" prefHeight="29.0" prefWidth="227.0" text="Contact">
                         <font>
-                        <Font size="30.0" />
+                        <Font size="24.0" />
                         </font>
                     </Label>
-                    <Label fx:id="label_heure" text="Heure" textFill="#7c7c7c">
+                     <Label fx:id="label_event" prefHeight="23.0" prefWidth="228.0" text="Event">
+                        <font>
+                           <Font size="18.0" />
+                        </font>
+                     </Label>
+                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                        <children>
+                          <Label fx:id="label_content" text="Contenu du message">
+                              <font>
+                              <Font size="15.0" />
+                              </font>
+                          </Label>
+                        </children>
+                     </VBox>
+                </children>
+            </VBox>
+               <HBox alignment="TOP_RIGHT" prefHeight="105.0" prefWidth="243.0">
+                  <children>
+                    <Label fx:id="label_heure" alignment="TOP_LEFT" text="Heure" textFill="#7c7c7c">
                         <font>
                         <Font size="10.0" />
                         </font>
                     </Label>
-                    <Label fx:id="label_content" text="Contenu du message">
-                        <font>
-                        <Font size="15.0" />
-                        </font>
-                    </Label>
-                </children>
-            </VBox>
+                  </children>
+               </HBox>
             </children>
         </HBox>
     </children>
 </VBox>
-<Separator prefWidth="700.0" />
 </AnchorPane>
