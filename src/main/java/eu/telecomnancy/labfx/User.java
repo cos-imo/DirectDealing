@@ -129,15 +129,25 @@ public class User {
         ArrayList<Ressource> ressources = new ArrayList<Ressource>();
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Event WHERE User_id = "+this.id+";");
+        String sql = """
+        SELECT e.Event_id as eventId, e.Ressource_id as ressourceId, e.isObjet as isObject, e.Name as eventName, e.preteur_id as preteur_id, e.acheteur_id as acheteur_id, e.Recurrence as Recurrence, e.DateDebut as eventDateDebut, e.DateFin as eventDateFin, r.Owner_id as Owner_id, r.Name as ressourceName, r.Desc as Desc, r.DateDebut as RDateDebut, r.DateFin as RDateFin, r.LocalisationLatitude as LocalisationLatitude, r.LocalisationLongitude as LocalisationLongitude, r.type as Rtype, r.Prix as RPrix, r.Image as RImage
+        FROM Event AS e 
+        JOIN Ressource AS r 
+        ON e.Ressource_id = r.Ressource_id
+        WHERE e.acheteur_id = ? OR e.preteur_id = ?;        
+                """;
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, this.id);
+        preparedStatement.setInt(2, this.id);
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()){
-            int id = resultSet.getInt("Event_id");
-            int idRessource = resultSet.getInt("Ressource_id");
-            int idUmprunteur = resultSet.getInt("User_id");
-            Ressource ressource = Ressource.newRessourceFromId(idRessource);
+            int id = resultSet.getInt("eventId");
+            int idRessource = resultSet.getInt("ressourceId");
+            int idPreteur = resultSet.getInt("preteur_id");
+            int idAcheteur = resultSet.getInt("acheteur_id");
+            Ressource ressource = new Ressource(resultSet.getString("ressourceName"), resultSet.getString("Desc"), new DateTime(resultSet.getInt("RDateDebut")), new DateTime(resultSet.getInt("RDateFin")), idRessource, idPreteur, idAcheteur, wallet, Recurrence.getRecurrence(resultSet.getInt("Recurrence")), id, pdp);
             if (ressource != null){
-                EventRessource eventRessource = new EventRessource(ressource, id, idUmprunteur, new DateTime(resultSet.getInt("Date_debut")), new DateTime(resultSet.getInt("Date_fin")));
+                EventRessource eventRessource = new EventRessource(ressource, id,idPreteur, idAcheteur, new DateTime(resultSet.getInt("eventDateDebut")), new DateTime(resultSet.getInt("eventDateFin")));
                 eventRessources.add(eventRessource);
                 ressources.add(ressource);
             }

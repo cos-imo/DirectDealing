@@ -53,7 +53,11 @@ public class Calendrier {
         }
         return eventActif;
     }
-    private ArrayList<Ressource> createRessourceActif() throws SQLException{
+    private ArrayList<Ressource> createRessourceActif() throws SQLException{ 
+        //Etape 1 : Trouver l'occurence la plus proche de la date de début qui est aussi après la date de début
+        //Etape 2 : Ajouter l'occurence à la liste des ressources actives en vérifiant que sa date de fin est avant la date de fin de la période
+        //Etape 3 : Quand la date de fin est après la date de fin de la période ou que la date de début est après la date de fin de la période on arrête d'ajouter
+
         ArrayList<Ressource> ressourceActif = new ArrayList<Ressource>();
         for (Ressource ressource : user.getRessources()) {
             if (betweenDate.contains(ressource.getDateDebut()) || betweenDate.contains(ressource.getDateFin())) {
@@ -94,7 +98,7 @@ public class Calendrier {
         } else {
             newEnd = event.getDateFin();
         }
-        EventRessource newEvent = new EventRessource(event.getRessource(), event.getId(),event.getIdUmprunteur(),newDebut, newEnd);
+        EventRessource newEvent = new EventRessource(event.getRessource(), event.getId(),event.getIdPreteur(),event.getIdUmprunteur(),newDebut, newEnd);
         return newEvent;
     }
     public int getDaysOccurencePeriod(DateTime mainDate){
