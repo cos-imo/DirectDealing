@@ -44,9 +44,9 @@
                   </ImageView>
                </graphic>
             </Button>
-            <VBox alignment="CENTER" layoutX="-1.0" layoutY="-3.0" maxHeight="-Infinity" prefHeight="50.0" prefWidth="70.0">
+            <VBox alignment="CENTER" layoutX="-1.0" layoutY="-3.0" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="150.0">
             <Label fx:id="labelNames" alignment="TOP_RIGHT" minWidth="-Infinity" text="NOM Prénom" />
-            <Label fx:id="labelFlorain" prefWidth="100.0" text="100">
+            <Label fx:id="labelFlorain" alignment="CENTER" prefWidth="100.0" text="100">
                <graphic>
                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                   <image>
