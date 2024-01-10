@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.sql.Connection;
@@ -22,6 +23,12 @@ public class MessagerieController {
     @FXML
     private ScrollPane scrollPane;
 
+    @FXML
+    private Label contactName;
+
+    @FXML
+    private Label eventName;
+
     public void initialize() throws SQLException {
         getMessages();
     }
@@ -32,6 +39,7 @@ public class MessagerieController {
             Node content = loader.load();
 
             BandeauConversationController objectController = loader.getController();
+            objectController.setParent(this);
             objectController.setElementData(sender, contenu, event);
 
             messageListContainer.getChildren().addAll(content);
@@ -75,5 +83,11 @@ public class MessagerieController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    protected void setChat(String nomCorrespondant, String nomEvent){
+        contactName.setText(nomCorrespondant);
+        eventName.setText(nomEvent);
     }
 }

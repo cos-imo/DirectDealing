@@ -31,12 +31,12 @@
                   <content>
                      <VBox fx:id="messagesContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="729.0">
                         <children>
-                           <Label text="Contact">
+                           <Label fx:id="contactName" text="Contact">
                               <font>
                                  <Font size="30.0" />
                               </font>
                            </Label>
-                           <Label text="Event">
+                           <Label fx:id="eventName" text="Event">
                               <font>
                                  <Font size="18.0" />
                               </font>
