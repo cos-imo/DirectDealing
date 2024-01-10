@@ -102,6 +102,7 @@ public class AjoutItemControler {
         return false;
     }
 
+    @FXML
     private int getMaxId() throws SQLException{
         int max_id = 0;
 
