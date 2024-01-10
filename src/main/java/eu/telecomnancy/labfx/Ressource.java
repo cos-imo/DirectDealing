@@ -85,7 +85,7 @@ public class Ressource {
         return pdp;
     }
     public static Ressource newRessourceFromId(int id) throws SQLException{
-        String sql = "SELECT * FROM Ressource WHERE id = '"+id+"';";
+        String sql = "SELECT * FROM Ressource WHERE Ressource_id = '"+id+"';";
         return newRessourceFromAttribute(sql);
     }
     private static Ressource newRessourceFromAttribute(String sql) throws SQLException{
@@ -98,23 +98,24 @@ public class Ressource {
         if (rs.next()){ //Se ferme si la requête est vide
             pstmt.close();
             connection.close();
+            String name = rs.getString("Name");
+            String desc = rs.getString("Desc");
+            DateTime dateDebut = new DateTime(rs.getInt("DateDebut"));//TODO: Récupérer dans le bon format en joda Time
+            DateTime dateFin = new DateTime(rs.getInt("DateFin")); //TODO : Récupérer le bon format en Joda Time
+            double longitude = rs.getDouble("LocalisationLongitude");
+            double latitude = rs.getDouble("LocalisationLatitude");
+            int id = rs.getInt("Ressource_id");
+            Florain prix = new Florain(rs.getInt("Prix"));
+            Recurrence reccurence = Recurrence.getRecurrence(rs.getInt("recurrence"));
+            int id_owner = rs.getInt("Owner_id");
+            byte[] imagebyte = rs.getBytes("Image");
+            Image pdp = null;
+            if (imagebyte != null && imagebyte.length > 0) {
+                pdp = (new Image(new ByteArrayInputStream(imagebyte)));
+            }
+            return new Ressource(name, desc, dateDebut, dateFin, longitude, latitude, id, prix, reccurence, id_owner,pdp);
         }
-        String name = rs.getString("Name");
-        String desc = rs.getString("Desc");
-        DateTime dateDebut = new DateTime(rs.getInt("DateDebut"));//TODO: Récupérer dans le bon format en joda Time
-        DateTime dateFin = new DateTime(rs.getInt("DateFin")); //TODO : Récupérer le bon format en Joda Time
-        double longitude = rs.getDouble("LocalisationLongitude");
-        double latitude = rs.getDouble("LocalisationLatitude");
-        int id = rs.getInt("Ressource_id");
-        Florain prix = new Florain(rs.getInt("Prix"));
-        Recurrence reccurence = Recurrence.getRecurrence(rs.getInt("recurrence"));
-        int id_owner = rs.getInt("Owner_id");
-        byte[] imagebyte = rs.getBytes("Image");
-        Image pdp = null;
-        if (imagebyte != null && imagebyte.length > 0) {
-            pdp = (new Image(new ByteArrayInputStream(imagebyte)));
-        }
-        return new Ressource(name, desc, dateDebut, dateFin, longitude, latitude, id, prix, reccurence, id_owner,pdp);
+        return null;
     }
 
 }
