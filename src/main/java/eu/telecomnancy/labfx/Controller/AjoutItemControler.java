@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.Slider;
 import eu.telecomnancy.labfx.Connect;
 import eu.telecomnancy.labfx.Recurrence;
+import eu.telecomnancy.labfx.Session;
 import javafx.util.converter.IntegerStringConverter;
 import java.time.LocalDateTime;
 import java.io.File;
@@ -85,22 +86,23 @@ public class AjoutItemControler {
         }
     }
 
-    private boolean insertDatabase(String Name, String Desc, java.sql.Date DateDebut, java.sql.Date DateFin, float LocalisationLongitude, float LocalisationLatitude, boolean type, int Prix,Recurrence recurrence) throws SQLException{
+    private boolean insertDatabase(String Name, String Desc, java.sql.Timestamp DateDebut, java.sql.Timestamp DateFin, float LocalisationLongitude, float LocalisationLatitude, boolean type, int Prix,Recurrence recurrence) throws SQLException{
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
-        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Image, Owner_id,Recurrence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2,?)";
+        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Image, Owner_id,Recurrence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, getMaxId());
             preparedStatement.setString(2, Name);
             preparedStatement.setString(3, Desc);
-            preparedStatement.setDate(4, DateDebut);
-            preparedStatement.setDate(5, DateFin);
+            preparedStatement.setTimestamp(4, DateDebut);
+            preparedStatement.setTimestamp(5, DateFin);
             preparedStatement.setFloat(6, LocalisationLongitude);
             preparedStatement.setFloat(7, LocalisationLatitude);
             preparedStatement.setBoolean(8, type);
             preparedStatement.setInt(9, Prix);
             preparedStatement.setBytes(10, this.image);
-            preparedStatement.setInt(11, Recurrence.getInt(recurrence));
+            preparedStatement.setInt(11, Session.getInstance().getCurrentUser().getId());
+            preparedStatement.setInt(12, Recurrence.getInt(recurrence));
 
             // Requête d'insertion
             int rowsAffected = preparedStatement.executeUpdate();
@@ -145,20 +147,42 @@ public class AjoutItemControler {
         int Prix = Integer.valueOf(prix_florain.getText());
         boolean type = choixType.getSelectionModel().getSelectedIndex() == 0; //Le premier choix est "objet"
         Recurrence rec = Recurrence.getRecurrence(choixRecurrence.getSelectionModel().getSelectedIndex());
-        String hourDebutS = this.hourDebut.getValue();
+        // Convertir les heures et les minutes en entiers
         String minuteDebutS = this.minuteDebut.getValue();
-        String hourFinS = this.hourFin.getValue();
         String minuteFinS = this.minuteFin.getValue();
-        int hourDebutI = Integer.parseInt(hourDebutS.substring(0, hourDebutS.length()-2));
+        int hourDebutI = Integer.parseInt(hourDebut.getValue().substring(0, hourDebut.getValue().length()-1));
         int minuteDebutI = Integer.parseInt(minuteDebutS);
-        int hourFinI = Integer.parseInt(hourFinS.substring(0, hourFinS.length()-2));
+        int hourFinI = Integer.parseInt(hourFin.getValue().substring(0, hourFin.getValue().length()-1));
         int minuteFinI = Integer.parseInt(minuteFinS);
-        LocalDateTime dateTimeDebut = LocalDateTime.of(DateDebut.getYear(), DateDebut.getMonth(), DateDebut.getDayOfMonth(), hourDebutI, minuteDebutI);
-        LocalDateTime dateTimeFin = LocalDateTime.of(DateFin.getYear(), DateFin.getMonth(), DateFin.getDayOfMonth(), hourFinI, minuteFinI);
-        java.sql.Date sqlDateDebut = java.sql.Date.valueOf(dateTimeDebut.toLocalDate());
-        java.sql.Date sqlDateFin = java.sql.Date.valueOf(dateTimeFin.toLocalDate());
+
+        System.out.println("Heure début (entier): " + hourDebutI);
+        System.out.println("Minute début (entier): " + minuteDebutI);
+        System.out.println("Heure fin (entier): " + hourFinI);
+        System.out.println("Minute fin (entier): " + minuteFinI);
+
+        // Créer les LocalDateTime
+        LocalDateTime dateTimeDebut = LocalDateTime.of(DatePickerDebut.getValue().getYear(), DatePickerDebut.getValue().getMonth(), DatePickerDebut.getValue().getDayOfMonth(), hourDebutI, minuteDebutI);
+        LocalDateTime dateTimeFin = LocalDateTime.of(DatePickerFin.getValue().getYear(), DatePickerFin.getValue().getMonth(), DatePickerFin.getValue().getDayOfMonth(), hourFinI, minuteFinI);
+        System.out.println("Date début: " + dateTimeDebut);
+        System.out.println("Date fin: " + dateTimeFin);
+
+        // Convertir les LocalDateTime en java.sql.Date
+        // System.out.println("Date début (toLocateDate): " + dateTimeDebut.toLocalDate());
+        // System.out.println("Date fin (toLocateDate): " + dateTimeFin.toLocalDate());
+        // java.sql.Date sqlDateDebut = java.sql.Date.valueOf(dateTimeDebut.toLocalDate());
+        // java.sql.Date sqlDateFin = java.sql.Date.valueOf(dateTimeFin.toLocalDate());
+        // System.out.println("Date début (sqlDate): " + sqlDateDebut);
+        // System.out.println("Date fin (sqlDate): " + sqlDateFin);
+
+        // Convertir les LocalDateTime en java.sql.Date mais avec les secondes
+        java.sql.Timestamp sqlTimestampDebut = java.sql.Timestamp.valueOf(dateTimeDebut);
+        java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateTimeFin);
+        // System.out.println("Date début (sqlTimestamp): " + sqlTimestampDebut);
+        // System.out.println("Date fin (sqlTimestamp): " + sqlTimestampFin);
+
+
         try {
-            this.insertDatabase(Nom, Description, sqlDateDebut, sqlDateFin, 0.0f, 0.0f, type, Prix,rec);
+            this.insertDatabase(Nom, Description, sqlTimestampDebut, sqlTimestampFin, 0.0f, 0.0f, type, Prix,rec);
         } catch (SQLException e) {
             e.printStackTrace();
         }
