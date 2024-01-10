@@ -26,9 +26,13 @@ public class BandeauConversationController{
     private MessagerieController controller;
     private String contactFirstName;
     private String contactLastName;
+    private int contactId;
+    private int eventId;
     private String eventName;
 
     public void setElementData(int nom, String contenu, int event) throws SQLException{
+        this.eventId = event;
+        this.contactId = nom;
         String query1 = "SELECT First_Name, Last_Name FROM User WHERE User_id = ?;";
         String query2 = "SELECT Name FROM Event WHERE Event_id = ?;";
         Connect connect = new Connect();
@@ -58,7 +62,6 @@ public class BandeauConversationController{
 
     @FXML
     private void openConversation(){
-        System.out.println("Conversation ouverte");
-        this.controller.setChat(this.contactFirstName + " " + this.contactLastName, this.eventName);
+        this.controller.setChat(this.contactFirstName + " " + this.contactLastName, this.eventName, this.contactId, this.eventId);
     }
 }

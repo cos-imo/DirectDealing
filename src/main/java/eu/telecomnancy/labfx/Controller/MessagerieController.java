@@ -29,6 +29,11 @@ public class MessagerieController {
     @FXML
     private Label eventName;
 
+    @FXML
+    private VBox messagesContainer;
+
+    private boolean isConversationInitialized;
+
     public void initialize() throws SQLException {
         getMessages();
     }
@@ -86,8 +91,61 @@ public class MessagerieController {
     }
 
     @FXML
-    protected void setChat(String nomCorrespondant, String nomEvent){
+    protected void setChat(String nomCorrespondant, String nomEvent, int contactId, int eventId){
+        messagesContainer.getChildren().clear();
+
         contactName.setText(nomCorrespondant);
         eventName.setText(nomEvent);
+
+        if (!isConversationInitialized){
+            initConversation();
+        }
+
+        Connect connect = new Connect();
+        int user_id = Session.getInstance().getCurrentUser().getId();
+        try (Connection connection = connect.getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                """
+                SELECT *
+                FROM Message
+                WHERE Event_lie_id = ?
+                AND (Sender_id = ? OR Receiver_id = ?);
+                """
+            );
+            preparedStatement.setInt(1, eventId);
+            preparedStatement.setInt(2, contactId);
+            preparedStatement.setInt(2, contactId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            int sender = 0;
+            String message = "";
+            while (resultSet.next()) {
+                //id1 = resultSet.getInt("user2_id");
+                message = resultSet.getString("Contenu");
+                addMessage(message, "01:02");
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void initConversation(){
+
+    }
+
+    private void addMessage(String messageContent, String messageDate){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Message.fxml"));
+            Node content = loader.load();
+
+            MessageController msgController = loader.getController();
+
+            msgController.setMessage(messageContent, messageDate);
+
+            messagesContainer.getChildren().addAll(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
