@@ -48,7 +48,7 @@ public class RechercheController {
         getElements();
     }
     
-    private void addElementToSearchList(String name, String desc, String type, String Prix, Image image ,java.sql.Date dateDebut, java.sql.Date dateFin) throws SQLException{
+    private void addElementToSearchList(String name, String desc, Boolean type, String Prix, Image image ,java.sql.Date dateDebut, java.sql.Date dateFin, int ressource_id, int owner_id) throws SQLException{
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/ListObject.fxml"));
@@ -56,7 +56,7 @@ public class RechercheController {
 
             ListObjectController objectController = loader.getController();
 
-            objectController.setElementData(name, desc, type, Prix, image, dateDebut, dateFin);
+            objectController.setElementData(name, desc, type, Prix, image, dateDebut, dateFin, ressource_id, owner_id);
 
             searchListContainer.getChildren().addAll(content);
         } catch (IOException e) {
@@ -74,19 +74,21 @@ public class RechercheController {
 
              while (resultSet.next()) {
 
+                int owner_id = resultSet.getInt("Owner_id");
+                int ressource_id = resultSet.getInt("Ressource_id");
                 String name = resultSet.getString("Name");
                 String desc = resultSet.getString("Desc");
-                String type = resultSet.getBoolean("type") ? "Objet" : "Service";
+                Boolean type = resultSet.getBoolean("type");
                 String Prix = resultSet.getString("Prix");
-                java.sql.Date dateDebut = new java.sql.Date(resultSet.getLong("DateDebut")*1000);
-                java.sql.Date dateFin = new java.sql.Date(resultSet.getLong("DateFin")*1000);
+                java.sql.Date dateDebut = new java.sql.Date(resultSet.getLong("DateDebut"));
+                java.sql.Date dateFin = new java.sql.Date(resultSet.getLong("DateFin"));
                 if (resultSet.getBytes("Image") != null) {
                     image = new Image(new ByteArrayInputStream(resultSet.getBytes("Image")));
                 } else {
                     System.out.println("Image nulle?");
                 }
 
-                addElementToSearchList(name, desc, type, Prix, image, dateDebut, dateFin);
+                addElementToSearchList(name, desc, type, Prix, image, dateDebut, dateFin, ressource_id, owner_id);
             }
             resultSet.close();
         }
@@ -181,9 +183,11 @@ public class RechercheController {
 
              while (resultSet.next()) {
 
+                int owner_id = resultSet.getInt("Owner_id");
+                int ressource_id = resultSet.getInt("Ressource_id");
                 String name = resultSet.getString("Name");
                 String desc = resultSet.getString("Desc");
-                String type = resultSet.getBoolean("type") ? "Objet" : "Service";
+                Boolean type = resultSet.getBoolean("type");
                 String Prix = resultSet.getString("Prix");
                 java.sql.Date dateDebut = new java.sql.Date(resultSet.getLong("DateDebut")*1000);
                 java.sql.Date dateFin = new java.sql.Date(resultSet.getLong("DateFin")*1000);
@@ -194,7 +198,7 @@ public class RechercheController {
                     System.out.println("Image nulle?");
                 }
 
-                addElementToSearchList(name, desc, type, Prix, image, dateDebut, dateFin);
+                addElementToSearchList(name, desc, type, Prix, image, dateDebut, dateFin, ressource_id, owner_id);
             }
             resultSet.close();
         }
