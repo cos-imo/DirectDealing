@@ -1,15 +1,15 @@
 package eu.telecomnancy.labfx;
 
-import java.sql.Date;
+import org.joda.time.DateTime;
 
 public class EventRessource {
     private Ressource ressource;
     private int id;
     private int idUmprunteur;
-    private Date dateDebut;
-    private Date dateFin;
+    private DateTime dateDebut;
+    private DateTime dateFin;
 
-    public EventRessource(Ressource ressource, int id, int idUmprunteur, Date dateDebut, Date dateFin) {
+    public EventRessource(Ressource ressource, int id, int idUmprunteur, DateTime dateDebut, DateTime dateFin) {
         this.ressource = ressource;
         this.id = id;
         this.idUmprunteur = idUmprunteur;
@@ -28,10 +28,10 @@ public class EventRessource {
     public Ressource getRessource() {
         return ressource;
     }
-    public Date getDateDebut() {
+    public DateTime getDateDebut() {
         return dateDebut;
     }
-    public Date getDateFin() {
+    public DateTime getDateFin() {
         return dateFin;
     }
 

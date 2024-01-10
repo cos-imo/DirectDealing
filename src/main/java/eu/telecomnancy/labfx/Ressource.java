@@ -2,19 +2,20 @@ package eu.telecomnancy.labfx;
 
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.joda.time.DateTime;
 
 import javafx.scene.image.Image;
 
 public class Ressource {
     private String name;
     private String description;
-    private Date dateDebut;
-    private Date dateFin;
+    private DateTime dateDebut;
+    private DateTime dateFin;
     private double longitude;
     private double latitude;
     private int id;
@@ -24,7 +25,7 @@ public class Ressource {
     private Image pdp;
 
 
-    public Ressource(String name, String description, Date dateDebut, Date dateFin, double longitude, double latitude, int id, Florain prix, Recurrence reccurence, int id_owner, Image pdp) {
+    public Ressource(String name, String description, DateTime dateDebut, DateTime dateFin, double longitude, double latitude, int id, Florain prix, Recurrence reccurence, int id_owner, Image pdp) {
         this.name = name;
         this.description = description;
         this.dateDebut = dateDebut;
@@ -35,6 +36,18 @@ public class Ressource {
         this.idOwner = id_owner;
         this.pdp = pdp;
     }
+    public Ressource(Ressource ressource, DateTime dateDebut, DateTime dateFin) {
+        this.name = ressource.getName();
+        this.description = ressource.getDescription();
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.id = ressource.getId();
+        this.prix = ressource.getPrix();
+        this.reccurence = ressource.getReccurence();
+        this.idOwner = ressource.getIdOwner();
+        this.pdp = ressource.getPdp();
+    }
+
     public int getId(){
         return this.id;
     }
@@ -44,10 +57,10 @@ public class Ressource {
     public String getDescription(){
         return this.description;
     }
-    public Date getDateDebut(){
+    public DateTime getDateDebut(){
         return this.dateDebut;
     }
-    public Date getDateFin(){
+    public DateTime getDateFin(){
         return this.dateFin;
     }
     public double getLongitude(){
@@ -68,6 +81,9 @@ public class Ressource {
     public User getOwner() throws SQLException {
         return User.newUserFromId(idOwner);
     }
+    public Image getPdp() {
+        return pdp;
+    }
     public static Ressource newRessourceFromId(int id) throws SQLException{
         String sql = "SELECT * FROM Ressource WHERE id = '"+id+"';";
         return newRessourceFromAttribute(sql);
@@ -82,12 +98,11 @@ public class Ressource {
         if (rs.next()){ //Se ferme si la requête est vide
             pstmt.close();
             connection.close();
-            
         }
         String name = rs.getString("Name");
         String desc = rs.getString("Desc");
-        Date dateDebut = rs.getDate("DateDebut");
-        Date dateFin = rs.getDate("DateFin");
+        DateTime dateDebut = new DateTime(rs.getInt("DateDebut"));//TODO: Récupérer dans le bon format en joda Time
+        DateTime dateFin = new DateTime(rs.getInt("DateFin")); //TODO : Récupérer le bon format en Joda Time
         double longitude = rs.getDouble("LocalisationLongitude");
         double latitude = rs.getDouble("LocalisationLatitude");
         int id = rs.getInt("Ressource_id");
