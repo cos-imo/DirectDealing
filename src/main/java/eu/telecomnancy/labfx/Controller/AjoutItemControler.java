@@ -21,10 +21,12 @@ import javafx.scene.control.Slider;
 import eu.telecomnancy.labfx.Connect;
 import eu.telecomnancy.labfx.Recurrence;
 import javafx.util.converter.IntegerStringConverter;
-
+import java.time.LocalDateTime;
 import java.io.File;
 import java.util.List;
 import java.sql.*;
+
+import org.joda.time.DateTime;
 
 public class AjoutItemControler {
 
@@ -41,9 +43,17 @@ public class AjoutItemControler {
 
     @FXML
     private DatePicker DatePickerDebut;
+    @FXML
+    private ChoiceBox<String> hourDebut;
+    @FXML
+    private ChoiceBox<String> minuteDebut;
 
     @FXML
     private DatePicker DatePickerFin;
+    @FXML
+    private ChoiceBox<String> hourFin;
+    @FXML
+    private ChoiceBox<String> minuteFin;
 
     @FXML
     private ChoiceBox<String> choixType;
@@ -98,7 +108,6 @@ public class AjoutItemControler {
             connection.commit();
             connection.close();
             // Retourner vrai si une ligne a été insérée, faux sinon
-            System.out.println("Ok");
             return rowsAffected > 0;
             }
         catch (SQLException e) {
@@ -132,13 +141,22 @@ public class AjoutItemControler {
         String Description = DescriptionField.getText();
         LocalDate DateDebut = DatePickerDebut.getValue();
         LocalDate DateFin = DatePickerFin.getValue();
-        String selectedValue = choixType.getValue();
         String Nom = NomAnnonce.getText();
         int Prix = Integer.valueOf(prix_florain.getText());
         boolean type = choixType.getSelectionModel().getSelectedIndex() == 0; //Le premier choix est "objet"
-        java.sql.Date sqlDateDebut = java.sql.Date.valueOf(DateDebut);
-        java.sql.Date sqlDateFin = java.sql.Date.valueOf(DateFin);
         Recurrence rec = Recurrence.getRecurrence(choixRecurrence.getSelectionModel().getSelectedIndex());
+        String hourDebutS = this.hourDebut.getValue();
+        String minuteDebutS = this.minuteDebut.getValue();
+        String hourFinS = this.hourFin.getValue();
+        String minuteFinS = this.minuteFin.getValue();
+        int hourDebutI = Integer.parseInt(hourDebutS.substring(0, hourDebutS.length()-2));
+        int minuteDebutI = Integer.parseInt(minuteDebutS);
+        int hourFinI = Integer.parseInt(hourFinS.substring(0, hourFinS.length()-2));
+        int minuteFinI = Integer.parseInt(minuteFinS);
+        LocalDateTime dateTimeDebut = LocalDateTime.of(DateDebut.getYear(), DateDebut.getMonth(), DateDebut.getDayOfMonth(), hourDebutI, minuteDebutI);
+        LocalDateTime dateTimeFin = LocalDateTime.of(DateFin.getYear(), DateFin.getMonth(), DateFin.getDayOfMonth(), hourFinI, minuteFinI);
+        java.sql.Date sqlDateDebut = java.sql.Date.valueOf(dateTimeDebut.toLocalDate());
+        java.sql.Date sqlDateFin = java.sql.Date.valueOf(dateTimeFin.toLocalDate());
         try {
             this.insertDatabase(Nom, Description, sqlDateDebut, sqlDateFin, 0.0f, 0.0f, type, Prix,rec);
         } catch (SQLException e) {

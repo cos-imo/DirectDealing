@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -13,9 +15,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-
 
 <!-- ?import javafx.scene.media.MediaView? -->
 
@@ -42,14 +41,118 @@
                                     <Image url="@../images/kawai.png" />
                                  </image>
                               </ImageView>
-                              <Button mnemonicParsing="false" onAction="#ajouterPhotos" text="Button" />
+                              <Button mnemonicParsing="false" onAction="#ajouterPhotos" text="Changer la photo" />
                            </children>
                         </VBox>
                      </children>
                   </HBox>
                   <Separator prefWidth="200.0" />
-                  <DatePicker fx:id="DatePickerDebut" />
-                  <DatePicker fx:id="DatePickerFin" />
+                  <HBox prefHeight="42.0" prefWidth="1080.0">
+                     <children>
+                        <DatePicker fx:id="DatePickerDebut" />
+                        <ChoiceBox fx:id="hourDebut" prefWidth="150.0" >
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="00H"/>
+                                 <String fx:value="01H"/>
+                                 <String fx:value="02H"/>
+                                 <String fx:value="03H"/>
+                                 <String fx:value="04H"/>
+                                 <String fx:value="05H"/>
+                                 <String fx:value="06H"/>
+                                 <String fx:value="07H"/>
+                                 <String fx:value="08H"/>
+                                 <String fx:value="09H"/>
+                                 <String fx:value="10H"/>
+                                 <String fx:value="11H"/>
+                                 <String fx:value="12H"/>
+                                 <String fx:value="13H"/>
+                                 <String fx:value="14H"/>
+                                 <String fx:value="15H"/>
+                                 <String fx:value="16H"/>
+                                 <String fx:value="17H"/>
+                                 <String fx:value="18H"/>
+                                 <String fx:value="19H"/>
+                                 <String fx:value="20H"/>
+                                 <String fx:value="21H"/>
+                                 <String fx:value="22H"/>
+                                 <String fx:value="23H"/>
+                              </FXCollections>
+                           </items>
+                        </ChoiceBox>
+                        <ChoiceBox fx:id="minuteDebut" prefWidth="150.0" >
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="00"/>
+                                 <String fx:value="05"/>
+                                 <String fx:value="10"/>
+                                 <String fx:value="15"/>
+                                 <String fx:value="20"/>
+                                 <String fx:value="25"/>
+                                 <String fx:value="30"/>
+                                 <String fx:value="35"/>
+                                 <String fx:value="40"/>
+                                 <String fx:value="45"/>
+                                 <String fx:value="50"/>
+                                 <String fx:value="55"/>
+                              </FXCollections>
+                           </items>
+                        </ChoiceBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="39.0" prefWidth="1080.0">
+                     <children>
+                        <DatePicker fx:id="DatePickerFin" />
+                           <ChoiceBox fx:id="hourFin" prefWidth="150.0" >
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="00H"/>
+                                 <String fx:value="01H"/>
+                                 <String fx:value="02H"/>
+                                 <String fx:value="03H"/>
+                                 <String fx:value="04H"/>
+                                 <String fx:value="05H"/>
+                                 <String fx:value="06H"/>
+                                 <String fx:value="07H"/>
+                                 <String fx:value="08H"/>
+                                 <String fx:value="09H"/>
+                                 <String fx:value="10H"/>
+                                 <String fx:value="11H"/>
+                                 <String fx:value="12H"/>
+                                 <String fx:value="13H"/>
+                                 <String fx:value="14H"/>
+                                 <String fx:value="15H"/>
+                                 <String fx:value="16H"/>
+                                 <String fx:value="17H"/>
+                                 <String fx:value="18H"/>
+                                 <String fx:value="19H"/>
+                                 <String fx:value="20H"/>
+                                 <String fx:value="21H"/>
+                                 <String fx:value="22H"/>
+                                 <String fx:value="23H"/>
+                              </FXCollections>
+                           </items>
+                        </ChoiceBox>
+                        <ChoiceBox fx:id="minuteFin" prefWidth="150.0" >
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="00"/>
+                                 <String fx:value="05"/>
+                                 <String fx:value="10"/>
+                                 <String fx:value="15"/>
+                                 <String fx:value="20"/>
+                                 <String fx:value="25"/>
+                                 <String fx:value="30"/>
+                                 <String fx:value="35"/>
+                                 <String fx:value="40"/>
+                                 <String fx:value="45"/>
+                                 <String fx:value="50"/>
+                                 <String fx:value="55"/>
+                              </FXCollections>
+                           </items>
+                        </ChoiceBox>
+                     </children>
+                  </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Label prefHeight="31.0" prefWidth="46.0" text="Prix : " />
@@ -80,6 +183,9 @@
                                  </FXCollections>
                               </items>
                            </ChoiceBox>
+
+                        <Separator prefWidth="200.0" />
+                        <!-- <ChoiceBox fx:id="choixType" prefWidth="150.0" /> -->
                      </children>
                   </VBox>
                   <Button fx:id="BoutonDeConfirmation" mnemonicParsing="false" onAction="#ajouterItem" text="[+] Ajouter" />
