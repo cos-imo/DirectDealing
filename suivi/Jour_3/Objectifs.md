@@ -10,3 +10,7 @@ Rendre un livrable permettant de visualiser le calendrier des réservations d'un
 4. Permettre à l'utilisateur d'accéder à la période (jour, semaine, mois) précédente ou suivante.
 5. Ajouter des filtres pour n'afficher que les réservations d'un type particulier (service ou objet)
 6. Ajouter des filtres au moteur de recherche sur la page d'accueil.
+
+## Tâches effectuées
+
+4, 5, 6

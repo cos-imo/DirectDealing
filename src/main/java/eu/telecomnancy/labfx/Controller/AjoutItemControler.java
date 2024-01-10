@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import javafx.stage.Stage;
 import javafx.scene.control.Slider;
 import eu.telecomnancy.labfx.Connect;
+import eu.telecomnancy.labfx.Recurrence;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.io.File;
@@ -48,6 +49,9 @@ public class AjoutItemControler {
     private ChoiceBox<String> choixType;
 
     @FXML
+    private ChoiceBox<String> choixRecurrence;
+
+    @FXML
     private ImageView image_annonce;
 
     private void setImage(byte[] img){
@@ -71,10 +75,10 @@ public class AjoutItemControler {
         }
     }
 
-    private boolean insertDatabase(String Name, String Desc, java.sql.Date DateDebut, java.sql.Date DateFin, float LocalisationLongitude, float LocalisationLatitude, int type, int Prix) throws SQLException{
+    private boolean insertDatabase(String Name, String Desc, java.sql.Date DateDebut, java.sql.Date DateFin, float LocalisationLongitude, float LocalisationLatitude, boolean type, int Prix,Recurrence recurrence) throws SQLException{
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
-        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Image, Owner_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2)";
+        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Image, Owner_id,Recurrence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, getMaxId());
             preparedStatement.setString(2, Name);
@@ -83,9 +87,10 @@ public class AjoutItemControler {
             preparedStatement.setDate(5, DateFin);
             preparedStatement.setFloat(6, LocalisationLongitude);
             preparedStatement.setFloat(7, LocalisationLatitude);
-            preparedStatement.setInt(8, type);
+            preparedStatement.setBoolean(8, type);
             preparedStatement.setInt(9, Prix);
             preparedStatement.setBytes(10, this.image);
+            preparedStatement.setInt(11, Recurrence.getInt(recurrence));
 
             // Requête d'insertion
             int rowsAffected = preparedStatement.executeUpdate();
@@ -130,10 +135,12 @@ public class AjoutItemControler {
         String selectedValue = choixType.getValue();
         String Nom = NomAnnonce.getText();
         int Prix = Integer.valueOf(prix_florain.getText());
+        boolean type = choixType.getSelectionModel().getSelectedIndex() == 0; //Le premier choix est "objet"
         java.sql.Date sqlDateDebut = java.sql.Date.valueOf(DateDebut);
         java.sql.Date sqlDateFin = java.sql.Date.valueOf(DateFin);
+        Recurrence rec = Recurrence.getRecurrence(choixRecurrence.getSelectionModel().getSelectedIndex());
         try {
-            this.insertDatabase(Nom, Description, sqlDateDebut, sqlDateFin, 0.0f, 0.0f, Prix, 20);
+            this.insertDatabase(Nom, Description, sqlDateDebut, sqlDateFin, 0.0f, 0.0f, type, Prix,rec);
         } catch (SQLException e) {
             e.printStackTrace();
         }

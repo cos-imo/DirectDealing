@@ -17,4 +17,18 @@ public enum Recurrence {
                 return Non;
         }
     }
+    public static int getInt(Recurrence recurrence) {
+        switch (recurrence) {
+            case Non:
+                return 0;
+            case Quotidien:
+                return 1;
+            case Hebdomadaire:
+                return 2;
+            case Mensuel:
+                return 3;
+            default:
+                return 0;
+        }
+    }
 }

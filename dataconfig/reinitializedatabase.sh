@@ -32,7 +32,7 @@ CREATE TABLE Ressource (
     DateFin INTEGER NOT NULL, -- timestamp
     LocalisationLongitude FLOAT NOT NULL,
     LocalisationLatitude FLOAT NOT NULL,
-    type BOOLEAN NOT NULL,
+    type BOOLEAN NOT NULL, -- 0 = service, 1 = objet
     Prix INTEGER NOT NULL,
     Recurrence INTEGER NOT NULL,
     Image BLOB,

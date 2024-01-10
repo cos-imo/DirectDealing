@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import java.text.SimpleDateFormat;
 import javafx.scene.text.Font;
 import java.util.List;
 import java.io.ByteArrayInputStream;
@@ -77,8 +78,8 @@ public class RechercheController {
                 String desc = resultSet.getString("Desc");
                 String type = resultSet.getBoolean("type") ? "Objet" : "Service";
                 String Prix = resultSet.getString("Prix");
-                java.sql.Date dateDebut = resultSet.getDate("DateDebut");
-                java.sql.Date dateFin = resultSet.getDate("DateFin");
+                java.sql.Date dateDebut = new java.sql.Date(resultSet.getLong("DateDebut")*1000);
+                java.sql.Date dateFin = new java.sql.Date(resultSet.getLong("DateFin")*1000);
                 if (resultSet.getBytes("Image") != null) {
                     image = new Image(new ByteArrayInputStream(resultSet.getBytes("Image")));
                 } else {
@@ -134,6 +135,7 @@ public class RechercheController {
             if (DateDebut!=null){
                 java.sql.Date sqlDateDebut = java.sql.Date.valueOf(DateDebut);
 
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 System.out.println(sqlDateDebut);
 
                 if (sqlDateDebut!=null) {
@@ -152,7 +154,7 @@ public class RechercheController {
 
                 if (sqlDateFin!=null) {
                     if (!filters){
-                        query += " WHERE DateDebut<= strftime('%s', '" + sqlDateFin + "23:59:59')";
+                        query += " WHERE DateDebut<= strftime('%s', '" + sqlDateFin + " 23:59:59')";
                         filters = true;
                     } else {
                         query += " AND DateDebut<= strftime('%s', '" + sqlDateFin + " 23:59:59')";
@@ -183,8 +185,8 @@ public class RechercheController {
                 String desc = resultSet.getString("Desc");
                 String type = resultSet.getBoolean("type") ? "Objet" : "Service";
                 String Prix = resultSet.getString("Prix");
-                java.sql.Date dateDebut = resultSet.getDate("DateDebut");
-                java.sql.Date dateFin = resultSet.getDate("DateFin");
+                java.sql.Date dateDebut = new java.sql.Date(resultSet.getLong("DateDebut")*1000);
+                java.sql.Date dateFin = new java.sql.Date(resultSet.getLong("DateFin")*1000);
 
                 if (resultSet.getBytes("Image") != null) {
                     image = new Image(new ByteArrayInputStream(resultSet.getBytes("Image")));
