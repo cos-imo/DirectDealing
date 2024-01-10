@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.joda.time.DateTime;
+
 import javafx.scene.image.Image;
 
 
@@ -23,7 +25,7 @@ public class User {
     private int note;
     private ArrayList<Ressource> ressources;
 
-    public User(String email, String password, String nom, String prenom, Image pdp, int id, int wallet, int note) {
+    public User(String email, String password, String nom, String prenom, Image pdp, int id, int wallet, int note) throws SQLException {
         this.email = email;
         this.password = password;
         this.nom = nom;
@@ -32,6 +34,7 @@ public class User {
         this.id = id;
         this.wallet = new Florain(wallet);
         this.note = note;
+        getEventRessource(); //Initialise ressources // TODO : Changer ca sans dupliquer la réquête SQL
     }
 
     public String getEmail() {
@@ -123,6 +126,7 @@ public class User {
 
     public ArrayList<EventRessource> getEventRessource() throws SQLException {
         ArrayList<EventRessource> eventRessources = new ArrayList<EventRessource>();
+        ArrayList<Ressource> ressources = new ArrayList<Ressource>();
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
         PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Event WHERE User_id = "+this.id+";");
@@ -133,13 +137,15 @@ public class User {
             int idUmprunteur = resultSet.getInt("User_id");
             Ressource ressource = Ressource.newRessourceFromId(idRessource);
             if (ressource != null){
-                EventRessource eventRessource = new EventRessource(ressource, id, idUmprunteur, resultSet.getDate("Date_debut"), resultSet.getDate("Date_fin"));
+                EventRessource eventRessource = new EventRessource(ressource, id, idUmprunteur, new DateTime(resultSet.getInt("Date_debut")), new DateTime(resultSet.getInt("Date_fin")));
                 eventRessources.add(eventRessource);
+                ressources.add(ressource);
             }
         }
         preparedStatement.close();
         connection.commit();
         connection.close();
+        this.ressources = ressources;
         return eventRessources;
     }
 }
