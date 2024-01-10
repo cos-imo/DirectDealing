@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import eu.telecomnancy.labfx.Connect;
+import java.text.SimpleDateFormat;
 import java.io.IOException;
 import java.sql.*;
 
@@ -41,7 +42,8 @@ public class ListObjectController{
         label_type.setText(type);
         label_nomPreteur.setText(preteur);
         prix_florains.setText(cout);
-        label_date.setText("Du " + dateDebut.toString() + " au " + dateFin);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        label_date.setText("Du " + dateFormat.format(dateDebut) + " au " + dateFormat.format(dateFin));
         if (image_annonce!=null){
             image_annonce.setImage(image);
         }
