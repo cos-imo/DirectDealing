@@ -1,6 +1,12 @@
 package eu.telecomnancy.labfx.Controller;
 
 
+import java.sql.Array;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import eu.telecomnancy.labfx.EventRessource;
+import eu.telecomnancy.labfx.Ressource;
 import eu.telecomnancy.labfx.Session;
 import eu.telecomnancy.labfx.User;
 import javafx.fxml.FXML;
@@ -33,8 +39,9 @@ public class HeaderController extends HBox {
         labelFlorain.setText(String.valueOf(currentUser.getWallet().getFlorain()));
     }
     @FXML
-    private void OpenCalendar(ActionEvent event) {
+    private void OpenCalendar(ActionEvent event) throws SQLException {
         LoadPage.loadPage("Calendrier", event,getClass());
+        AfficheAllEvents();
     }
 
     @FXML
@@ -55,5 +62,11 @@ public class HeaderController extends HBox {
     private void setDisconnectBtn(ActionEvent event){
         Session.getInstance().setCurrentUser(null);
         LoadPage.loadPage("Connexion", event,getClass());
+    }
+    public void AfficheAllEvents() throws SQLException{
+        ArrayList<EventRessource> events = Session.getInstance().getCurrentUser().getEventRessource();
+        for (EventRessource event : events){
+            event.AfficheEvent();
+        }
     }    
 }

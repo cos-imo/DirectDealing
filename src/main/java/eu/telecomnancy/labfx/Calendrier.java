@@ -60,23 +60,21 @@ public class Calendrier {
 
         ArrayList<Ressource> ressourceActif = new ArrayList<Ressource>();
         for (Ressource ressource : user.getRessources()) {
-            if (betweenDate.contains(ressource.getDateDebut()) || betweenDate.contains(ressource.getDateFin())) {
-                ressourceActif.add(ressource);
+            DateTime newDebut = ressource.getDateDebut();
+            DateTime newFin = ressource.getDateFin();
+            if (ressource.getReccurence() != Recurrence.Non){
+                while (newDebut.isBefore(betweenDate.getEnd()) && newDebut.isBefore(newFin)){
+                    newDebut = AjoutPeriodRecc(newDebut,ressource.getReccurence());
+                    newFin = AjoutPeriodRecc(newFin,ressource.getReccurence());
+                }
+                while (betweenDate.contains(newFin) || betweenDate.contains(newDebut)){
+                    ressourceActif.add(ressourceReducedToAffichage(new Ressource(ressource, newDebut, newFin)));
+                    newDebut = AjoutPeriodRecc(newDebut,ressource.getReccurence());
+                    newFin = AjoutPeriodRecc(newFin,ressource.getReccurence());
+                }
             } else {
-                if (ressource.getDateDebut().isBefore(betweenDate.getStart())){
-                    switch (ressource.getReccurence()) {
-                        case Quotidien:
-                            
-                        break;
-                        case Hebdomadaire:
-                            
-                        break;
-                        case Mensuel:
-                            
-                        break;
-                        default:
-                            break;
-                    }
+                if (betweenDate.contains(ressource.getDateDebut()) || betweenDate.contains(ressource.getDateFin())) {
+                    ressourceActif.add(ressourceReducedToAffichage(ressource));
                 }
             }
         }
@@ -86,34 +84,63 @@ public class Calendrier {
         return eventActif;
     }
     public EventRessource createEventBetweenDate(EventRessource event){
-        DateTime newDebut = new DateTime();
-        DateTime newEnd = new DateTime();
-        if (event.getDateDebut().isBefore(betweenDate.getStart())){
-            newDebut = betweenDate.getStart();
-        } else {
-            newDebut = event.getDateDebut();
-        }
-        if (event.getDateFin().isAfter(betweenDate.getEnd())){
-            newEnd = betweenDate.getEnd();
-        } else {
-            newEnd = event.getDateFin();
-        }
-        EventRessource newEvent = new EventRessource(event.getRessource(), event.getId(),event.getIdPreteur(),event.getIdUmprunteur(),newDebut, newEnd);
+        DateTime newDebut = reduceDebutDate(event.getDateDebut());
+        DateTime newEnd = reduceFinDate(event.getDateFin());
+        EventRessource newEvent = new EventRessource(event,newDebut, newEnd);
         return newEvent;
     }
-    public int getDaysOccurencePeriod(DateTime mainDate){
-        switch (modeAffichage) {
-            case Jour:
-                return 1;
-            case Semaine:
-                return 7;
-            case Mois:
-                return mainDate.dayOfMonth().getMaximumValue();
-            default:
-                return 0;
+    
+    public DateTime minDate(DateTime date1, DateTime date2){
+        if (date1.isBefore(date2)){
+            return date1;
+        } else {
+            return date2;
         }
     }
+    public DateTime maxDate(DateTime date1, DateTime date2){
+        if (date1.isAfter(date2)){
+            return date1;
+        } else {
+            return date2;
+        }
+    }
+    public DateTime reduceDebutDate(DateTime date1){
+        return maxDate(date1, betweenDate.getStart());
+    }
+    public DateTime reduceFinDate(DateTime date1){
+        return minDate(date1, betweenDate.getEnd());
+    }
+    // public DateTime AjoutPeriodAffichage(DateTime date){
+    //     switch (modeAffichage) {
+    //         case Jour:
+    //             return date.plusDays(1);
+    //         case Semaine:
+    //             return date.plusWeeks(1);
+    //         case Mois:
+    //             return date.plusMonths(1);
+    //         default:
+    //             return null;
+    //     }
+    // }
+    public DateTime AjoutPeriodRecc(DateTime date, Recurrence reccurence){
+        switch (reccurence) {
+            case Quotidien:
+                return date.plusDays(1);
+            case Hebdomadaire:
+                return date.plusWeeks(1);
+            case Mensuel:
+                return date.plusMonths(1);
+            default:
+                return date;
+        }
+    }
+    public Ressource ressourceReducedToAffichage(Ressource r){
+        Ressource newRessource = new Ressource(r,reduceDebutDate(r.getDateDebut()),reduceFinDate(r.getDateFin()));
+        return newRessource;
 
-
+    }
+    public ArrayList<Ressource> getRessourceActif() {
+        return ressourceActif;
+    }
 
 }

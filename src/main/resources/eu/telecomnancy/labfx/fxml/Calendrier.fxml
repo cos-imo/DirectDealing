@@ -17,27 +17,27 @@
                     <ComboBox fx:id="viewSelector" visible="false" onAction="#handleViewSelector"/>
                 </StackPane>
                 <Pane HBox.hgrow="ALWAYS"/>
-                <Button fx:id="previousMonthButton" text="⬅" onAction="#previousMonth" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;">
+                <Button fx:id="previousButton" text="⬅" onAction="#previousButton" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;">
                     <tooltip>
-                        <Tooltip text="Mois précédent" />
+                        <Tooltip text="previousText" />
                     </tooltip>
                 </Button>
-                <StackPane fx:id="monthStackPane" alignment="CENTER">
-                    <Label fx:id="monthLabel" text="Mois" style="-fx-font-size: 24px;" onMouseClicked="#showMonthPicker"/>
-                    <ComboBox fx:id="monthPicker" onAction="#handleMonthPicker" visible="false"/>
+                <StackPane fx:id="leftLabelStackPane" alignment="CENTER">
+                    <Label fx:id="leftLabel" text="leftLabelText" style="-fx-font-size: 24px;" onMouseClicked="#leftLabelAction"/>
+                    <ComboBox fx:id="leftPicker" onAction="#handleLeftPicker" visible="false"/>
                 </StackPane>
                 <StackPane>
-                    <Label fx:id="yearLabel" text="Année" style="-fx-font-size: 24px;" onMouseClicked="#showYearPicker"/>
-                    <ComboBox fx:id="yearPicker" visible="false" onAction="#handleYearPicker"/>
+                    <Label fx:id="rightLabel" text="rightLabelText" style="-fx-font-size: 24px;" onMouseClicked="#rightLabelAction"/>
+                    <ComboBox fx:id="rightPicker" visible="false" onAction="#handleRightPicker"/>
                 </StackPane>
-                <Button fx:id="currentMonthButton" text="•" onAction="#currentMonth" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;">
+                <Button fx:id="currentDateButton" text="•" onAction="#currentDate" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;">
                     <tooltip>
                         <Tooltip text="Date actuelle" />
                     </tooltip>
                 </Button>
-                <Button fx:id="nextMonthButton" text="➡" onAction="#nextMonth" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;">
+                <Button fx:id="nextButton" text="➡" onAction="#nextButton" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;">
                     <tooltip>
-                        <Tooltip text="Mois suivant" />
+                        <Tooltip text="rightButtonText" />
                     </tooltip>
                 </Button>
                 <Pane HBox.hgrow="ALWAYS"/>
