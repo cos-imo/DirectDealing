@@ -33,20 +33,20 @@ public class Calendrier {
     }
 
     private Interval getBetweenDate() {
-        Interval betweenDate = new Interval(new DateTime(mainDate), new DateTime(mainDate));
         switch (modeAffichage) {
             case Jour:
-                
-                break;
+            
+            break;
             case Semaine:
-                    
-                break;
+            
+            break;
             case Mois:
-                        
-                break;
+            
+            break;
             default:
-                break;
+            break;
         }
+        Interval betweenDate = new Interval(new DateTime(mainDate), new DateTime(mainDate));
         return betweenDate;
     }
 

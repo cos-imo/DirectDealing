@@ -94,7 +94,7 @@ public class Ressource {
         Florain prix = new Florain(rs.getInt("Prix"));
         Recurrence reccurence = Recurrence.getRecurrence(rs.getInt("recurrence"));
         int id_owner = rs.getInt("Owner_id");
-        byte[] imagebyte = rs.getBytes("Photo_profil");
+        byte[] imagebyte = rs.getBytes("Image");
         Image pdp = null;
         if (imagebyte != null && imagebyte.length > 0) {
             pdp = (new Image(new ByteArrayInputStream(imagebyte)));

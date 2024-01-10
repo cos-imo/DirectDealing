@@ -27,7 +27,6 @@ CREATE TABLE Ressource (
     Owner_id INTEGER NOT NULL,
     Name TEXT NOT NULL,
     Desc TEXT NOT NULL,
-    Illustration BLOB,
     DateDebut DATE NOT NULL,
     DateFin DATE NOT NULL,
     LocalisationLongitude FLOAT NOT NULL,
