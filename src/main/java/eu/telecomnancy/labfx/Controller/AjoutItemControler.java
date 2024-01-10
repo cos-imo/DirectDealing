@@ -74,7 +74,7 @@ public class AjoutItemControler {
     private boolean insertDatabase(String Name, String Desc, java.sql.Date DateDebut, java.sql.Date DateFin, float LocalisationLongitude, float LocalisationLatitude, int type, int Prix) throws SQLException{
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
-        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Illustration, Owner_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2)";
+        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Image, Owner_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, getMaxId());
             preparedStatement.setString(2, Name);
