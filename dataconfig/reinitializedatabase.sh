@@ -76,6 +76,9 @@ INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES
 INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 1, 2, strftime('%s', '2024-01-12 20:00:00'), "Bonjour, pas de soucis, ou dois-je venir ?");
 INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 2, 1, strftime('%s', '2024-01-12 20:04:46'), "Je vous envoie mon adresse par mail");
 INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 1, 2, strftime('%s', '2024-01-12 20:05:10'), "Ok, à demain");
+INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 1, 2, strftime('%s', '2024-01-12 20:05:10'), "Ok, à demain");
+INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 1, 2, strftime('%s', '2024-01-12 20:05:10'), "Ok, à demain");
+INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 1, 2, strftime('%s', '2024-01-12 20:05:10'), "Ok, à demain");
 
 
 .exit
