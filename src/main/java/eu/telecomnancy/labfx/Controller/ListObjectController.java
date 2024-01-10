@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import eu.telecomnancy.labfx.Connect;
+import java.text.SimpleDateFormat;
 import java.io.IOException;
 import java.sql.*;
 
@@ -33,11 +34,16 @@ public class ListObjectController{
     @FXML
     ImageView image_annonce;
 
-    public void setElementData(String annonceName, String type, String preteur, String cout, Image image){
+    @FXML
+    Label label_date;
+
+    public void setElementData(String annonceName, String type, String preteur, String cout, Image image, java.sql.Date dateDebut, java.sql.Date dateFin){
         label_nom.setText(annonceName);
         label_type.setText(type);
         label_nomPreteur.setText(preteur);
         prix_florains.setText(cout);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        label_date.setText("Du " + dateFormat.format(dateDebut.getTime()) + " au " + dateFormat.format(dateFin.getTime()));
         if (image_annonce!=null){
             image_annonce.setImage(image);
         }

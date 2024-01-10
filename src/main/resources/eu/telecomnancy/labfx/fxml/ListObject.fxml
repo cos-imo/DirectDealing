@@ -37,13 +37,18 @@
                         <Font size="15.0" />
                         </font>
                     </Label>
+                     <Label fx:id="label_date" text="dd/mm/yyy" textFill="#7c7c7c">
+                        <font>
+                           <Font size="10.0" />
+                        </font>
+                     </Label>
                 </children>
             </VBox>
-            <VBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="320.0">
+            <VBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="320.0">
                 <children>
                     <Label text="Localisation" textFill="#7c7c7c" />
                       <HBox alignment="BOTTOM_RIGHT">
-                        <ImageView  fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../images/coin.png" />
                             </image>
