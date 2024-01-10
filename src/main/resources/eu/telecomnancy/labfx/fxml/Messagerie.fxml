@@ -1,26 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ScrollBar?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.MessagerieController">
    <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0">
       <top>
          <fx:include source="Header.fxml" />
       </top>
-      <center>
-         <ScrollPane fx:id="scrollPane" VBox.vgrow="ALWAYS">
+      <left>
+         <ScrollPane fx:id="scrollPane" maxWidth="410.0" minWidth="410.0" prefWidth="410.0" BorderPane.alignment="CENTER">
             <content>
-               <VBox fx:id="messageListContainer" prefHeight="400.0" prefWidth="980.0">
+               <VBox fx:id="messageListContainer" prefWidth="410.0">
                   <!-- Ajoutez ici les éléments de votre liste de messages -->
                </VBox>
             </content>
          </ScrollPane>
+      </left>
+      <center>
+         <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+               <Separator orientation="VERTICAL" prefHeight="200.0" />
+               <ScrollPane fx:id="scrollPaneConversation" maxWidth="670.0" minWidth="670.0" prefWidth="670.0">
+                  <content>
+                     <VBox fx:id="messagesContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="729.0">
+                        <children>
+                           <Label text="Contact">
+                              <font>
+                                 <Font size="30.0" />
+                              </font>
+                           </Label>
+                           <Label text="Event">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </Label>
+                           <Separator prefWidth="200.0" />
+                           <Separator prefWidth="200.0" />
+                        </children>
+                     </VBox>
+                  </content>
+               </ScrollPane>
+            </children>
+         </HBox>
       </center>
    </BorderPane>
 </AnchorPane>

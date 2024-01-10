@@ -2,6 +2,7 @@ package eu.telecomnancy.labfx.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ComboBox;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import java.sql.*;
@@ -18,6 +19,9 @@ public class BandeauConversationController{
 
     @FXML
     Label label_content;
+    
+    @FXML
+    ComboBox viewSelector;
 
     public void setElementData(int nom, String contenu, int event) throws SQLException{
         String query1 = "SELECT First_Name, Last_Name FROM User WHERE User_id = ?;";
@@ -38,5 +42,10 @@ public class BandeauConversationController{
             }
         }
         label_content.setText(contenu);
+    }
+
+    @FXML
+    private void openConversation(){
+        System.out.println("Conversation ouverte");
     }
 }
