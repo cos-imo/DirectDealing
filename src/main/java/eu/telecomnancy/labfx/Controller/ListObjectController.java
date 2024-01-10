@@ -43,7 +43,7 @@ public class ListObjectController{
         label_nomPreteur.setText(preteur);
         prix_florains.setText(cout);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        label_date.setText("Du " + dateFormat.format(dateDebut) + " au " + dateFormat.format(dateFin));
+        label_date.setText("Du " + dateFormat.format(dateDebut.getTime()) + " au " + dateFormat.format(dateFin.getTime()));
         if (image_annonce!=null){
             image_annonce.setImage(image);
         }
