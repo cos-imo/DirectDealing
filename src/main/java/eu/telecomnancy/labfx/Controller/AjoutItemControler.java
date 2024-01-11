@@ -106,8 +106,8 @@ public class AjoutItemControler {
 
             // Requête d'insertion
             int rowsAffected = preparedStatement.executeUpdate();
-            preparedStatement.close();
             connection.commit();
+            preparedStatement.close();
             connection.close();
             // Retourner vrai si une ligne a été insérée, faux sinon
             return rowsAffected > 0;
@@ -130,6 +130,9 @@ public class AjoutItemControler {
             if (resultSet.next()) {
                 max_id = resultSet.getInt(1);
             }
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -155,16 +158,16 @@ public class AjoutItemControler {
         int hourFinI = Integer.parseInt(hourFin.getValue().substring(0, hourFin.getValue().length()-1));
         int minuteFinI = Integer.parseInt(minuteFinS);
 
-        System.out.println("Heure début (entier): " + hourDebutI);
-        System.out.println("Minute début (entier): " + minuteDebutI);
-        System.out.println("Heure fin (entier): " + hourFinI);
-        System.out.println("Minute fin (entier): " + minuteFinI);
+        // System.out.println("Heure début (entier): " + hourDebutI);
+        // System.out.println("Minute début (entier): " + minuteDebutI);
+        // System.out.println("Heure fin (entier): " + hourFinI);
+        // System.out.println("Minute fin (entier): " + minuteFinI);
 
         // Créer les LocalDateTime
         LocalDateTime dateTimeDebut = LocalDateTime.of(DatePickerDebut.getValue().getYear(), DatePickerDebut.getValue().getMonth(), DatePickerDebut.getValue().getDayOfMonth(), hourDebutI, minuteDebutI);
         LocalDateTime dateTimeFin = LocalDateTime.of(DatePickerFin.getValue().getYear(), DatePickerFin.getValue().getMonth(), DatePickerFin.getValue().getDayOfMonth(), hourFinI, minuteFinI);
-        System.out.println("Date début: " + dateTimeDebut);
-        System.out.println("Date fin: " + dateTimeFin);
+        // System.out.println("Date début: " + dateTimeDebut);
+        // System.out.println("Date fin: " + dateTimeFin);
 
         // Convertir les LocalDateTime en java.sql.Date
         // System.out.println("Date début (toLocateDate): " + dateTimeDebut.toLocalDate());

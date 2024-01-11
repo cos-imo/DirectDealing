@@ -5,7 +5,13 @@ import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+
+
+import eu.telecomnancy.labfx.Calendrier;
 import eu.telecomnancy.labfx.EventRessource;
+import eu.telecomnancy.labfx.ModeAffichage;
 import eu.telecomnancy.labfx.Ressource;
 import eu.telecomnancy.labfx.Session;
 import eu.telecomnancy.labfx.User;
@@ -43,6 +49,10 @@ public class HeaderController extends HBox {
         LoadPage.loadPage("Calendrier", event,getClass());
         // AfficheAllEvents();
         // AfficheAllRessources();
+        Calendrier calendrier = new Calendrier(Session.getInstance().getCurrentUser(), DateTime.now(),ModeAffichage.Mois);
+        AfficheAllRessources(calendrier.getRessourceActif());
+        AfficheAllEvents(calendrier.getEventActif());
+        AfficheInterval(calendrier.getBetweenDate());
     }
 
     @FXML
@@ -64,17 +74,26 @@ public class HeaderController extends HBox {
         Session.getInstance().setCurrentUser(null);
         LoadPage.loadPage("Connexion", event,getClass());
     }
-    public void AfficheAllEvents() throws SQLException{
-        ArrayList<EventRessource> events = Session.getInstance().getCurrentUser().getEventRessource();
+    public void AfficheAllEvents(ArrayList<EventRessource> events) throws SQLException{
+        System.out.println("Affichage des events actifs: ");
+        if (events.isEmpty()){
+            System.out.println("Aucun event actif");
+        }
         for (EventRessource event : events){
             event.AfficheEvent();
         }
     }    
-    public void AfficheAllRessources() throws SQLException{
-        ArrayList<Ressource> ressources = Session.getInstance().getCurrentUser().getRessources();
-        System.out.println("Ressources All : ");
+    public void AfficheAllRessources(ArrayList<Ressource> ressources) throws SQLException{
+        System.out.println("Affichage des ressources actives: ");
+        if (ressources.isEmpty()){
+            System.out.println("Aucune ressource active");
+        }
         for (Ressource ressource : ressources){
             ressource.AfficheRessource();
         }
+    }
+    public void AfficheInterval(Interval interval){
+        System.out.println("Date de début : " + interval.getStart());
+        System.out.println("Date de fin : " + interval.getEnd());
     }
 }
