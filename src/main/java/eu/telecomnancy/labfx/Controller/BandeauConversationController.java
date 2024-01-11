@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import java.text.SimpleDateFormat;
 import java.sql.*;
 
 import eu.telecomnancy.labfx.Connect;
@@ -16,6 +17,9 @@ public class BandeauConversationController{
 
     @FXML
     Label label_nom;
+
+    @FXML
+    Label label_heure;
 
     @FXML
     Label label_content;
@@ -30,7 +34,7 @@ public class BandeauConversationController{
     private int eventId;
     private String eventName;
 
-    public void setElementData(int nom, String contenu, int event) throws SQLException{
+    public void setElementData(int nom, String contenu, int event, java.sql.Timestamp date) throws SQLException{
         this.eventId = event;
         this.contactId = nom;
         String query1 = "SELECT First_Name, Last_Name FROM User WHERE User_id = ?;";
@@ -53,6 +57,9 @@ public class BandeauConversationController{
                 label_event.setText(this.eventName);
             }
         }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM - HH:mm");
+        String heureformatee = dateFormat.format(date);
+        label_heure.setText(heureformatee);
         label_content.setText(contenu);
     }
 
