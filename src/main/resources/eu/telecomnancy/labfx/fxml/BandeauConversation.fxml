@@ -8,13 +8,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.control.ComboBox?>
-
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="109.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.BandeauConversationController">
 <Separator prefWidth="400.0" />
-    <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="400.0" onMouseClicked="#openConversation">
+    <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#openConversation" prefHeight="105.0" prefWidth="400.0">
         <children>
             <HBox prefHeight="104.0" prefWidth="584.0">
                 <children>
@@ -23,13 +20,30 @@
                             <Image fx:id="image_objet" url="@../images/account.png" />
                         </image>
                     </ImageView>
-                <VBox prefHeight="105.0" prefWidth="458.0">
+                <VBox prefHeight="105.0" prefWidth="438.0">
                     <children>
-                        <Label fx:id="label_nom" prefHeight="29.0" prefWidth="261.0" text="Contact">
-                            <font>
-                            <Font size="24.0" />
-                            </font>
-                        </Label>
+                      <HBox prefHeight="105.0" prefWidth="243.0">
+                          <children>
+                           <HBox prefHeight="100.0" prefWidth="200.0">
+                              <children>
+                                    <Label fx:id="label_nom" prefHeight="29.0" prefWidth="207.0" text="Contact">
+                                        <font>
+                                        <Font size="24.0" />
+                                        </font>
+                                    </Label>
+                              </children>
+                           </HBox>
+                           <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                              <children>
+                                    <Label fx:id="label_heure" alignment="TOP_LEFT" text="Heureouais" textFill="#7c7c7c">
+                                        <font>
+                                        <Font size="10.0" />
+                                        </font>
+                                    </Label>
+                              </children>
+                           </HBox>
+                          </children>
+                      </HBox>
                         <Label fx:id="label_event" prefHeight="23.0" prefWidth="275.0" text="Event">
                             <font>
                             <Font size="18.0" />
@@ -46,15 +60,6 @@
                         </VBox>
                     </children>
                 </VBox>
-                <HBox alignment="TOP_RIGHT" prefHeight="105.0" prefWidth="243.0">
-                    <children>
-                        <Label fx:id="label_heure" alignment="TOP_LEFT" text="Heure" textFill="#7c7c7c">
-                            <font>
-                            <Font size="10.0" />
-                            </font>
-                        </Label>
-                    </children>
-                </HBox>
                 </children>
             </HBox>
         </children>

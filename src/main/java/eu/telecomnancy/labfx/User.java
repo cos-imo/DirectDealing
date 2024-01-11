@@ -77,8 +77,8 @@ public class User {
             int idOwner = resultSet.getInt("Owner_id");
             String name = resultSet.getString("Name");
             String desc = resultSet.getString("Desc");
-            DateTime dateDebut = new DateTime(resultSet.getInt("DateDebut"));
-            DateTime dateFin = new DateTime(resultSet.getInt("DateFin"));
+            DateTime dateDebut = new DateTime(resultSet.getLong("DateDebut"));
+            DateTime dateFin = new DateTime(resultSet.getLong("DateFin"));
             float longitude = resultSet.getFloat("LocalisationLongitude");
             float latitude = resultSet.getFloat("LocalisationLatitude");
             boolean type = resultSet.getBoolean("type");
@@ -88,13 +88,14 @@ public class User {
             if (imagebyte != null && imagebyte.length > 0) {
                 image = (new Image(new ByteArrayInputStream(imagebyte)));
             }
+
             Recurrence recurrence = Recurrence.getRecurrence(resultSet.getInt("Recurrence"));
             Ressource ressource = new Ressource(name, desc, dateDebut, dateFin, longitude, latitude, id, new Florain(prix), recurrence, idOwner, image, type);
             ressourcess.add(ressource);
         }
         preparedStatement.close();
+        connection.commit();
         connection.close();
-
         return ressourcess;
     }
     public static User newUserFromMail(String mail) throws SQLException{
@@ -108,12 +109,10 @@ public class User {
     }
     public static User newUserFromAttribute(String sql) throws SQLException {
         Connect connect = new Connect();
-        System.out.println("Va jusqu'ici");
         Connection connection = connect.getConnection(); 
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (!resultSet.isClosed()){
-            System.out.println("User trouvé");
             String email = resultSet.getString("Mail");
             String password = resultSet.getString("Password");
             String nom = resultSet.getString("Last_Name");
@@ -130,7 +129,6 @@ public class User {
             preparedStatement.close();
             connection.commit();
             connection.close();
-            System.out.println("User créé");
             return user;
         }
         connection.close();

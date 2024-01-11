@@ -10,3 +10,7 @@ Rendre un livrable permettant de visualiser les comptes d'autres personnes en cl
 4. Permettre à l'utilisateur d'envoyer un message à quelqu'un à partir d'une annonce
 5. Permettre à l'utilisateur de demander une réservation à quelqu'un à partir d'une annonce
 6. Permettre à l'utilisateur de laisser un avis à quelqu'un après la date de fin de la réservation
+
+## Tâches effectuées
+
+1, 2, 3, 5
