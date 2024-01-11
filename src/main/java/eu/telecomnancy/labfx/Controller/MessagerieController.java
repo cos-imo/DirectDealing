@@ -4,13 +4,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.TextField;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 
 import eu.telecomnancy.labfx.Connect;
 import eu.telecomnancy.labfx.Session;
@@ -32,7 +32,17 @@ public class MessagerieController {
     @FXML
     private VBox messagesContainer;
 
+    @FXML
+    private Button boutonEnvoyer;
+
+    @FXML
+    private TextField messageSaisi;
+
     private boolean isConversationInitialized;
+    private String nomCorrespondant;
+    private String nomEvent;
+    private int correspondantActif;
+    private int eventActif;
 
     public void initialize() throws SQLException {
         getMessages();
@@ -92,6 +102,10 @@ public class MessagerieController {
 
     @FXML
     protected void setChat(String nomCorrespondant, String nomEvent, int contactId, int eventId){
+        this.nomCorrespondant = nomCorrespondant;
+        this.nomEvent = nomEvent;
+        this.correspondantActif = contactId;
+        this.eventActif = eventId;
         messagesContainer.getChildren().clear();
 
         contactName.setText(nomCorrespondant);
@@ -132,6 +146,37 @@ public class MessagerieController {
 
     private void initConversation(){
 
+    }
+
+    @FXML
+    private boolean envoyerMessage(){
+        String messageAEnvoyer = messageSaisi.getText();
+        int user_id = Session.getInstance().getCurrentUser().getId();
+
+        Connect connect = new Connect();
+        try (Connection connection = connect.getConnection()) {
+            String sql = "INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, this.eventActif);
+            preparedStatement.setInt(2, user_id);
+            preparedStatement.setInt(3, this.correspondantActif);
+            preparedStatement.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
+            preparedStatement.setString(5, messageSaisi.getText());
+
+            // Requête d'insertion
+            int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.commit();
+            connection.close();
+            messageSaisi.clear();
+            this.setChat(this.nomCorrespondant, this.nomEvent, this.correspondantActif, this.eventActif);
+            // Retourner vrai si une ligne a été insérée, faux sinon
+            return rowsAffected > 0;
+            }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void addMessage(String messageContent, String messageDate){
