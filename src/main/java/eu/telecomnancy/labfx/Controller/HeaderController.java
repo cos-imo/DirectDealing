@@ -25,6 +25,8 @@ import javafx.event.ActionEvent;
 public class HeaderController extends HBox {
     @FXML
     private Button btnOpenCalendar;
+    @FXML
+    private Button btnOpenMesAnnonces;
     @FXML 
     private Label labelNames;
     @FXML
@@ -53,6 +55,11 @@ public class HeaderController extends HBox {
         // AfficheAllRessources(calendrier.getRessourceActif());
         // AfficheAllEvents(calendrier.getEventActif());
         // AfficheInterval(calendrier.getBetweenDate());
+    }
+
+    @FXML
+    private void OpenMesAnnonces(ActionEvent event){
+        LoadPage.loadPage("MesAnnonces", event,getClass());
     }
 
     @FXML

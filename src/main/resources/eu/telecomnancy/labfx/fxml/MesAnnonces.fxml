@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.MesAnnoncesController">
+   <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0">
+      <center>
+         <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+              <!-- <fx:include source="Header.fxml" VBox.vgrow="NEVER"/> -->
+         <children>
+               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                     <Label alignment="CENTER" text="Mes annonces" textAlignment="CENTER">
+                        <font>
+                           <Font size="40.0" />
+                        </font>
+                     </Label>
+                     <HBox prefHeight="100.0" prefWidth="200.0">
+                        <children>
+                           <Separator orientation="VERTICAL" prefHeight="200.0" />
+                           <VBox prefHeight="40.0" prefWidth="684.0">
+                              <children>
+                                 <Label text="Type" />
+                                 <ChoiceBox fx:id="type" prefHeight="24.0" prefWidth="698.0">
+                                    <items>
+                                       <FXCollections fx:factory="observableArrayList">
+                                          <String fx:value="Objet" />
+                                          <String fx:value="Service" />
+                                       </FXCollections>
+                                    </items>
+                                 </ChoiceBox>
+                              </children>
+                           </VBox>
+                           <Separator orientation="VERTICAL" prefHeight="200.0" />
+                        </children>
+                        <VBox.margin>
+                           <Insets top="5.0" />
+                        </VBox.margin>
+                     </HBox>
+                     <Separator>
+                        <VBox.margin>
+                           <Insets top="5.0" />
+                        </VBox.margin>
+                     </Separator>
+                  <HBox maxHeight="-Infinity" minHeight="-Infinity" prefWidth="700.0">
+                     <children>
+                        <VBox fx:id="MesAnnoncesContainer" prefHeight="500.0" prefWidth="1080.0" />
+                        <ScrollBar orientation="VERTICAL" />
+                     </children>
+                        <VBox.margin>
+                           <Insets top="5.0" />
+                        </VBox.margin>
+                  </HBox>
+                  </children>
+                  <VBox.margin>
+                     <Insets />
+                  </VBox.margin>
+               </VBox>
+         </children>
+          </VBox>
+      </center>
+      <top>
+         <fx:include source="Header.fxml" />
+      </top>
+   </BorderPane>
+</AnchorPane>
