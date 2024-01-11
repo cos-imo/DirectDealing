@@ -13,6 +13,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.text.SimpleDateFormat;
 import javafx.scene.text.Font;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
@@ -102,6 +104,7 @@ public class RechercheController {
                 } else {
                     System.out.println("Image nulle?");
                 }
+
                 if (isDisponible(ressource_id)) {
                     addElementToSearchList(name, desc, type, Prix, image, dateDebut, dateFin, ressource_id, owner_id);
                 }

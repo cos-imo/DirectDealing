@@ -74,6 +74,8 @@ public class ListObjectController{
     private String desc;
     private String cout;
     private int owner_id;
+    private Date dateDebutAnnonce;
+    private Date dateFinAnnonce;
 
     private int selectedDebutHour = -1;
     private int selectedDebutMinute = -1;
@@ -100,11 +102,13 @@ public class ListObjectController{
         minuteFinComboBox.setDisable(notEnoughFlorains);
 
         label_nom.setText(annonceName);
-        label_type.setText("" + type);
+        label_type.setText(type ? "Objet" : "Service");
         label_nomPreteur.setText(desc);
         prix_florains.setText(cout);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        label_date.setText("Du " + dateFormat.format(dateDebut.getTime()) + " au " + dateFormat.format(dateFin.getTime()));
+        dateDebutAnnonce = dateDebut;
+        dateFinAnnonce = dateFin;
+        label_date.setText("Du " + dateFormat.format(dateDebutAnnonce.getTime()) + " au " + dateFormat.format(dateFinAnnonce.getTime()));
         if (image_annonce!=null){
             image_annonce.setImage(image);
         }
@@ -155,52 +159,60 @@ public class ListObjectController{
                 return;
             }
             else {
-                Connect connect = new Connect();
-                try (Connection connection = connect.getConnection()) {
-                    String query = "INSERT INTO Event (Ressource_id, isObjet, Name, preteur_id, acheteur_id, DateDebut, DateFin, Prix) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-                    PreparedStatement preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setInt(1, ressource_id);
-                    preparedStatement.setBoolean(2, type);
-                    preparedStatement.setString(3, annonceName);
-                    preparedStatement.setInt(4, owner_id);
-                    preparedStatement.setInt(5, Session.getInstance().getCurrentUser().getId());
-                    int minuteDebutI = this.minuteDebutComboBox.getValue();
-                    int minuteFinI = this.minuteFinComboBox.getValue();
-                    int hourFinI = this.hourFinComboBox.getValue();
-                    int hourDebutI = this.hourDebutComboBox.getValue();
+                if (dateDebut.isBefore(dateDebutAnnonce.toLocalDate()) || dateFin.isAfter(dateFinAnnonce.toLocalDate())) {
+                    System.out.println("Date de début ou de fin en dehors de la période de l'annonce");
+                    return;
+                }
+                else {
+
+                    
+                    Connect connect = new Connect();
+                    try (Connection connection = connect.getConnection()) {
+                        String query = "INSERT INTO Event (Ressource_id, isObjet, Name, preteur_id, acheteur_id, DateDebut, DateFin, Prix) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+                        PreparedStatement preparedStatement = connection.prepareStatement(query);
+                        preparedStatement.setInt(1, ressource_id);
+                        preparedStatement.setBoolean(2, type);
+                        preparedStatement.setString(3, annonceName);
+                        preparedStatement.setInt(4, owner_id);
+                        preparedStatement.setInt(5, Session.getInstance().getCurrentUser().getId());
+                        int minuteDebutI = this.minuteDebutComboBox.getValue();
+                        int minuteFinI = this.minuteFinComboBox.getValue();
+                        int hourFinI = this.hourFinComboBox.getValue();
+                        int hourDebutI = this.hourDebutComboBox.getValue();
 
 
-                    // Créer les LocalDateTime
-                    LocalDateTime dateTimeDebut = LocalDateTime.of(DatePickerDebut.getValue().getYear(), DatePickerDebut.getValue().getMonth(), DatePickerDebut.getValue().getDayOfMonth(), hourDebutI, minuteDebutI);
-                    LocalDateTime dateTimeFin = LocalDateTime.of(DatePickerFin.getValue().getYear(), DatePickerFin.getValue().getMonth(), DatePickerFin.getValue().getDayOfMonth(), hourFinI, minuteFinI);
+                        // Créer les LocalDateTime
+                        LocalDateTime dateTimeDebut = LocalDateTime.of(DatePickerDebut.getValue().getYear(), DatePickerDebut.getValue().getMonth(), DatePickerDebut.getValue().getDayOfMonth(), hourDebutI, minuteDebutI);
+                        LocalDateTime dateTimeFin = LocalDateTime.of(DatePickerFin.getValue().getYear(), DatePickerFin.getValue().getMonth(), DatePickerFin.getValue().getDayOfMonth(), hourFinI, minuteFinI);
 
 
 
-                    // Convertir les LocalDateTime en java.sql.Date mais avec les secondes
-                    java.sql.Timestamp sqlTimestampDebut = java.sql.Timestamp.valueOf(dateTimeDebut);
-                    java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateTimeFin);
-                    // System.out.println("Date début (sqlTimestamp): " + sqlTimestampDebut);
-                    // System.out.println("Date fin (sqlTimestamp): " + sqlTimestampFin);
-                    preparedStatement.setTimestamp(6, sqlTimestampDebut);
-                    preparedStatement.setTimestamp(7, sqlTimestampFin);
+                        // Convertir les LocalDateTime en java.sql.Date mais avec les secondes
+                        java.sql.Timestamp sqlTimestampDebut = java.sql.Timestamp.valueOf(dateTimeDebut);
+                        java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateTimeFin);
+                        // System.out.println("Date début (sqlTimestamp): " + sqlTimestampDebut);
+                        // System.out.println("Date fin (sqlTimestamp): " + sqlTimestampFin);
+                        preparedStatement.setTimestamp(6, sqlTimestampDebut);
+                        preparedStatement.setTimestamp(7, sqlTimestampFin);
 
-                    preparedStatement.setInt(8, Integer.parseInt(cout));
-                    preparedStatement.executeUpdate();
-                    query = "UPDATE User SET Wallet = Wallet - ? WHERE User_id = ?;";
-                    preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setInt(1, Integer.parseInt(cout));
-                    preparedStatement.setInt(2, Session.getInstance().getCurrentUser().getId());
-                    preparedStatement.executeUpdate();
-                    query = "UPDATE User SET Wallet = Wallet + ? WHERE User_id = ?;";
-                    preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setInt(1, Integer.parseInt(cout));
-                    preparedStatement.setInt(2, owner_id);
-                    preparedStatement.executeUpdate();
-                    System.out.println("Réservation effectuée");
-                    Session.getInstance().getCurrentUser().getWallet().addFlorain(-Integer.parseInt(cout));
-                    preparedStatement.close();
-                    connection.commit();
-                    connection.close();
+                        preparedStatement.setInt(8, Integer.parseInt(cout));
+                        preparedStatement.executeUpdate();
+                        query = "UPDATE User SET Wallet = Wallet - ? WHERE User_id = ?;";
+                        preparedStatement = connection.prepareStatement(query);
+                        preparedStatement.setInt(1, Integer.parseInt(cout));
+                        preparedStatement.setInt(2, Session.getInstance().getCurrentUser().getId());
+                        preparedStatement.executeUpdate();
+                        query = "UPDATE User SET Wallet = Wallet + ? WHERE User_id = ?;";
+                        preparedStatement = connection.prepareStatement(query);
+                        preparedStatement.setInt(1, Integer.parseInt(cout));
+                        preparedStatement.setInt(2, owner_id);
+                        preparedStatement.executeUpdate();
+                        System.out.println("Réservation effectuée");
+                        Session.getInstance().getCurrentUser().getWallet().addFlorain(-Integer.parseInt(cout));
+                        preparedStatement.close();
+                        connection.commit();
+                        connection.close();
+                    }
                 }
             }
         }
