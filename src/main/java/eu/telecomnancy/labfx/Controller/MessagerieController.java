@@ -80,7 +80,7 @@ public class MessagerieController {
                      "JOIN Event e ON m.Event_lie_id = e.Event_id " +
                      "WHERE m.Sender_id = ? OR m.Receiver_id = ? " +
                      "GROUP BY e.Event_id, user1_id, user2_id " +
-                     "ORDER BY e.Event_id ASC"
+                     "ORDER BY m.Date DESC"
                 );
             preparedStatement.setInt(1, user_id);
             preparedStatement.setInt(2, user_id);
@@ -135,7 +135,8 @@ public class MessagerieController {
             while (resultSet.next()) {
                 //id1 = resultSet.getInt("user2_id");
                 message = resultSet.getString("Contenu");
-                addMessage(message, "01:02");
+                java.sql.Timestamp date = resultSet.getTimestamp("Date");
+                addMessage(message, date);
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -179,7 +180,7 @@ public class MessagerieController {
         return false;
     }
 
-    private void addMessage(String messageContent, String messageDate){
+    private void addMessage(String messageContent, java.sql.Timestamp messageDate){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Message.fxml"));
             Node content = loader.load();

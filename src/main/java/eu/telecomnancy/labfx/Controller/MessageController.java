@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import java.text.SimpleDateFormat;
+import java.sql.*;
 
 public class MessageController {
     @FXML
@@ -13,8 +15,10 @@ public class MessageController {
     private Label messageHeure;
 
     @FXML
-    protected void setMessage(String messageContent, String messageHorodatage){
+    protected void setMessage(String messageContent, java.sql.Timestamp messageHorodatage){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM - HH:mm");
+        String heureformatee = dateFormat.format(messageHorodatage);
         messageBody.setText(messageContent);
-        messageHeure.setText(messageHorodatage);
+        messageHeure.setText(heureformatee);
     }
 }
