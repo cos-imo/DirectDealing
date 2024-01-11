@@ -65,29 +65,29 @@ public class Calendrier {
         for (Ressource ressource : user.getRessources()) {
             DateTime newDebut = ressource.getDateDebut();
             DateTime newFin = ressource.getDateFin();
-            System.out.println("---------------------------");
-            System.out.println("Ressource : " + ressource.getName());
-            System.out.println("Date de début : " + newDebut);
-            System.out.println("Date de fin : " + newFin);
+            // System.out.println("---------------------------");
+            // System.out.println("Ressource : " + ressource.getName());
+            // System.out.println("Date de début : " + newDebut);
+            // System.out.println("Date de fin : " + newFin);
             if (ressource.getReccurence() != Recurrence.Non){
-                while (newFin.isBefore(betweenDate.getStart())){
+                while (newFin.isBefore(maxDate(betweenDate.getStart(),ressource.getDateDebut()))){
                     newDebut = AjoutPeriodRecc(newDebut,ressource.getReccurence());
                     newFin = AjoutPeriodRecc(newFin,ressource.getReccurence());
-                    System.out.println("Nouvelle date de début : " + newDebut);
-                    System.out.println("Nouvelle date de fin : " + newFin);
+                    // System.out.println("Nouvelle date de début : " + newDebut);
+                    // System.out.println("Nouvelle date de fin : " + newFin);
                 }
-                while (betweenDate.contains(newFin) || betweenDate.contains(newDebut)){
-                    System.out.println("Ressource dans l'intervalle avec les dates :");
+                while ((betweenDate.contains(newFin) || betweenDate.contains(newDebut))){
+                    // System.out.println("Ressource dans l'intervalle avec les dates :");
                     ressourcesActifs.add(ressourceReducedToAffichage(new Ressource(ressource, newDebut, newFin)));
-                    System.out.println("Nouvelle date de début : " + newDebut);
-                    System.out.println("Nouvelle date de fin : " + newFin);
+                    // System.out.println("Nouvelle date de début : " + newDebut);
+                    // System.out.println("Nouvelle date de fin : " + newFin);
                     newDebut = AjoutPeriodRecc(newDebut,ressource.getReccurence());
                     newFin = AjoutPeriodRecc(newFin,ressource.getReccurence());
                 }
             } else {
-                System.out.println("Ressource non récurrente");
+                // System.out.println("Ressource non récurrente");
                 if (betweenDate.contains(ressource.getDateDebut()) || betweenDate.contains(ressource.getDateFin())) {
-                    System.out.println("Ressource dans l'intervalle");
+                    // System.out.println("Ressource dans l'intervalle");
                     ressourcesActifs.add(ressourceReducedToAffichage(ressource));
                 }
             }
