@@ -64,6 +64,21 @@ public class RechercheController {
         }
     }
 
+    private boolean isDisponible(int ressource_id) throws SQLException {
+        Connect connect = new Connect();
+        try (Connection connection = connect.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Event WHERE Ressource_id = ?;");
+            preparedStatement.setInt(1, ressource_id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    }
+ 
     private int getElements() throws SQLException{
 
         Connect connect = new Connect();
@@ -87,8 +102,9 @@ public class RechercheController {
                 } else {
                     System.out.println("Image nulle?");
                 }
-
-                addElementToSearchList(name, desc, type, Prix, image, dateDebut, dateFin, ressource_id, owner_id);
+                if (isDisponible(ressource_id)) {
+                    addElementToSearchList(name, desc, type, Prix, image, dateDebut, dateFin, ressource_id, owner_id);
+                }
             }
             resultSet.close();
         }
@@ -197,8 +213,9 @@ public class RechercheController {
                 } else {
                     System.out.println("Image nulle?");
                 }
-
-                addElementToSearchList(name, desc, type, Prix, image, dateDebut, dateFin, ressource_id, owner_id);
+                if (isDisponible(ressource_id)) {
+                    addElementToSearchList(name, desc, type, Prix, image, dateDebut, dateFin, ressource_id, owner_id);
+                }
             }
             resultSet.close();
         }
