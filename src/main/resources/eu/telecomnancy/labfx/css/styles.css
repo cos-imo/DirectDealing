@@ -10,3 +10,12 @@
     -fx-padding: 10px;
     -fx-background-radius: 20px; /* Bords arrondis de la bulle */
 }
+
+.event-bubble {
+    -fx-text-fill: black;
+    -fx-background-color: grey;
+    -fx-padding: 5;
+    -fx-pref-width: 350px;
+    -fx-pref-height: 5px;
+    -fx-border-radius:10px;
+}

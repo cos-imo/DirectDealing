@@ -9,8 +9,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoField;
@@ -18,6 +22,7 @@ import java.time.temporal.TemporalAdjusters;
 import org.joda.time.Days;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -35,6 +40,10 @@ import javafx.scene.control.Button;
 import eu.telecomnancy.labfx.Calendrier;
 import eu.telecomnancy.labfx.ModeAffichage;
 import eu.telecomnancy.labfx.Session;
+import eu.telecomnancy.labfx.EventRessource;
+import eu.telecomnancy.labfx.Ressource;
+
+
 
 
 public class CalendrierController {
@@ -59,6 +68,9 @@ public class CalendrierController {
     private ComboBox<Integer> rightPicker;
     @FXML
     private ComboBox<String> viewSelector;
+
+    @FXML
+    RowConstraints ligneContrainte;
 
     private Calendrier calendrier;
     private DateTime targetDate;
@@ -128,9 +140,15 @@ public class CalendrierController {
         if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
             debutMois = calendarStart.toLocalDate().withDayOfMonth(1);
             finMois = calendarStart.toLocalDate().dayOfMonth().withMaximumValue();
+            ligneContrainte.setMinHeight(80);
+            ligneContrainte.setPrefHeight(80);
+            ligneContrainte.setMaxHeight(80);
         } else if (calendrier.getModeAffichage() == ModeAffichage.Semaine) {
             debutMois = calendarStart.toLocalDate().withDayOfWeek(1);
             finMois = calendarStart.toLocalDate().dayOfWeek().withMaximumValue();
+            ligneContrainte.setMinHeight(400);
+            ligneContrainte.setPrefHeight(400);
+            ligneContrainte.setMaxHeight(400);
         }
         int joursOutDebut = debutMois.getDayOfWeek() - 1;
 
@@ -170,23 +188,70 @@ public class CalendrierController {
         }
     }
     private DateTime addDayToCalenderAsMonth(DateTime calendarStart, int weekRow, int dayColumn) {
+
         Label dayLabel = new Label(String.valueOf(calendarStart.getDayOfMonth()));
-        dayLabel.setAlignment(Pos.TOP_LEFT); // Aligner le texte en haut à gauche
-        dayLabel.setContentDisplay(ContentDisplay.TOP); // Positionner le texte au-dessus de tout autre contenu graphique
-        dayLabel.setGraphicTextGap(0.0); // Pas d'écart entre le texte et le graphique (si vous en utilisez un)
-        dayLabel.setStyle("-fx-border-color: black; -fx-padding: 5; -fx-pref-width: 400px; -fx-pref-height: 400px;");
+        dayLabel.setAlignment(Pos.TOP_LEFT);
+        dayLabel.setContentDisplay(ContentDisplay.TOP);
+        dayLabel.setGraphicTextGap(0.0);
+        dayLabel.setStyle("-fx-padding: 5;");
+
+        Label testEvent = new Label("Test");
+        testEvent.setAlignment(Pos.BOTTOM_CENTER);
+        testEvent.setContentDisplay(ContentDisplay.TOP);
+        testEvent.setStyle("-fx-text-fill: black;-fx-background-color: grey; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-border-radius:10px;");
+        testEvent.setMaxHeight(5);
+        Label testEvent2= new Label("Test");
+        testEvent2.setAlignment(Pos.BOTTOM_CENTER);
+        testEvent2.setContentDisplay(ContentDisplay.TOP);
+        testEvent2.setStyle("-fx-text-fill: black;-fx-background-color: grey; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-border-radius:10px;");
+        testEvent2.setMaxHeight(5);
+
+
+        // Add the Label to a VBox
+        VBox dayBox = new VBox();
+        dayBox.getChildren().add(dayLabel);
+        dayBox.setAlignment(Pos.TOP_LEFT);
+        dayBox.setMaxWidth(Double.MAX_VALUE);
+        dayBox.setStyle("-fx-border-color: black; -fx-pref-width: 400px; -fx-pref-height: 400px; -fx-padding:3px;");
+        dayBox.setOnMouseClicked((event) -> {
+        targetDate = calendarStart;
+        calendrier.setModeAffichage(ModeAffichage.Semaine);
+        viewLabel.setText("Semaine");
+        viewSelector.setValue("Semaine");
+        try {
+            initializeBis();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        });
+
+        VBox eventBox = new VBox();
+        eventBox.getChildren().add(testEvent);
+        eventBox.getChildren().add(testEvent2);
+        eventBox.setAlignment(Pos.CENTER);
+        eventBox.setMaxWidth(350);
+        eventBox.setSpacing(3);
+
+        dayBox.getChildren().add(eventBox);
+
+        // Label dayLabel = new Label(String.valueOf(calendarStart.getDayOfMonth()));
+        // dayLabel.setAlignment(Pos.TOP_LEFT); // Aligner le texte en haut à gauche
+        // dayLabel.setContentDisplay(ContentDisplay.TOP); // Positionner le texte au-dessus de tout autre contenu graphique
+        // dayLabel.setGraphicTextGap(0.0); // Pas d'écart entre le texte et le graphique (si vous en utilisez un)
+        // dayLabel.setStyle("-fx-border-color: black; -fx-padding: 5; -fx-pref-width: 400px; -fx-pref-height: 400px;");
         if (DateTime.now().getDayOfYear() == calendarStart.getDayOfYear() && DateTime.now().getYear() == calendarStart.getYear()) {
-            dayLabel.setStyle(dayLabel.getStyle() + "-fx-background-color: #d7c162;");
+            dayBox.setStyle(dayBox.getStyle() + "-fx-background-color: #d7c162;");
         } else {
-            dayLabel.setStyle(dayLabel.getStyle() + "-fx-background-color: white;");
+            dayBox.setStyle(dayBox.getStyle() + "-fx-background-color: white;");
         }
         if(!calendrier.getBetweenDate().contains(calendarStart)) {
             dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
         }
-        calendarGrid.add(dayLabel, dayColumn, weekRow);
+        calendarGrid.add(dayBox, dayColumn, weekRow);
         return calendarStart.plusDays(1);
     }
     private DateTime addDayToCalenderAsWeek(DateTime calendarStart, int dayColumn){
+
         Label dayLabel = new Label(String.valueOf(calendarStart.getDayOfMonth()));
         dayLabel.setAlignment(Pos.TOP_LEFT); // Aligner le texte en haut à gauche
         dayLabel.setContentDisplay(ContentDisplay.TOP); // Positionner le texte au-dessus de tout autre contenu graphique
@@ -205,6 +270,18 @@ public class CalendrierController {
         calendarGrid.add(dayLabel, dayColumn, 1);
         return calendarStart.plusDays(1);
     }
+    // }
+    // private ArrayList<EventRessource> getTodayEvent(DateTime newDay) throws SQLException {
+    //     ArrayList<EventRessource> eventActif = new ArrayList<EventRessource>();
+    //     for (EventRessource event : calendrier.getEventActif()) {
+    //         Interval thisDay = new Interval(newDay.withTimeAtStartOfDay(), newDay.plusDays(1).withTimeAtStartOfDay().minusSeconds(1));
+    //         if () {
+    //             eventActif.add(event);
+    //         }
+    //     }
+    //     return eventActif;
+    // }
+
     private void initializeLeftPicker() {
         int currentYearMonth = targetDate.getMonthOfYear();
         ObservableList<String> months = FXCollections.observableArrayList(
@@ -293,11 +370,13 @@ public class CalendrierController {
         leftLabel.setText(selectedMonth);
         leftPicker.setValue(selectedMonth);
         if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
-            targetDate = targetDate.withMonthOfYear(leftPicker.getItems().indexOf(selectedMonth) + 1);
+            int actualweek = targetDate.getWeekOfWeekyear();
+            int targetweek = leftPicker.getItems().indexOf(selectedMonth)+1;
+            targetDate = targetDate.plusWeeks(targetweek - actualweek);
             initializeBis();
 
         } else if (calendrier.getModeAffichage() == ModeAffichage.Semaine) {
-            targetDate = targetDate.withWeekOfWeekyear(leftPicker.getItems().indexOf(selectedMonth));
+            targetDate = targetDate.withWeekOfWeekyear(leftPicker.getItems().indexOf(selectedMonth)+1);
             initializeBis();
         }
     }
