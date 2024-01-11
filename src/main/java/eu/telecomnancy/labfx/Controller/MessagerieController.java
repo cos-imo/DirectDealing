@@ -48,14 +48,14 @@ public class MessagerieController {
         getMessages();
     }
 
-    private void addElementToMessageList(int sender, String contenu, int event) throws SQLException {
+    private void addElementToMessageList(int sender, String contenu, int event, java.sql.Timestamp date) throws SQLException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/BandeauConversation.fxml"));
             Node content = loader.load();
 
             BandeauConversationController objectController = loader.getController();
             objectController.setParent(this);
-            objectController.setElementData(sender, contenu, event);
+            objectController.setElementData(sender, contenu, event, date);
 
             messageListContainer.getChildren().addAll(content);
 
@@ -92,7 +92,8 @@ public class MessagerieController {
                 sender = resultSet.getInt("user2_id");
                 message = resultSet.getString("Contenu");
                 event_id = resultSet.getInt("Event_id");
-                addElementToMessageList(sender, message, event_id);
+                java.sql.Timestamp heure = resultSet.getTimestamp("last_message_date");
+                addElementToMessageList(sender, message, event_id, heure);
                 }
             resultSet.close();
         } catch (SQLException e) {
