@@ -12,21 +12,29 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
-import java.time.YearMonth;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
+import org.joda.time.Days;
+import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+//DateTime joda Time
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javafx.scene.input.MouseEvent;
 import java.time.temporal.IsoFields;
 import javafx.scene.control.Button;
+
+import eu.telecomnancy.labfx.Calendrier;
+import eu.telecomnancy.labfx.ModeAffichage;
+import eu.telecomnancy.labfx.Session;
 
 
 public class CalendrierController {
@@ -52,16 +60,15 @@ public class CalendrierController {
     @FXML
     private ComboBox<String> viewSelector;
 
-    private LocalDate TODAY;
-    private YearMonth currentYearMonth;
-    
+    private Calendrier calendrier;
+    private DateTime targetDate;
 
     @FXML
     private void debugButton(ActionEvent event) {
-        System.err.println("currentYearMonth.." + currentYearMonth);
+        System.err.println("currentYearMonth.." + targetDate.getMonthOfYear());
         
-        System.err.println("weekNumber........" + weekNumber);
-        System.err.println("TODAY............." + TODAY);
+        System.err.println("weekNumber........" + targetDate.getWeekOfWeekyear());
+        System.err.println("TODAY............." + targetDate);
         System.err.println("viewSelector......" + viewSelector.getValue());
         System.err.println("viewLabel........." + viewLabel.getText());
         System.err.println("leftPicker........" + leftPicker.getValue());
@@ -71,85 +78,68 @@ public class CalendrierController {
 
 
     }
-
-    private void debug() {
-        System.err.println("currentYearMonth.." + currentYearMonth);
-        System.err.println("currentYear......." + currentYearMonth.getYear());
-        System.err.println("currentMonth......" + currentYearMonth.getMonthValue());
-        System.err.println("weekNumber........" + weekNumber);
-        System.err.println("TODAY............." + TODAY);
-        System.err.println("viewSelector......" + viewSelector.getValue());
-        System.err.println("viewLabel........." + viewLabel.getText());
-        System.err.println("leftPicker........" + leftPicker.getValue());
-        System.err.println("leftLabel........." + leftLabel.getText());
-        System.err.println("rightPicker......." + rightPicker.getValue());
-        System.err.println("rightLabel........" + rightLabel.getText());
-    }
-
     @FXML
-    private void handleViewSelector(ActionEvent event) {
+    private void handleViewSelector(ActionEvent event) throws SQLException {
         String selectedView = viewSelector.getValue();
-        initializeLeftPicker();
-        if (selectedView == "Mois") {
-            currentYearMonth = YearMonth.of(rightPicker.getValue(), mapMonthNameToNumber(leftPicker.getValue()));
-            leftLabel.setText(currentYearMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE).substring(0, 1).toUpperCase(Locale.FRANCE) + currentYearMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE).substring(1));
-            leftPicker.setValue(leftLabel.getText());
-            System.err.println("_____ChangeView_Month_____");
-            debug();
-        } else if (selectedView == "Semaine") {
-            if (currentYearMonth.getMonth() == YearMonth.now().getMonth()) {
-                weekNumber = TODAY.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
-            } else {
-                weekNumber = getFirstWeekIndexOfMonth(currentYearMonth);;
-            }
-            leftLabel.setText("Semaine " + weekNumber.toString());
-            leftPicker.setValue("Semaine " + weekNumber.toString());
-            rightLabel.setText(currentYearMonth.getYear()+"");
-            rightPicker.setValue(currentYearMonth.getYear());
-            System.err.println("_____ChangeView_Week_____");
-            debug();
-        } 
-            viewLabel.setText(selectedView);
-            System.err.println("_____ViewSelector_____");
-            debug();
-        // } else if (selectedView == null) {
-        //     System.err.println("_____ViewSelector_Null_____");
-        //     debug();
-        // }
+        if ("Mois".equals(selectedView)) {
+            calendrier.setModeAffichage(ModeAffichage.Mois);
+        } else if (selectedView.equals("Semaine")) {
+            calendrier.setModeAffichage(ModeAffichage.Semaine);
+        }
+        viewLabel.setText(selectedView);
+        viewSelector.setValue(selectedView);
+        initializeBis();
     }
-    
-    
- 
 
     @FXML
     private void showViewSelector() {
         viewSelector.show();
     }
 
-    public void initialize() {
-        currentYearMonth = YearMonth.now();
-        TODAY = LocalDate.now();
-        weekNumber = TODAY.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
-        // weeklyYear = TODAY.getYear();
-        viewSelector.getItems().addAll("Mois", "Semaine", "Jour");
-        viewSelector.setValue("Mois");
+    public void initialize() throws SQLException {
+        targetDate = DateTime.now();
         viewLabel.setText("Mois");
-        leftLabel.setText("Test");
-        fillCalendar(currentYearMonth);
-        updateMonthYearDisplay(currentYearMonth);
+        viewSelector.getItems().addAll("Mois", "Semaine");
+        weekNumber = targetDate.getWeekOfWeekyear();
+        // weeklyYear = TODAY.getYear();
+        viewSelector.setValue("Mois");
+        initializeBis();
+    }    
+    public void initializeBis() throws SQLException {
+        calendarGrid.getChildren().clear();
+        if (calendrier != null) {
+            this.calendrier = new Calendrier(Session.getInstance().getCurrentUser(), targetDate, calendrier.getModeAffichage()); //Dedans on a toutes les informations à affiche
+        }
+        else {
+            this.calendrier = new Calendrier(Session.getInstance().getCurrentUser(), targetDate, ModeAffichage.Mois); //Dedans on a toutes les informations à afficher
+        }
         initializeLeftPicker();
         initializeRightPicker();
-    }    
+        fillCalendar();
+    }
 
-    private void fillCalendar(YearMonth yearMonth) {
+    private void fillCalendar() {
         // Clear previous calendar entries
-    
-        
         // Determine the starting day for the calendar
-        LocalDate calendarStart = yearMonth.atDay(1).minusDays(yearMonth.atDay(1).getDayOfWeek().getValue() - DayOfWeek.MONDAY.getValue());
+        DateTime calendarStart = calendrier.getBetweenDate().getStart();
+        DateTime calendarEnd = calendrier.getBetweenDate().getEnd();
+        org.joda.time.LocalDate debutMois = null;
+        org.joda.time.LocalDate finMois = null;
+        if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
+            debutMois = calendarStart.toLocalDate().withDayOfMonth(1);
+            finMois = calendarStart.toLocalDate().dayOfMonth().withMaximumValue();
+        } else if (calendrier.getModeAffichage() == ModeAffichage.Semaine) {
+            debutMois = calendarStart.toLocalDate().withDayOfWeek(1);
+            finMois = calendarStart.toLocalDate().dayOfWeek().withMaximumValue();
+        }
+        int joursOutDebut = debutMois.getDayOfWeek() - 1;
+
+        int joursOutFin =  7 - finMois.getDayOfWeek();
+
+        calendarStart= calendarStart.minusDays(joursOutDebut);
+        calendarEnd = calendarEnd.plusDays(joursOutFin);
         
         // Fill the calendar with days
-        LocalDate date = calendarStart;
         int weekRow = 1;
 
         DayOfWeek[] days = DayOfWeek.values();
@@ -163,34 +153,60 @@ public class CalendrierController {
             GridPane.setHgrow(lblDay, Priority.ALWAYS); // Permettre au Label de croître horizontalement
             GridPane.setFillWidth(lblDay, true); // Le Label occupe toute la largeur de la cellule
         }
-
-
-        
-
-
-        while (date.getMonthValue() <= yearMonth.getMonthValue() | currentYearMonth.getMonthValue() == YearMonth.now().getMonthValue()) {
+    
+        while (calendarStart.isBefore(calendarEnd)) {
             for (int j = 0; j < 7; j++) { // Weekday columns
-                Label dayLabel = new Label(String.valueOf(date.getDayOfMonth()));
-                dayLabel.setAlignment(Pos.TOP_LEFT); // Aligner le texte en haut à gauche
-                dayLabel.setContentDisplay(ContentDisplay.TOP); // Positionner le texte au-dessus de tout autre contenu graphique
-                dayLabel.setGraphicTextGap(0.0); // Pas d'écart entre le texte et le graphique (si vous en utilisez un)
-                dayLabel.setStyle("-fx-border-color: black; -fx-background-color: white; -fx-padding: 5; -fx-pref-width: 400px; -fx-pref-height: 300px;");            
-                if(date.getMonthValue() != yearMonth.getMonthValue()) {
-                    dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
+                if (calendrier.getModeAffichage() == ModeAffichage.Semaine){
+                    calendarStart = addDayToCalenderAsWeek(calendarStart, j);
+                } else if (calendrier.getModeAffichage() == ModeAffichage.Mois){
+                    calendarStart = addDayToCalenderAsMonth(calendarStart, weekRow, j);
                 }
-                calendarGrid.add(dayLabel, j, weekRow);
-                date = date.plusDays(1);
             }
-                // If the row is completely in the next month, remove it
-                if (date.getMonthValue() != yearMonth.getMonthValue() && date.getDayOfWeek() == DayOfWeek.MONDAY) {
-                    break;
-                }
-                weekRow++;
+            // If the row is completely in the next month, remove it
+            if (calendarStart.getMonthOfYear() != calendrier.getBetweenDate().getStart().getMonthOfYear() && calendarStart.getDayOfWeek() == 1) {
+                break;
             }
+            weekRow++;
         }
-
+    }
+    private DateTime addDayToCalenderAsMonth(DateTime calendarStart, int weekRow, int dayColumn) {
+        Label dayLabel = new Label(String.valueOf(calendarStart.getDayOfMonth()));
+        dayLabel.setAlignment(Pos.TOP_LEFT); // Aligner le texte en haut à gauche
+        dayLabel.setContentDisplay(ContentDisplay.TOP); // Positionner le texte au-dessus de tout autre contenu graphique
+        dayLabel.setGraphicTextGap(0.0); // Pas d'écart entre le texte et le graphique (si vous en utilisez un)
+        dayLabel.setStyle("-fx-border-color: black; -fx-padding: 5; -fx-pref-width: 400px; -fx-pref-height: 400px;");
+        if (DateTime.now().getDayOfYear() == calendarStart.getDayOfYear() && DateTime.now().getYear() == calendarStart.getYear()) {
+            dayLabel.setStyle(dayLabel.getStyle() + "-fx-background-color: #d7c162;");
+        } else {
+            dayLabel.setStyle(dayLabel.getStyle() + "-fx-background-color: white;");
+        }
+        if(!calendrier.getBetweenDate().contains(calendarStart)) {
+            dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
+        }
+        calendarGrid.add(dayLabel, dayColumn, weekRow);
+        return calendarStart.plusDays(1);
+    }
+    private DateTime addDayToCalenderAsWeek(DateTime calendarStart, int dayColumn){
+        Label dayLabel = new Label(String.valueOf(calendarStart.getDayOfMonth()));
+        dayLabel.setAlignment(Pos.TOP_LEFT); // Aligner le texte en haut à gauche
+        dayLabel.setContentDisplay(ContentDisplay.TOP); // Positionner le texte au-dessus de tout autre contenu graphique
+        dayLabel.setGraphicTextGap(0.0); // Pas d'écart entre le texte et le graphique (si vous en utilisez un)
+        dayLabel.setStyle("-fx-border-color: black; -fx-padding: 5; -fx-pref-width: 400px; -fx-pref-height: 400px;");            
+        if (DateTime.now().getDayOfYear() == calendarStart.getDayOfYear() && DateTime.now().getYear() == calendarStart.getYear()) {
+            dayLabel.setStyle(dayLabel.getStyle() + "-fx-background-color: #d7c162;");
+        } else {
+            dayLabel.setStyle(dayLabel.getStyle() + "-fx-background-color: white;");
+        }
+        if(targetDate.getMonthOfYear() != calendarStart.getMonthOfYear()) {
+            dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
+        } else {
+            dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: black;");
+        }
+        calendarGrid.add(dayLabel, dayColumn, 1);
+        return calendarStart.plusDays(1);
+    }
     private void initializeLeftPicker() {
-        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.FRANCE);
+        int currentYearMonth = targetDate.getMonthOfYear();
         ObservableList<String> months = FXCollections.observableArrayList(
             "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
@@ -204,34 +220,27 @@ public class CalendrierController {
 
         leftPicker.getItems().clear(); // Nettoyer les anciennes données avant de remplir
 
-
-        if (viewSelector.getValue() == "Mois") {
-            leftLabel.setText(currentYearMonth.format(monthFormatter).substring(0, 1).toUpperCase(Locale.FRANCE) + currentYearMonth.format(monthFormatter).substring(1));
+        if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
+            leftLabel.setText(months.get(currentYearMonth - 1));
             leftPicker.setItems(months);
-        } else if (viewSelector.getValue() == "Semaine") {
-            if (currentYearMonth.getMonth() == YearMonth.now().getMonth()) {
-                weekNumber = TODAY.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
-            } else {
-                weekNumber = getFirstWeekIndexOfMonth(currentYearMonth);;
-            }
-            leftLabel.setText("Semaine " + weekNumber.toString());
-            // // // // rightLabel.setText(currentYearMonth.getYear()+"");
+        } else if (calendrier.getModeAffichage() == ModeAffichage.Semaine) {
+            leftLabel.setText("Semaine " + targetDate.getWeekOfWeekyear());
             leftPicker.setItems(weeks);
         } else if (viewSelector.getValue() == "Jour") {
             leftLabel.setText("Jour");
         }
         
-        
         leftPicker.setVisible(false); // Le ComboBox est initialement caché
     }
 
     private void initializeRightPicker() {
-        int currentYear = YearMonth.now().getYear();
+        int currentYear = targetDate.getYear();
         rightPicker.getItems().clear(); // Nettoyer les anciennes données avant de remplir
-        for (int year = currentYear - 2; year <= currentYear + 5; year++) {
+        for (int year = Math.max(currentYear-5,2024); year <= currentYear + 5; year++) {
             rightPicker.getItems().add(year);
         }
-        rightPicker.setVisible(false);
+        // rightPicker.setVisible(false);
+        rightLabel.setText(""+currentYear);
         rightPicker.setValue(currentYear); // Sélectionnez l'année actuelle par défaut
     }
 
@@ -245,230 +254,62 @@ public class CalendrierController {
         rightPicker.show(); // Montrer le ComboBox lorsque l'utilisateur clique sur le label
     }
 
-
-    private void correctWeekNumber(Integer cinquanteDeux) {
-        if (cinquanteDeux <= 0) {
-            weekNumber = 52;
-            currentYearMonth = currentYearMonth.minusYears(1);
-            // weeklyYear = currentYearMonth.getYear();
-            rightLabel.setText(currentYearMonth.getYear()+"");
-        } else if (cinquanteDeux >= 53) {
-            weekNumber = 1;
-            currentYearMonth = currentYearMonth.plusYears(1);
-            // weeklyYear = currentYearMonth.getYear();
-            rightLabel.setText(currentYearMonth.getYear()+"");
-        }
-    }
-
     @FXML
-    private void previousButton() {
-        if (viewSelector.getValue() == "Mois") {
-            currentYearMonth = currentYearMonth.minusMonths(1);
-            fillCalendar(currentYearMonth);
-            updateMonthYearDisplay(currentYearMonth);
-            System.err.println("_____PreviousButton_Month_____");
-            debug();
-        } else if (viewSelector.getValue() == "Semaine") {
-            weekNumber--;
-            correctWeekNumber(weekNumber);
-            currentYearMonth = getMonthFromWeek(weekNumber, currentYearMonth.getYear());
-            leftLabel.setText("Semaine " + weekNumber.toString());
-            rightLabel.setText(currentYearMonth.getYear()+"");
-            System.err.println("_____PreviousButton_Week_____");
-            debug();
-        } else if (viewLabel.getText() == "Jour") {
-            TODAY = TODAY.minusDays(1);
-            leftLabel.setText(TODAY.toString());
+    private void previousButton() throws SQLException {
+        if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
+            targetDate = targetDate.minusMonths(1);
+        } else if (calendrier.getModeAffichage() == ModeAffichage.Semaine) {
+            targetDate = targetDate.minusWeeks(1);
+        } else if (calendrier.getModeAffichage() == ModeAffichage.Jour) {
+            // Pas de vue jour pour le moment
         }
+        initializeBis();
         
         // fillCalendar(currentYearMonth);
         // updateMonthYearDisplay(currentYearMonth);
     }
 
-    public YearMonth getYearMonthFromWeek(int year, int weekNumber) {
-        LocalDate date = LocalDate.ofYearDay(year, 1)
-                                  .with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, weekNumber)
-                                  .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        return YearMonth.from(date);
+    @FXML
+    private void currentDate() throws SQLException {
+        targetDate = DateTime.now();
+        initializeBis();
     }
 
     @FXML
-    private void currentDate() {
-        currentYearMonth = YearMonth.now();
-        if ("Mois".equals(viewSelector.getValue())) {
-            fillCalendar(currentYearMonth);
-            updateMonthYearDisplay(currentYearMonth);
-            System.err.println("_____CurrentButton_Month_____");
-            debug();
-        } else if ("Semaine".equals(viewSelector.getValue())) {
-            weekNumber = TODAY.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
-            leftPicker.setValue("Semaine " + weekNumber.toString());
-            leftLabel.setText("Semaine " + weekNumber.toString());
-            rightPicker.setValue(currentYearMonth.getYear());
-            rightLabel.setText(currentYearMonth.getYear()+"");
-            System.err.println("_____CurrentButton_Week_____");
-            debug();
-        } else if (viewLabel.getText() == "Jour") {
-            TODAY = LocalDate.now();
-            leftLabel.setText(TODAY.toString());
-        }
-    }
-
-    @FXML
-    private void nextButton() {
+    private void nextButton() throws SQLException {
         if (viewSelector.getValue() == "Mois") {
-            currentYearMonth = currentYearMonth.plusMonths(1);
-            fillCalendar(currentYearMonth);
-            updateMonthYearDisplay(currentYearMonth);
-            System.err.println("_____NextButton_Month_____");
-            debug();
+            targetDate = targetDate.plusMonths(1);
         } else if (viewSelector.getValue() == "Semaine") {
-            weekNumber++;
-            correctWeekNumber(weekNumber);
-            currentYearMonth = getMonthFromWeek(weekNumber, currentYearMonth.getYear());
-            leftLabel.setText("Semaine " + weekNumber.toString());
-            rightLabel.setText(currentYearMonth.getYear()+"");
-            System.err.println("_____NextButton_Week_____");
-            debug();
+            targetDate = targetDate.plusWeeks(1);
         } else if (viewLabel.getText() == "Jour") {
-            TODAY = TODAY.plusDays(1);
-            leftLabel.setText(TODAY.toString());
+            // Pas de vue jour pour le moment
         }
-    }
-    
-    private int mapMonthNameToNumber(String monthName) {
-        Map<String, Integer> monthNames = Map.ofEntries(
-            Map.entry("Janvier", 1),
-            Map.entry("Février", 2),
-            Map.entry("Mars", 3),
-            Map.entry("Avril", 4),
-            Map.entry("Mai", 5),
-            Map.entry("Juin", 6),
-            Map.entry("Juillet", 7),
-            Map.entry("Août", 8),
-            Map.entry("Septembre", 9),
-            Map.entry("Octobre", 10),
-            Map.entry("Novembre", 11),
-            Map.entry("Décembre", 12)
-        );
-        if (monthName == null) {
-            return currentYearMonth.getMonthValue();
-        } else {
-            return monthNames.getOrDefault(monthName, currentYearMonth.getMonthValue());
-        }
-    }
-
-    private int mapWeekstrToNumber(String weekStr) {
-        Map<String, Integer> weekNumbers = new HashMap<>();
-        for (int i = 1; i <= 52; i++) {
-            weekNumbers.put("Semaine " + i, i);
-        }
-        return weekNumbers.getOrDefault(weekStr, weekNumber);
-    }
-
-    
-
-    private YearMonth getMonthFromWeek(int weekOfYear, int year) {
-        LocalDate date = LocalDate.ofYearDay(year, 1)
-                                  .with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, weekOfYear)
-                                  .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        return YearMonth.from(date);
-    }
-
-    private int getFirstWeekIndexOfMonth(YearMonth yearMonth) {
-        LocalDate firstDayOfMonth = yearMonth.atDay(1);
-        return firstDayOfMonth.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
-    }
-    
-        
+        initializeBis();
+    }     
     
     @FXML
-    private void handleLeftPicker(ActionEvent event) {
-        String selectedMonthName = leftPicker.getValue();
-        if ("Mois".equals(viewSelector.getValue())) {
-            if (selectedMonthName != null) {
-                int monthNumber = mapMonthNameToNumber(selectedMonthName);
-                YearMonth selectedMonth = YearMonth.of(currentYearMonth.getYear(), monthNumber);
-                currentYearMonth = selectedMonth;
-                weekNumber = getFirstWeekIndexOfMonth(selectedMonth);
-                fillCalendar(currentYearMonth);
-                updateMonthYearDisplay(currentYearMonth);
-                System.err.println("_____LeftPicker_Month_____");
-                debug();
-            } else if (selectedMonthName == null) {
-                leftPicker.setValue(currentYearMonth.format(DateTimeFormatter.ofPattern("MMMM", Locale.FRANCE)).substring(0, 1).toUpperCase(Locale.FRANCE) + currentYearMonth.format(DateTimeFormatter.ofPattern("MMMM", Locale.FRANCE)).substring(1));
-                System.err.println("_____LeftPicker_Month_Null_____");
-                debug();
-            }
-        } else if ("Semaine".equals(viewSelector.getValue()) ) {
-            String selectedWeekStr = leftPicker.getValue();
-            if (selectedWeekStr != null) {
-                weekNumber = mapWeekstrToNumber(selectedWeekStr);
-                leftLabel.setText("Semaine " + weekNumber.toString());
-                currentYearMonth = getMonthFromWeek(weekNumber, currentYearMonth.getYear());
-            } else if (selectedWeekStr == null) {
-                leftPicker.setValue("Semaine " + weekNumber.toString());
-                System.err.println("_____LeftPicker_Week_Null_____");
-                debug();
-            }
+    private void handleLeftPicker(ActionEvent event) throws SQLException {
+        String selectedMonth = leftPicker.getValue();
+        leftLabel.setText(selectedMonth);
+        leftPicker.setValue(selectedMonth);
+        if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
+            targetDate = targetDate.withMonthOfYear(leftPicker.getItems().indexOf(selectedMonth) + 1);
+            initializeBis();
 
-            System.err.println("_____LeftPicker_Week_____");
-            debug();
+        } else if (calendrier.getModeAffichage() == ModeAffichage.Semaine) {
+            targetDate = targetDate.withWeekOfWeekyear(leftPicker.getItems().indexOf(selectedMonth));
+            initializeBis();
         }
     }
 
     @FXML
-    private void handleRightPicker(ActionEvent event) {
-        if (viewSelector.getValue() == "Mois") {
-            Integer selectedYear = rightPicker.getValue();
-            if (selectedYear != null) {
-                // Change to selected year while keeping the current month
-                YearMonth selectedYearMonth = YearMonth.of(selectedYear, currentYearMonth.getMonthValue());
-                currentYearMonth = selectedYearMonth;
-                // weeklyYear = selectedYear;
-                fillCalendar(currentYearMonth);
-                updateMonthYearDisplay(currentYearMonth);
-                System.err.println("_____RightPicker_Month_____");
-                debug();
-            } else if (selectedYear == null) {
-                rightPicker.setValue(currentYearMonth.getYear());
-                System.err.println("_____RightPicker_Month_Null_____");
-                debug();
-            }
-        } else if (viewSelector.getValue() == "Semaine") {
-            Integer selectedYear = rightPicker.getValue();
-            if (selectedYear != null) {
-                // Change to selected year while keeping the current week
-                currentYearMonth = getMonthFromWeek(weekNumber, selectedYear);
-                rightLabel.setText(selectedYear+"");
-                rightPicker.setValue(selectedYear);
-                System.err.println("_____RightPicker_Week_____");
-                debug();
-            } else if (selectedYear == null) {
-                rightPicker.setValue(currentYearMonth.getYear());
-                System.err.println("_____RightPicker_Week_Null_____");
-                debug();
-            }
-            
+    private void handleRightPicker(ActionEvent event) throws SQLException {
+        int selectedYear = rightPicker.getValue();
+        rightLabel.setText(String.valueOf(selectedYear));
+        rightPicker.setValue(selectedYear);
+        if (selectedYear != targetDate.getYear()) {
+            targetDate = targetDate.plusYears(selectedYear-targetDate.getYear());
+            initializeBis();
         }
-        
     }
-
-    private void updateMonthYearDisplay(YearMonth yearMonth) {
-        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.FRANCE);
-        DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yyyy", Locale.FRANCE);
-        currentYearMonth = yearMonth;
-        leftLabel.setText(currentYearMonth.format(monthFormatter).substring(0, 1).toUpperCase(Locale.FRANCE) + currentYearMonth.format(monthFormatter).substring(1));
-        leftPicker.setValue(currentYearMonth.format(monthFormatter).substring(0, 1).toUpperCase(Locale.FRANCE) + currentYearMonth.format(monthFormatter).substring(1));
-        // monthLabel.setText(yearMonth.format(monthFormatter));
-        rightLabel.setText(yearMonth.format(yearFormatter));
-        rightPicker.setValue(yearMonth.getYear());
-    }
-
-    
-
-
-
-
-
 }
