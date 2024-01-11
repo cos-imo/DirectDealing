@@ -131,16 +131,14 @@ public class MessagerieController {
             preparedStatement.setInt(2, contactId);
             preparedStatement.setInt(3, contactId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            int sender = 0;
             String message = "";
-            int counter = 0;
+            int sender = 0;
             while (resultSet.next()) {
                 sender = resultSet.getInt("Sender_id");
                 //id1 = resultSet.getInt("user2_id");
                 message = resultSet.getString("Contenu");
                 java.sql.Timestamp date = resultSet.getTimestamp("Date");
                 addMessage(message, date, sender);
-                counter++;
             }
             resultSet.close();
         } catch (SQLException e) {
