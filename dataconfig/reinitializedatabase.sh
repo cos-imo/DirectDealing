@@ -20,7 +20,8 @@ CREATE TABLE User (
     Photo_profil BLOB,
     Wallet INTEGER DEFAULT 100,
     Note INTEGER,
-    VuePref TEXT CHECK (VuePref IN ('Mois', 'Semaine', 'Jour')) DEFAULT 'Mois'
+    VuePref TEXT CHECK (VuePref IN ('Mois', 'Semaine', 'Jour')) DEFAULT 'Mois',
+    Admin BOOLEAN DEFAULT 0
 );
 
 CREATE TABLE Ressource (
@@ -64,7 +65,7 @@ CREATE TABLE Message (
     Contenu TEXT NOT NULL
 );
 
-INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("a", "a", "a", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb");
+INSERT INTO User (First_Name, Last_Name, Mail, Password, Admin) VALUES ("a", "a", "a", "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb", 1);
 INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("Alexandre", "Zou", "b", "b");
 INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("Bastos", "tu veux du jus ?", "c", "c");
 INSERT INTO User (First_Name, Last_Name, Mail, Password) VALUES ("b", "b", "b", "b");
@@ -78,8 +79,8 @@ INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES
 INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 1, 2, strftime('%s', '2024-01-12 20:00:00')*1000, "Bonjour, pas de soucis, ou dois-je venir ?");
 INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 2, 1, strftime('%s', '2024-01-12 20:04:46')*1000, "Je vous envoie mon adresse par mail");
 INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 1, 2, strftime('%s', '2024-01-12 20:05:10')*1000, "Ok, à demain");
-INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 1, 3, strftime('%s', '2024-01-12 20:05:11')*1000, "Ok, à demain");
-INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 3, 1, strftime('%s', '2024-01-12 20:05:12')*1000, "Ok, à demain");
+INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 1, 3, strftime('%s', '2024-01-12 20:05:11')*1000, "Ok, à deeeeeeeeeeeeeeeeeeeeeeemmmmmmaaaaaaaaaaaaaaaiiiiiiiiiiiiiiiiinnnnnnnnnnnnnnnnnnnnnnnnnn LKOLOLOLOL");
+INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 3, 1, strftime('%s', '2024-01-12 20:05:12')*1000, "Ok, à deeeeeeeeeeeeeeeeeeeeeeemmmmmmaaaaaaaaaaaaaaaiiiiiiiiiiiiiiiiinnnnnnnnnnnnnnnnnnnnnnnnnn TOTZPEJGPEZGE");
 INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (2, 1, 3, strftime('%s', '2024-01-12 20:05:13')*1000, "Ok, zizi");
 
 

@@ -132,11 +132,13 @@ public class MessagerieController {
             preparedStatement.setInt(3, contactId);
             ResultSet resultSet = preparedStatement.executeQuery();
             String message = "";
+            int sender = 0;
             while (resultSet.next()) {
+                sender = resultSet.getInt("Sender_id");
                 //id1 = resultSet.getInt("user2_id");
                 message = resultSet.getString("Contenu");
                 java.sql.Timestamp date = resultSet.getTimestamp("Date");
-                addMessage(message, date);
+                addMessage(message, date, sender);
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -180,14 +182,27 @@ public class MessagerieController {
         return false;
     }
 
-    private void addMessage(String messageContent, java.sql.Timestamp messageDate){
+    private void addMessage(String messageContent, java.sql.Timestamp messageDate, int sender){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Message.fxml"));
-            Node content = loader.load();
+            FXMLLoader loader;
+            Node content;
+            if (sender == Session.getInstance().getCurrentUser().getId()) {
+                loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/MessageEnvoi.fxml"));
+                content = loader.load();
 
-            MessageController msgController = loader.getController();
+                MessageEnvoiController msgenvoiController = loader.getController();
+                msgenvoiController.setMessage(messageContent, messageDate, sender);
+            }
+            else {
+                loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/MessageRecu.fxml"));
+                content = loader.load();
 
-            msgController.setMessage(messageContent, messageDate);
+                MessageRecuController msgrecuController = loader.getController();
+                msgrecuController.setMessage(messageContent, messageDate, sender);
+            }
+            
+            
+
 
             messagesContainer.getChildren().addAll(content);
         } catch (IOException e) {

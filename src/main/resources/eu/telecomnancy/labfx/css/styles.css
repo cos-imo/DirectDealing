@@ -1,0 +1,12 @@
+/* styles.css */
+.message-bubble-envoi {
+    -fx-background-color: #E3BDFF; /* Couleur de fond de la bulle */
+    -fx-padding: 10px;
+    -fx-background-radius: 20px; /* Bords arrondis de la bulle */
+}
+
+.message-bubble-recu {
+    -fx-background-color: #F7AF9D; /* Couleur de fond de la bulle */
+    -fx-padding: 10px;
+    -fx-background-radius: 20px; /* Bords arrondis de la bulle */
+}
