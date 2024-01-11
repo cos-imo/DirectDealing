@@ -16,16 +16,17 @@ public class Ressource {
     private String description;
     private DateTime dateDebut;
     private DateTime dateFin;
-    private double longitude;
-    private double latitude;
+    private float longitude;
+    private float latitude;
     private int id;
     private Florain prix;
     private Recurrence reccurence;
     private int idOwner;
     private Image pdp;
+    private boolean type;
 
 
-    public Ressource(String name, String description, DateTime dateDebut, DateTime dateFin, double longitude, double latitude, int id, Florain prix, Recurrence reccurence, int id_owner, Image pdp) {
+    public Ressource(String name, String description, DateTime dateDebut, DateTime dateFin, float longitude, float latitude, int id, Florain prix, Recurrence reccurence, int id_owner, Image pdp, boolean type) {
         this.name = name;
         this.description = description;
         this.dateDebut = dateDebut;
@@ -35,6 +36,7 @@ public class Ressource {
         this.reccurence = reccurence;
         this.idOwner = id_owner;
         this.pdp = pdp;
+        this.type = type;
     }
     public Ressource(Ressource ressource, DateTime dateDebut, DateTime dateFin) {
         this.name = ressource.getName();
@@ -46,8 +48,11 @@ public class Ressource {
         this.reccurence = ressource.getReccurence();
         this.idOwner = ressource.getIdOwner();
         this.pdp = ressource.getPdp();
+        this.type = ressource.getType();
     }
-
+    public boolean getType(){
+        return this.type;
+    }
     public int getId(){
         return this.id;
     }
@@ -96,26 +101,40 @@ public class Ressource {
 
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()){ //Se ferme si la requête est vide
-            pstmt.close();
-            connection.close();
             String name = rs.getString("Name");
             String desc = rs.getString("Desc");
             DateTime dateDebut = new DateTime(rs.getInt("DateDebut"));//TODO: Récupérer dans le bon format en joda Time
             DateTime dateFin = new DateTime(rs.getInt("DateFin")); //TODO : Récupérer le bon format en Joda Time
-            double longitude = rs.getDouble("LocalisationLongitude");
-            double latitude = rs.getDouble("LocalisationLatitude");
+            float longitude = rs.getFloat("LocalisationLongitude");
+            float latitude = rs.getFloat("LocalisationLatitude");
             int id = rs.getInt("Ressource_id");
             Florain prix = new Florain(rs.getInt("Prix"));
             Recurrence reccurence = Recurrence.getRecurrence(rs.getInt("recurrence"));
             int id_owner = rs.getInt("Owner_id");
             byte[] imagebyte = rs.getBytes("Image");
+
             Image pdp = null;
             if (imagebyte != null && imagebyte.length > 0) {
                 pdp = (new Image(new ByteArrayInputStream(imagebyte)));
             }
-            return new Ressource(name, desc, dateDebut, dateFin, longitude, latitude, id, prix, reccurence, id_owner,pdp);
+            boolean type = rs.getBoolean("type");
+            pstmt.close();
+            connection.close();
+            return new Ressource(name, desc, dateDebut, dateFin, longitude, latitude, id, prix, reccurence, id_owner,pdp,type);
         }
         return null;
+    }
+    public void AfficheRessource() {
+        System.out.println("Name : " + this.name);
+        System.out.println("Description : " + this.description);
+        System.out.println("Date de début : " + this.dateDebut);
+        System.out.println("Date de fin : " + this.dateFin);
+        System.out.println("Longitude : " + this.longitude);
+        System.out.println("Latitude : " + this.latitude);
+        System.out.println("Id : " + this.id);
+        System.out.println("Prix : " + this.prix);
+        System.out.println("Reccurence : " + this.reccurence);
+        System.out.println("Id Owner : " + this.idOwner);
     }
 
 }

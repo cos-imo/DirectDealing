@@ -34,6 +34,7 @@ public class User {
         this.id = id;
         this.wallet = new Florain(wallet);
         this.note = note;
+        this.ressources = createRessources();
         getEventRessource(); //Initialise ressources // TODO : Changer ca sans dupliquer la réquête SQL
     }
 
@@ -63,6 +64,38 @@ public class User {
     }
     public ArrayList<Ressource> getRessources() {
         return ressources;
+    }
+    public ArrayList<Ressource> createRessources() throws SQLException{
+        ArrayList<Ressource> ressourcess = new ArrayList<Ressource>();
+        Connect connect = new Connect();
+        Connection connection = connect.getConnection();
+        String sql = "SELECT * FROM Ressource WHERE Owner_id = "+this.id+";";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            int id = resultSet.getInt("Ressource_id");
+            int idOwner = resultSet.getInt("Owner_id");
+            String name = resultSet.getString("Name");
+            String desc = resultSet.getString("Desc");
+            DateTime dateDebut = new DateTime(resultSet.getInt("DateDebut"));
+            DateTime dateFin = new DateTime(resultSet.getInt("DateFin"));
+            float longitude = resultSet.getFloat("LocalisationLongitude");
+            float latitude = resultSet.getFloat("LocalisationLatitude");
+            boolean type = resultSet.getBoolean("type");
+            int prix = resultSet.getInt("Prix");
+            byte[] imagebyte = resultSet.getBytes("Image");
+            Image image = null;
+            if (imagebyte != null && imagebyte.length > 0) {
+                image = (new Image(new ByteArrayInputStream(imagebyte)));
+            }
+            Recurrence recurrence = Recurrence.getRecurrence(resultSet.getInt("Recurrence"));
+            Ressource ressource = new Ressource(name, desc, dateDebut, dateFin, longitude, latitude, id, new Florain(prix), recurrence, idOwner, image, type);
+            System.out.println("Avant ajout : "+ressourcess.size());
+            ressourcess.add(ressource);
+            System.out.println("Après ajout : "+ressourcess.size());
+            ressource.AfficheRessource();
+        }
+        return ressourcess;
     }
     public static User newUserFromMail(String mail) throws SQLException{
         String sql = "SELECT * FROM User WHERE Mail = '"+mail+"';";
@@ -126,11 +159,10 @@ public class User {
 
     public ArrayList<EventRessource> getEventRessource() throws SQLException {
         ArrayList<EventRessource> eventRessources = new ArrayList<EventRessource>();
-        ArrayList<Ressource> ressources = new ArrayList<Ressource>();
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
         String sql = """
-        SELECT e.Event_id as eventId, e.Ressource_id as ressourceId, e.isObjet as isObject, e.Name as eventName, e.preteur_id as preteur_id, e.acheteur_id as acheteur_id, r.Recurrence as Recurrence, e.DateDebut as eventDateDebut, e.DateFin as eventDateFin, r.Owner_id as Owner_id, r.Name as ressourceName, r.Desc as Desc, r.DateDebut as RDateDebut, r.DateFin as RDateFin, r.LocalisationLatitude as LocalisationLatitude, r.LocalisationLongitude as LocalisationLongitude, r.type as Rtype, r.Prix as RPrix, r.Image as RImage
+        SELECT e.Event_id as eventId,e.isObjet as isObject, e.Ressource_id as ressourceId, e.isObjet as isObject, e.Name as eventName, e.preteur_id as preteur_id, e.acheteur_id as acheteur_id, r.Recurrence as Recurrence, e.DateDebut as eventDateDebut, e.DateFin as eventDateFin, r.Owner_id as Owner_id, r.Name as ressourceName, r.Desc as Desc, r.DateDebut as RDateDebut, r.DateFin as RDateFin, r.LocalisationLatitude as LocalisationLatitude, r.LocalisationLongitude as LocalisationLongitude, r.type as Rtype, r.Prix as RPrix, r.Image as RImage
         FROM Event AS e 
         JOIN Ressource AS r 
         ON e.Ressource_id = r.Ressource_id
@@ -145,17 +177,16 @@ public class User {
             int idRessource = resultSet.getInt("ressourceId");
             int idPreteur = resultSet.getInt("preteur_id");
             int idAcheteur = resultSet.getInt("acheteur_id");
-            Ressource ressource = new Ressource(resultSet.getString("ressourceName"), resultSet.getString("Desc"), new DateTime(resultSet.getInt("RDateDebut")), new DateTime(resultSet.getInt("RDateFin")), idRessource, idPreteur, idAcheteur, wallet, Recurrence.getRecurrence(resultSet.getInt("Recurrence")), id, pdp);
+            boolean isObject = resultSet.getBoolean("isObject");
+            Ressource ressource = new Ressource(resultSet.getString("ressourceName"), resultSet.getString("Desc"), new DateTime(resultSet.getInt("RDateDebut")), new DateTime(resultSet.getInt("RDateFin")), idRessource, idPreteur, idAcheteur, new Florain(resultSet.getInt("RPrix")), Recurrence.getRecurrence(resultSet.getInt("Recurrence")), id, pdp,isObject);
             if (ressource != null){
                 EventRessource eventRessource = new EventRessource(ressource, id,idPreteur, idAcheteur, new DateTime(resultSet.getInt("eventDateDebut")), new DateTime(resultSet.getInt("eventDateFin")));
                 eventRessources.add(eventRessource);
-                ressources.add(ressource);
             }
         }
         preparedStatement.close();
         connection.commit();
         connection.close();
-        this.ressources = ressources;
         return eventRessources;
     }
 }

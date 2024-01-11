@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.Slider;
 import eu.telecomnancy.labfx.Connect;
 import eu.telecomnancy.labfx.Recurrence;
+import eu.telecomnancy.labfx.Ressource;
 import eu.telecomnancy.labfx.Session;
 import javafx.util.converter.IntegerStringConverter;
 import java.time.LocalDateTime;
@@ -89,20 +90,19 @@ public class AjoutItemControler {
     private boolean insertDatabase(String Name, String Desc, java.sql.Timestamp DateDebut, java.sql.Timestamp DateFin, float LocalisationLongitude, float LocalisationLatitude, boolean type, int Prix,Recurrence recurrence) throws SQLException{
         Connect connect = new Connect();
         Connection connection = connect.getConnection(); 
-        String sql = "INSERT INTO Ressource (Ressource_Id, Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Image, Owner_id,Recurrence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+        String sql = "INSERT INTO Ressource (Name, Desc, DateDebut, DateFin, LocalisationLongitude, LocalisationLatitude, type, Prix, Image, Owner_id,Recurrence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, getMaxId());
-            preparedStatement.setString(2, Name);
-            preparedStatement.setString(3, Desc);
-            preparedStatement.setTimestamp(4, DateDebut);
-            preparedStatement.setTimestamp(5, DateFin);
-            preparedStatement.setFloat(6, LocalisationLongitude);
-            preparedStatement.setFloat(7, LocalisationLatitude);
-            preparedStatement.setBoolean(8, type);
-            preparedStatement.setInt(9, Prix);
-            preparedStatement.setBytes(10, this.image);
-            preparedStatement.setInt(11, Session.getInstance().getCurrentUser().getId());
-            preparedStatement.setInt(12, Recurrence.getInt(recurrence));
+            preparedStatement.setString(1, Name);
+            preparedStatement.setString(2, Desc);
+            preparedStatement.setTimestamp(3, DateDebut);
+            preparedStatement.setTimestamp(4, DateFin);
+            preparedStatement.setFloat(5, LocalisationLongitude);
+            preparedStatement.setFloat(6, LocalisationLatitude);
+            preparedStatement.setBoolean(7, type);
+            preparedStatement.setInt(8, Prix);
+            preparedStatement.setBytes(9, this.image);
+            preparedStatement.setInt(10, Session.getInstance().getCurrentUser().getId());
+            preparedStatement.setInt(11, Recurrence.getInt(recurrence));
 
             // Requête d'insertion
             int rowsAffected = preparedStatement.executeUpdate();
@@ -135,7 +135,7 @@ public class AjoutItemControler {
             e.printStackTrace();
         }
         System.out.println(max_id+1);
-        return max_id+1;
+        return max_id;
     }
 
     @FXML   
@@ -183,6 +183,7 @@ public class AjoutItemControler {
 
         try {
             this.insertDatabase(Nom, Description, sqlTimestampDebut, sqlTimestampFin, 0.0f, 0.0f, type, Prix,rec);
+            Session.getInstance().getCurrentUser().getRessources().add(Ressource.newRessourceFromId(getMaxId()));
         } catch (SQLException e) {
             e.printStackTrace();
         }

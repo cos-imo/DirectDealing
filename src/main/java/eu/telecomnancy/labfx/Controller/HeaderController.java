@@ -41,7 +41,8 @@ public class HeaderController extends HBox {
     @FXML
     private void OpenCalendar(ActionEvent event) throws SQLException {
         LoadPage.loadPage("Calendrier", event,getClass());
-        AfficheAllEvents();
+        // AfficheAllEvents();
+        // AfficheAllRessources();
     }
 
     @FXML
@@ -69,4 +70,11 @@ public class HeaderController extends HBox {
             event.AfficheEvent();
         }
     }    
+    public void AfficheAllRessources() throws SQLException{
+        ArrayList<Ressource> ressources = Session.getInstance().getCurrentUser().getRessources();
+        System.out.println("Ressources All : ");
+        for (Ressource ressource : ressources){
+            ressource.AfficheRessource();
+        }
+    }
 }
