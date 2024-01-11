@@ -13,4 +13,4 @@ Rendre un livrable permettant de visualiser les comptes d'autres personnes en cl
 
 ## Tâches effectuées
 
-1, 2, 3,
+1, 2, 3, 5
