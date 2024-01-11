@@ -18,12 +18,12 @@ public class Calendrier {
     public Calendrier(User user, DateTime mainDate, ModeAffichage modeAffichage) throws SQLException {
         this.user = user;
         this.mainDate = mainDate;
-        this.betweenDate = getBetweenDate();
         this.modeAffichage = modeAffichage;
+        this.betweenDate = createBetwwenDate();
         this.eventActif = createEventActif(); //Dans les event on regarde ceux qui sont dans l'intervalle
         this.ressourceActif = createRessourceActif(); //Dans les ressources on regarde ceux dont la récurrence est dans l'intervalle
     }
-    private Interval getBetweenDate() {
+    private Interval createBetwwenDate() {
         DateTime dateDebut = null;
         DateTime dateFin = null;
         switch (modeAffichage) {
@@ -33,14 +33,17 @@ public class Calendrier {
             break;
             case Semaine:
                 dateDebut = mainDate.withTimeAtStartOfDay().withDayOfWeek(1);
-                dateFin = mainDate.withTimeAtStartOfDay().withDayOfWeek(7).minusMinutes(1);
+                dateFin = mainDate.withTimeAtStartOfDay().withDayOfWeek(8).minusMinutes(1);
             break;
             case Mois:
                 dateDebut = mainDate.withTimeAtStartOfDay().withDayOfMonth(1);
-                dateFin = mainDate.withTimeAtStartOfDay().withDayOfMonth(mainDate.dayOfMonth().getMaximumValue()).minusMinutes(1);            
+                dateFin = mainDate.withTimeAtStartOfDay().withDayOfMonth(mainDate.dayOfMonth().getMaximumValue()).plusHours(23).plusMinutes(59).plusSeconds(59);;            
             break;
         }
         Interval betweenDate = new Interval(dateDebut, dateFin);
+        return betweenDate;
+    }
+    public Interval getBetweenDate() {
         return betweenDate;
     }
     private ArrayList<EventRessource> createEventActif() throws SQLException{
@@ -58,29 +61,40 @@ public class Calendrier {
         //Etape 2 : Ajouter l'occurence à la liste des ressources actives en vérifiant que sa date de fin est avant la date de fin de la période
         //Etape 3 : Quand la date de fin est après la date de fin de la période ou que la date de début est après la date de fin de la période on arrête d'ajouter
 
-        ArrayList<Ressource> ressourceActif = new ArrayList<Ressource>();
+        ArrayList<Ressource> ressourcesActifs = new ArrayList<Ressource>();
         for (Ressource ressource : user.getRessources()) {
             DateTime newDebut = ressource.getDateDebut();
             DateTime newFin = ressource.getDateFin();
+            System.out.println("---------------------------");
+            System.out.println("Ressource : " + ressource.getName());
+            System.out.println("Date de début : " + newDebut);
+            System.out.println("Date de fin : " + newFin);
             if (ressource.getReccurence() != Recurrence.Non){
-                while (newDebut.isBefore(betweenDate.getEnd()) && newDebut.isBefore(newFin)){
+                while (newFin.isBefore(betweenDate.getStart())){
                     newDebut = AjoutPeriodRecc(newDebut,ressource.getReccurence());
                     newFin = AjoutPeriodRecc(newFin,ressource.getReccurence());
+                    System.out.println("Nouvelle date de début : " + newDebut);
+                    System.out.println("Nouvelle date de fin : " + newFin);
                 }
                 while (betweenDate.contains(newFin) || betweenDate.contains(newDebut)){
-                    ressourceActif.add(ressourceReducedToAffichage(new Ressource(ressource, newDebut, newFin)));
+                    System.out.println("Ressource dans l'intervalle avec les dates :");
+                    ressourcesActifs.add(ressourceReducedToAffichage(new Ressource(ressource, newDebut, newFin)));
+                    System.out.println("Nouvelle date de début : " + newDebut);
+                    System.out.println("Nouvelle date de fin : " + newFin);
                     newDebut = AjoutPeriodRecc(newDebut,ressource.getReccurence());
                     newFin = AjoutPeriodRecc(newFin,ressource.getReccurence());
                 }
             } else {
+                System.out.println("Ressource non récurrente");
                 if (betweenDate.contains(ressource.getDateDebut()) || betweenDate.contains(ressource.getDateFin())) {
-                    ressourceActif.add(ressourceReducedToAffichage(ressource));
+                    System.out.println("Ressource dans l'intervalle");
+                    ressourcesActifs.add(ressourceReducedToAffichage(ressource));
                 }
             }
         }
-        return ressourceActif;
+        return ressourcesActifs;
     }
-    private ArrayList<EventRessource> getEventActif() {
+    public ArrayList<EventRessource> getEventActif() {
         return eventActif;
     }
     public EventRessource createEventBetweenDate(EventRessource event){

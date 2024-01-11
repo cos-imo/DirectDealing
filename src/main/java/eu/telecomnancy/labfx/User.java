@@ -90,11 +90,11 @@ public class User {
             }
             Recurrence recurrence = Recurrence.getRecurrence(resultSet.getInt("Recurrence"));
             Ressource ressource = new Ressource(name, desc, dateDebut, dateFin, longitude, latitude, id, new Florain(prix), recurrence, idOwner, image, type);
-            System.out.println("Avant ajout : "+ressourcess.size());
             ressourcess.add(ressource);
-            System.out.println("Après ajout : "+ressourcess.size());
-            ressource.AfficheRessource();
         }
+        preparedStatement.close();
+        connection.close();
+
         return ressourcess;
     }
     public static User newUserFromMail(String mail) throws SQLException{
@@ -108,6 +108,7 @@ public class User {
     }
     public static User newUserFromAttribute(String sql) throws SQLException {
         Connect connect = new Connect();
+        System.out.println("Va jusqu'ici");
         Connection connection = connect.getConnection(); 
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
