@@ -19,11 +19,11 @@ public class Calendrier {
         this.user = user;
         this.mainDate = mainDate;
         this.modeAffichage = modeAffichage;
-        this.betweenDate = createBetwwenDate();
+        this.betweenDate = createBetweenDate();
         this.eventActif = createEventActif(); //Dans les event on regarde ceux qui sont dans l'intervalle
         this.ressourceActif = createRessourceActif(); //Dans les ressources on regarde ceux dont la récurrence est dans l'intervalle
     }
-    private Interval createBetwwenDate() {
+    private Interval createBetweenDate() {
         DateTime dateDebut = null;
         DateTime dateFin = null;
         switch (modeAffichage) {
@@ -33,7 +33,7 @@ public class Calendrier {
             break;
             case Semaine:
                 dateDebut = mainDate.withTimeAtStartOfDay().withDayOfWeek(1);
-                dateFin = mainDate.withTimeAtStartOfDay().withDayOfWeek(8).minusMinutes(1);
+                dateFin = mainDate.withTimeAtStartOfDay().withDayOfWeek(7).plusHours(23).plusMinutes(59).plusSeconds(59);
             break;
             case Mois:
                 dateDebut = mainDate.withTimeAtStartOfDay().withDayOfMonth(1);
@@ -45,6 +45,12 @@ public class Calendrier {
     }
     public Interval getBetweenDate() {
         return betweenDate;
+    }
+    public ModeAffichage getModeAffichage() {
+        return modeAffichage;
+    }
+    public void setModeAffichage(ModeAffichage modeAffichage) {
+        this.modeAffichage = modeAffichage;
     }
     private ArrayList<EventRessource> createEventActif() throws SQLException{
         ArrayList<EventRessource> eventActif = new ArrayList<EventRessource>();
