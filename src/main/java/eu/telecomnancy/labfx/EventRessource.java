@@ -26,7 +26,9 @@ public class EventRessource {
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
     }
-
+    public String getName() {
+        return ressource.getName();
+    }
     public int getIdOwner() {
         return ressource.getIdOwner();
     }

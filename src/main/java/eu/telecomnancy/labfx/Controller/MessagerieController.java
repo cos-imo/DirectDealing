@@ -204,7 +204,7 @@ public class MessagerieController {
                     try (Connection connection = connect.getConnection()) {
                         String query = "INSERT INTO Event (Ressource_id, isObjet, Name, preteur_id, acheteur_id, DateDebut, DateFin, Prix) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
                         PreparedStatement preparedStatement = connection.prepareStatement(query);
-                        preparedStatement.setInt(1, ressource_id);
+                        preparedStatement.setInt(1, RessourceActif);
                         preparedStatement.setBoolean(2, type);
                         preparedStatement.setString(3, nomRessource);
                         preparedStatement.setInt(4, owner_id);

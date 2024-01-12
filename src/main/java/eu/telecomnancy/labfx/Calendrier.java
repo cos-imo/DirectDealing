@@ -54,8 +54,10 @@ public class Calendrier {
     }
     private ArrayList<EventRessource> createEventActif() throws SQLException{
         ArrayList<EventRessource> eventActif = new ArrayList<EventRessource>();
-        for (EventRessource event : user.getEventRessource()) {
+        ArrayList<EventRessource> eventActifNonRecurrent = user.getEventRessource();
+        for (EventRessource event : eventActifNonRecurrent) {
             Interval betweenEvent = new Interval(event.getDateDebut(), event.getDateFin());
+            System.out.println("Event : " + event.getName() + " Date de début : " + event.getDateDebut() + " Date de fin : " + event.getDateFin());
             if (betweenDate.contains(event.getDateDebut()) || betweenDate.contains(event.getDateFin()) || betweenEvent.contains(betweenDate)) {
                 eventActif.add(createEventBetweenDate(event));
             }
