@@ -232,13 +232,7 @@ public class CalendrierController {
         dayBox.getChildren().add(eventBox);
 
         ArrayList<EventRessource> todayEvent = getTodayEvent(calendarStart);
-        for (EventRessource event : todayEvent) {
-            event.AfficheEvent();
-        }
         ArrayList<Ressource> todayRessource = getTodayRessource(calendarStart,todayEvent);
-        for (Ressource ressource : todayRessource) {
-            ressource.AfficheRessource();
-        }
         for (EventRessource event : todayEvent) {
             Label eventLabel = new Label(event.getRessource().getName());
             eventLabel.setAlignment(Pos.TOP_LEFT);
@@ -299,11 +293,8 @@ public class CalendrierController {
         ArrayList<EventRessource> eventActif = new ArrayList<EventRessource>();
         for (EventRessource event : calendrier.getEventActif()) {
             Interval thisDay = new Interval(newDay.withTimeAtStartOfDay(), newDay.plusDays(1).withTimeAtStartOfDay().minusSeconds(1));
-            System.out.println(thisDay);
             if (thisDay.contains(event.getDateDebut()) || thisDay.contains(event.getDateFin()) || event.getDateDebut().isBefore(thisDay.getStart()) && event.getDateFin().isAfter(thisDay.getEnd())) {
                 EventRessource newEvent = EventReducedToAffichage(event, thisDay);
-                System.out.println("Pour le jour "+newDay+" l'event ");
-                newEvent.AfficheEvent();
                 eventActif.add(newEvent);
             }
         }
