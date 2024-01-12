@@ -192,10 +192,6 @@ public class MessagerieController {
                     connection.close();
                 }
                 if (dateDebutTimestamp.before(dateDebutAnnonce) || dateFinTimestamp.after(dateFinAnnonce)) {
-                    System.out.println("Date debut timestamp: " + dateDebutTimestamp);
-                    System.out.println("Date fin timestamp: " + dateFinTimestamp);
-                    System.out.println("Date debut annonce: " + dateDebutAnnonce);
-                    System.out.println("Date fin annonce: " + dateFinAnnonce);
                     System.out.println("Date de début ou de fin en dehors de la période de l'annonce");
                     return;
                 }

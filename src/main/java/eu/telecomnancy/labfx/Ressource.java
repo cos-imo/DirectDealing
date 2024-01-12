@@ -107,7 +107,7 @@ public class Ressource {
             DateTime dateFin = new DateTime(rs.getLong("DateFin")); //TODO : Récupérer le bon format en Joda Time
             float longitude = rs.getFloat("LocalisationLongitude");
             float latitude = rs.getFloat("LocalisationLatitude");
-            int id = rs.getInt("Ressource_id");
+            int idR = rs.getInt("Ressource_id");
             Florain prix = new Florain(rs.getInt("Prix"));
             Recurrence reccurence = Recurrence.getRecurrence(rs.getInt("recurrence"));
             int id_owner = rs.getInt("Owner_id");
@@ -120,7 +120,7 @@ public class Ressource {
             boolean type = rs.getBoolean("type");
             pstmt.close();
             connection.close();
-            return new Ressource(name, desc, dateDebut, dateFin, longitude, latitude, id, prix, reccurence, id_owner,pdp,type);
+            return new Ressource(name, desc, dateDebut, dateFin, longitude, latitude, idR, prix, reccurence, id_owner,pdp,type);
         }
         return null;
     }

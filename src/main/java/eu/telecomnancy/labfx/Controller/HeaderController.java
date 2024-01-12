@@ -50,9 +50,9 @@ public class HeaderController extends HBox {
     private void OpenCalendar(ActionEvent event) throws SQLException {
         LoadPage.loadPage("Calendrier", event,getClass());
 
-        Calendrier calendrier = new Calendrier(Session.getInstance().getCurrentUser(), DateTime.now(),ModeAffichage.Mois);
+        // Calendrier calendrier = new Calendrier(Session.getInstance().getCurrentUser(), DateTime.now(),ModeAffichage.Mois);
         // AfficheAllRessources(calendrier.getRessourceActif());
-        AfficheAllEvents(calendrier.getEventActif());
+        // AfficheAllEvents(calendrier.getEventActif());
         // AfficheInterval(calendrier.getBetweenDate());
     }
 
