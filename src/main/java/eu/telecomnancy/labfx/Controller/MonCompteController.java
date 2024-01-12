@@ -14,6 +14,7 @@ import eu.telecomnancy.labfx.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -43,10 +44,10 @@ public class MonCompteController {
     ImageView PhotoProfil;
 
     @FXML
-    TextField TextFieldPassword;
+    PasswordField TextFieldPassword;
 
     @FXML
-    TextField TextFieldConfirmPassword;
+    PasswordField TextFieldConfirmPassword;
 
     @FXML
     Button BtnChangePassword;

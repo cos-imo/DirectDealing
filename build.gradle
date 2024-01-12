@@ -67,18 +67,3 @@ testlogger {
     showSkippedStandardStreams true
     showFailedStandardStreams true
 }
-
-jar {
-    manifest {
-        attributes(
-            'Main-Class': 'eu.telecomnancy.labfx.Main',
-            'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' ')
-        )
-    }
-
-    duplicatesStrategy = 'exclude'
-
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
