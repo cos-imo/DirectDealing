@@ -6,6 +6,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
+
 import java.text.SimpleDateFormat;
 
 import eu.telecomnancy.labfx.Connect;
@@ -25,10 +27,17 @@ public class MessageRecuController {
     
     @FXML
     protected void setMessage(String messageContent, java.sql.Timestamp messageHorodatage, int sender){
+        Rectangle clip = new Rectangle(
+            Imageotherid.getFitWidth(), Imageotherid.getFitHeight()
+        );
+        clip.setArcWidth(80);
+        clip.setArcHeight(80);
+        Imageotherid.setClip(clip);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM - HH:mm");
         String heureformatee = dateFormat.format(messageHorodatage);
         messageRecuBody.setText(messageContent);
         messageRecuHeure.setText(heureformatee);
+        System.out.println(sender);
         String query = "SELECT Photo_profil FROM User WHERE User_id = ?;";
         Connect connect = new Connect();
         try (Connection connection = connect.getConnection()) {
