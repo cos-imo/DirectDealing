@@ -140,15 +140,9 @@ public class CalendrierController {
         if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
             debutMois = calendarStart.toLocalDate().withDayOfMonth(1);
             finMois = calendarStart.toLocalDate().dayOfMonth().withMaximumValue();
-            ligneContrainte.setMinHeight(80);
-            ligneContrainte.setPrefHeight(80);
-            ligneContrainte.setMaxHeight(80);
         } else if (calendrier.getModeAffichage() == ModeAffichage.Semaine) {
             debutMois = calendarStart.toLocalDate().withDayOfWeek(1);
             finMois = calendarStart.toLocalDate().dayOfWeek().withMaximumValue();
-            ligneContrainte.setMinHeight(400);
-            ligneContrainte.setPrefHeight(400);
-            ligneContrainte.setMaxHeight(400);
         }
         int joursOutDebut = debutMois.getDayOfWeek() - 1;
 
@@ -166,7 +160,7 @@ public class CalendrierController {
             Label lblDay = new Label(dayDisplayName.substring(0, 1).toUpperCase() + dayDisplayName.substring(1)); // Capitalize the first letter
             lblDay.setAlignment(Pos.CENTER); // Centrer le texte dans le Label
             lblDay.setMaxWidth(Double.MAX_VALUE); // Permettre au Label de s'étendre à la largeur maximale
-            lblDay.setStyle("-fx-background-color: grey; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5;");
+            lblDay.setStyle("-fx-background-color: grey; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5;-fx-pref-height:40px;");
             calendarGrid.add(lblDay, i, 0); // Ajoutez au GridPane
             GridPane.setHgrow(lblDay, Priority.ALWAYS); // Permettre au Label de croître horizontalement
             GridPane.setFillWidth(lblDay, true); // Le Label occupe toute la largeur de la cellule
@@ -175,9 +169,14 @@ public class CalendrierController {
         while (calendarStart.isBefore(calendarEnd)) {
             for (int j = 0; j < 7; j++) { // Weekday columns
                 if (calendrier.getModeAffichage() == ModeAffichage.Semaine){
-                    calendarStart = addDayToCalenderAsWeek(calendarStart, j);
+                    Interval interval = new Interval(calendarStart,calendarStart.plusHours(4).minusSeconds(1));
+                    calendarStart = addDayToCalenderAsWeek(interval, j,weekRow-1);
+                    if (j==5){
+                        break;
+                    }
                 } else if (calendrier.getModeAffichage() == ModeAffichage.Mois){
-                    calendarStart = addDayToCalenderAsMonth(calendarStart, weekRow, j);
+                    Interval interval = new Interval(calendarStart,calendarStart.plusDays(1).minusSeconds(1));
+                    calendarStart = addDayToCalenderAsMonth(interval, weekRow, j);
                 }
             }
             // If the row is completely in the next month, remove it
@@ -187,7 +186,8 @@ public class CalendrierController {
             weekRow++;
         }
     }
-    private DateTime addDayToCalenderAsMonth(DateTime calendarStart, int weekRow, int dayColumn) throws SQLException {
+    private DateTime addDayToCalenderAsMonth(Interval interval, int weekRow, int dayColumn) throws SQLException {
+        DateTime calendarStart = interval.getStart();
 
         Label dayLabel = new Label(String.valueOf(calendarStart.getDayOfMonth()));
         dayLabel.setAlignment(Pos.TOP_LEFT);
@@ -218,9 +218,8 @@ public class CalendrierController {
         eventBox.setMaxWidth(350);
         eventBox.setSpacing(3);
         dayBox.getChildren().add(eventBox);
-
-        ArrayList<EventRessource> todayEvent = getTodayEvent(calendarStart);
-        ArrayList<Ressource> todayRessource = getTodayRessource(calendarStart,todayEvent);
+        ArrayList<EventRessource> todayEvent = getTodayEvent(interval);
+        ArrayList<Ressource> todayRessource = getTodayRessource(todayEvent,interval);
         for (EventRessource event : todayEvent) {
             Label eventLabel = new Label(event.getRessource().getName());
             eventLabel.setAlignment(Pos.TOP_LEFT);
@@ -256,10 +255,10 @@ public class CalendrierController {
         calendarGrid.add(dayBox, dayColumn, weekRow);
         return calendarStart.plusDays(1);
     }
-    private DateTime addDayToCalenderAsWeek(DateTime calendarStart, int dayColumn) throws SQLException{
-
+    private DateTime addDayToCalenderAsWeek(Interval interval, int dayColumn,int weekRow) throws SQLException{
+        DateTime calendarStart = interval.getStart();
         
-        Label dayLabel = new Label(String.valueOf(calendarStart.getDayOfMonth()));
+        Label dayLabel = new Label(interval.getStart().getHourOfDay() + "h" + interval.getStart().getMinuteOfHour() + " - " + interval.getEnd().getHourOfDay() + "h" + interval.getEnd().getMinuteOfHour());
         dayLabel.setAlignment(Pos.TOP_LEFT);
         dayLabel.setContentDisplay(ContentDisplay.TOP);
         dayLabel.setGraphicTextGap(0.0);
@@ -270,7 +269,7 @@ public class CalendrierController {
         dayBox.getChildren().add(dayLabel);
         dayBox.setAlignment(Pos.TOP_LEFT);
         dayBox.setMaxWidth(Double.MAX_VALUE);
-        dayBox.setStyle("-fx-border-color: black; -fx-pref-width: 400px; -fx-pref-height: 400px; -fx-padding:3px;");
+        dayBox.setStyle("-fx-border-color: black; -fx-pref-width: 400px; -fx-pref-height: 600px; -fx-padding:3px;");
         dayBox.setOnMouseClicked((event) -> {
         targetDate = calendarStart;
         calendrier.setModeAffichage(ModeAffichage.Mois);
@@ -289,8 +288,8 @@ public class CalendrierController {
         eventBox.setSpacing(3);
         dayBox.getChildren().add(eventBox);
 
-        ArrayList<EventRessource> todayEvent = getTodayEvent(calendarStart);
-        ArrayList<Ressource> todayRessource = getTodayRessource(calendarStart,todayEvent);
+        ArrayList<EventRessource> todayEvent = getTodayEvent(interval);
+        ArrayList<Ressource> todayRessource = getTodayRessource(todayEvent,interval);
         for (EventRessource event : todayEvent) {
             Label eventLabel = new Label(event.getRessource().getName());
             eventLabel.setAlignment(Pos.TOP_LEFT);
@@ -317,14 +316,13 @@ public class CalendrierController {
         if(!calendrier.getBetweenDate().contains(calendarStart)) {
             dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
         }
-        calendarGrid.add(dayBox, dayColumn, 1);
-        return calendarStart.plusDays(1);
+        calendarGrid.add(dayBox, weekRow, dayColumn+1);
+        return calendarStart.plusHours(4);
     }
 
-    private ArrayList<EventRessource> getTodayEvent(DateTime newDay) throws SQLException {
+    private ArrayList<EventRessource> getTodayEvent(Interval thisDay) throws SQLException {
         ArrayList<EventRessource> eventActif = new ArrayList<EventRessource>();
         for (EventRessource event : calendrier.getEventActif()) {
-            Interval thisDay = new Interval(newDay.withTimeAtStartOfDay(), newDay.plusDays(1).withTimeAtStartOfDay().minusSeconds(1));
             if (thisDay.contains(event.getDateDebut()) || thisDay.contains(event.getDateFin()) || event.getDateDebut().isBefore(thisDay.getStart()) && event.getDateFin().isAfter(thisDay.getEnd())) {
                 EventRessource newEvent = EventReducedToAffichage(event, thisDay);
                 eventActif.add(newEvent);
@@ -332,10 +330,9 @@ public class CalendrierController {
         }
         return eventActif;
     }
-    private ArrayList<Ressource> getTodayRessource(DateTime newDay,ArrayList<EventRessource> todayEvent) throws SQLException {
+    private ArrayList<Ressource> getTodayRessource(ArrayList<EventRessource> todayEvent, Interval thisDay) throws SQLException {
         ArrayList<Ressource> ressourcesActifs = new ArrayList<Ressource>();
         for (Ressource ressource : calendrier.getRessourceActif()) {
-            Interval thisDay = new Interval(newDay.withTimeAtStartOfDay(), newDay.plusDays(1).withTimeAtStartOfDay().minusSeconds(1));
             if (thisDay.contains(ressource.getDateDebut()) || thisDay.contains(ressource.getDateFin()) || ressource.getDateDebut().isBefore(thisDay.getStart()) && ressource.getDateFin().isAfter(thisDay.getEnd())) {
                 boolean alreadyHereAsEvent = false;
                 for (EventRessource event : todayEvent){
