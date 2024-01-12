@@ -10,8 +10,3 @@
     -fx-padding: 10px;
     -fx-background-radius: 80px 80px 80px 10px; /* Bords arrondis de la bulle */
 }
-
-ImageView { 
-    fx-background-radius: 50%;
-   
-}
