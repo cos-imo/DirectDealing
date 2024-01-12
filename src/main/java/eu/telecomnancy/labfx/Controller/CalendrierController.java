@@ -2,15 +2,26 @@ package eu.telecomnancy.labfx.Controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAdjusters;
+import org.joda.time.Days;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -18,6 +29,16 @@ import java.util.Locale;
 //DateTime joda Time
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import javafx.scene.input.MouseEvent;
+import java.time.temporal.IsoFields;
+
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+
 import eu.telecomnancy.labfx.Calendrier;
 import eu.telecomnancy.labfx.ModeAffichage;
 import eu.telecomnancy.labfx.Session;
@@ -239,6 +260,37 @@ public class CalendrierController {
             eventLabel.setStyle("-fx-text-fill: black;-fx-background-color: #f7921a; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-background-radius:10px;");
             eventLabel.setMaxHeight(5);
             eventBox.getChildren().add(eventLabel);
+            eventLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent eventhandle) {
+                    BorderPane root = new BorderPane();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/Messagerie.fxml"));
+
+                    Node source = (Node) eventhandle.getSource();
+
+                    Scene scene = new Scene(root, 1080, 720);
+
+                    try {
+                        root.setCenter(loader.load());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    MessagerieController controller = loader.getController();
+                    controller.setChat("", event.getName(), event.getIdOwner(), event.getRessource().getId());
+
+                    Stage primaryStage = (Stage) source.getScene().getWindow();
+
+                    primaryStage.setTitle("TelecomNancy DirectDealing");
+
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
+                }
+                
+            }
+            
+            );
         }
         for (Ressource ressource : todayRessource) {
             Label ressourceLabel = new Label(ressource.getName());

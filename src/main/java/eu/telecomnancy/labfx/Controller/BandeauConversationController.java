@@ -2,10 +2,13 @@ package eu.telecomnancy.labfx.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.ComboBox;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import java.text.SimpleDateFormat;
+import java.io.ByteArrayInputStream;
 import java.sql.*;
 
 import eu.telecomnancy.labfx.Connect;
@@ -27,6 +30,9 @@ public class BandeauConversationController{
     @FXML
     ComboBox viewSelector;
 
+    @FXML
+    ImageView pdpImage;
+
     private MessagerieController controller;
     private String contactFirstName;
     private String contactLastName;
@@ -37,7 +43,7 @@ public class BandeauConversationController{
     public void setElementData(int nom, String contenu, int ressource, java.sql.Timestamp date) throws SQLException{
         this.ressourceId = ressource;
         this.contactId = nom;
-        String query1 = "SELECT First_Name, Last_Name FROM User WHERE User_id = ?;";
+        String query1 = "SELECT First_Name, Last_Name, Photo_Profil FROM User WHERE User_id = ?;";
         String query2 = "SELECT Name FROM Ressource WHERE Ressource_id = ?;";
         Connect connect = new Connect();
         try (Connection connection = connect.getConnection()) {
@@ -48,6 +54,10 @@ public class BandeauConversationController{
                 this.contactFirstName = resultSet.getString("First_Name");
                 this.contactLastName = resultSet.getString("Last_Name");
                 label_nom.setText(this.contactFirstName + " " + this.contactLastName);
+                byte[] imagebyte = resultSet.getBytes("Photo_profil");
+                if (imagebyte != null && imagebyte.length > 0) {
+                    this.pdpImage.setImage(new Image(new ByteArrayInputStream(imagebyte)));
+                }
             }
             preparedStatement = connection.prepareStatement(query2);
             preparedStatement.setInt(1, ressource);

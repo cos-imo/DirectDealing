@@ -13,48 +13,59 @@ import eu.telecomnancy.labfx.Session;
 import eu.telecomnancy.labfx.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MonCompteController {
     @FXML
-    TextField TextFieldFirstName;
+    private TextField TextFieldFirstName;
 
     @FXML
-    TextField TextFieldLastName;
+    private TextField TextFieldLastName;
 
     @FXML
-    TextField TextFieldEmail;
+    private TextField TextFieldEmail;
 
     @FXML
-    Label LabelWallet;
+    private Label LabelWallet;
 
     @FXML
-    Label LabelNote;
+    private Label LabelNote;
 
     @FXML
-    Button BtnLoadImage;
+    private Button BtnLoadImage;
 
     @FXML
-    ImageView PhotoProfil;
+    private ImageView PhotoProfil;
 
     @FXML
-    PasswordField TextFieldPassword;
+    private PasswordField TextFieldPassword;
 
     @FXML
-    PasswordField TextFieldConfirmPassword;
+    private PasswordField TextFieldConfirmPassword;
 
     @FXML
-    Button BtnChangePassword;
+    private Button BtnChangePassword;
+
+    @FXML
+    private Label LabelError;
 
     private int user_id;
 
-    public void initialize() throws SQLException{
+    public void initialize() throws SQLException {
         User currentUser = Session.getInstance().getCurrentUser();
         this.user_id = currentUser.getId();
         Connect connect = new Connect();
@@ -84,6 +95,7 @@ public class MonCompteController {
 
     @FXML
     private void setFirstName(ActionEvent event) {
+        resetErrorLabel();
         String firstName = TextFieldFirstName.getText();
         if (firstName.length() > 0) {
             try {
@@ -98,7 +110,8 @@ public class MonCompteController {
                     connection.commit();
                     connection.close();
                     Session.getInstance().setCurrentUser(User.newUserFromId(user_id));
-                    LoadPage.loadPage("MonCompte", event,getClass());
+                    setErrorLabel("Prénom changé avec succès.");
+                    cleanLabel();
                 }
             }
             catch (Exception e) {
@@ -106,12 +119,14 @@ public class MonCompteController {
             }
         }
         else {
-            LoadPage.loadPage("MonCompte", event,getClass());
+            setErrorLabel("Veuillez rentrer un prénom valide.");
+            cleanLabel();
         }
     }
 
     @FXML
     private void setLastName(ActionEvent event) {
+        resetErrorLabel();
         String lastName = TextFieldLastName.getText();
         if (lastName.length() > 0) {
             try {
@@ -126,7 +141,8 @@ public class MonCompteController {
                     connection.commit();
                     connection.close();
                     Session.getInstance().setCurrentUser(User.newUserFromId(user_id));
-                    LoadPage.loadPage("MonCompte", event,getClass());
+                    setErrorLabel("Nom changé avec succès.");
+                    cleanLabel();
                 }
             }
             catch (Exception e) {
@@ -134,12 +150,14 @@ public class MonCompteController {
             }
         }
         else {
-            LoadPage.loadPage("MonCompte", event,getClass());
+            setErrorLabel("Veuillez rentrer un nom valide.");
+            cleanLabel();
         }
     }
 
     @FXML
     private void setEmail(ActionEvent event) {
+        resetErrorLabel();
         String email = TextFieldEmail.getText();
         try {
             Connect connect = new Connect();
@@ -152,7 +170,8 @@ public class MonCompteController {
                     pstmt.close();
                     connection.commit();
                     connection.close();
-                    LoadPage.loadPage("MonCompte", event,getClass());
+                    setErrorLabel("Erreur lors du changement d'adresse mail.");
+                    cleanLabel();
                 }
                 else {
                     if (isEmailValid(email)) {
@@ -165,14 +184,16 @@ public class MonCompteController {
                             connection.commit();
                             connection.close();
                             Session.getInstance().setCurrentUser(User.newUserFromId(user_id));
-                            LoadPage.loadPage("MonCompte", event,getClass());
+                            setErrorLabel("Adresse mail changée avec succès.");
+                            cleanLabel();
                         }
                     }
                     else {
                         pstmt.close();
                         connection.commit();
                         connection.close();
-                        LoadPage.loadPage("MonCompte", event,getClass());
+                        setErrorLabel("Veuillez rentrer une adresse mail valide.");
+                        cleanLabel();
                     }
                 }
 
@@ -219,52 +240,82 @@ public class MonCompteController {
 
     @FXML
     private void setChangePassword(ActionEvent event) {
-        String password = TextFieldPassword.getText();
-        String passwordConfirm = TextFieldConfirmPassword.getText();
-        if (password.equals(passwordConfirm)){
-            String query = "SELECT Password FROM User WHERE User_id = ?";
-            try {
-                Connect connect = new Connect();
-                Connection connection = connect.getConnection();
-                try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-                    pstmt.setInt(1, user_id);
-                    ResultSet rs = pstmt.executeQuery();
-                    System.out.println(rs);
-                    if (!rs.next()) {
-                        pstmt.close();
-                        connection.commit();
-                        connection.close();
-                        LoadPage.loadPage("MonCompte", event,getClass());
-                    }
-                    else {
-                        if (!rs.getString("Password").equals(User.getHashedPassword(password))) {
-                            String stmt = "UPDATE User SET Password = ? WHERE User_id = ?";
-                            try(PreparedStatement pstmt2 = connection.prepareStatement(stmt)) {
-                                pstmt2.setString(1, User.getHashedPassword(password));
-                                pstmt2.setInt(2, user_id);
-                                pstmt2.executeUpdate();
-                                pstmt2.close();
-                                connection.commit();
-                                connection.close();
-                                Session.getInstance().setCurrentUser(User.newUserFromId(user_id));
-                                LoadPage.loadPage("MonCompte", event,getClass());
-                            }
-                        }
-                        else {
+        resetErrorLabel();
+        if (TextFieldPassword.getText().equals("") || TextFieldConfirmPassword.getText().equals("")) {
+            setErrorLabel("Veuillez rentrer un mot de passe.");
+            cleanLabel();
+        }
+        else {
+            String password = TextFieldPassword.getText();
+            String passwordConfirm = TextFieldConfirmPassword.getText();
+            if (password.equals(passwordConfirm)){
+                String query = "SELECT Password FROM User WHERE User_id = ?";
+                try {
+                    Connect connect = new Connect();
+                    Connection connection = connect.getConnection();
+                    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+                        pstmt.setInt(1, user_id);
+                        ResultSet rs = pstmt.executeQuery();
+                        if (!rs.next()) {
                             pstmt.close();
                             connection.commit();
                             connection.close();
-                            LoadPage.loadPage("MonCompte", event,getClass());
+                            setErrorLabel("Erreur lors du changement de mot de passe.");
+                            cleanLabel();
+                        }
+                        else {
+                            if (!rs.getString("Password").equals(User.getHashedPassword(password))) {
+                                String stmt = "UPDATE User SET Password = ? WHERE User_id = ?";
+                                try(PreparedStatement pstmt2 = connection.prepareStatement(stmt)) {
+                                    pstmt2.setString(1, User.getHashedPassword(password));
+                                    pstmt2.setInt(2, user_id);
+                                    pstmt2.executeUpdate();
+                                    pstmt2.close();
+                                    connection.commit();
+                                    connection.close();
+                                    Session.getInstance().setCurrentUser(User.newUserFromId(user_id));
+                                    setErrorLabel("Mot de passe changé avec succès.");
+                                    cleanLabel();
+                                }
+                            }
+                            else {
+                                pstmt.close();
+                                connection.commit();
+                                connection.close();
+                                
+                            }
                         }
                     }
                 }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            else {
+                setErrorLabel("Les mots de passe ne correspondent pas.");
+                cleanLabel();
             }
         }
-        else {
-            LoadPage.loadPage("MonCompte", event,getClass());
+    }
+
+    private void resetErrorLabel() {
+        LabelError.setText("");
+    }
+
+    private void setErrorLabel(String error) {
+        LabelError.setText(error);
+    }
+
+    private void cleanLabel() {
+        TextFieldPassword.setText("");
+        TextFieldConfirmPassword.setText("");
+        TextFieldFirstName.setText(Session.getInstance().getCurrentUser().getPrenom());
+        TextFieldLastName.setText(Session.getInstance().getCurrentUser().getNom());
+        TextFieldEmail.setText(Session.getInstance().getCurrentUser().getEmail());
+        LabelWallet.setText(String.valueOf(Session.getInstance().getCurrentUser().getWallet().getFlorain()));
+        LabelNote.setText(String.valueOf(Session.getInstance().getCurrentUser().getNote()));
+        if (Session.getInstance().getCurrentUser().getPdp() != null) {
+            PhotoProfil.setImage(Session.getInstance().getCurrentUser().getPdp());
         }
     }
 }

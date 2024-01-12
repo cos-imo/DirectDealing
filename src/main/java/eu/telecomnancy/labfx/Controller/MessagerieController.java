@@ -45,9 +45,6 @@ public class MessagerieController {
     private Label RessourceName;
 
     @FXML
-    private Label Label_desc;
-
-    @FXML
     private Label label_desc;
 
     @FXML
@@ -90,8 +87,6 @@ public class MessagerieController {
     private String nomRessource;
     private int correspondantActif;
     private int RessourceActif;
-    private int ressource_id;
-    private String desc;
     private String cout;
     private int owner_id;
     private Image image;

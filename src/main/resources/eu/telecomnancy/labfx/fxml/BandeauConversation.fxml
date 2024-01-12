@@ -15,7 +15,7 @@
         <children>
             <HBox prefHeight="104.0" prefWidth="584.0">
                 <children>
-                <ImageView fitHeight="105.0" fitWidth="148.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="pdpImage" fitHeight="105.0" fitWidth="148.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                             <Image fx:id="image_objet" url="@../images/account.png" />
                         </image>

@@ -39,7 +39,7 @@
                            <VBox.margin>
                               <Insets bottom="30.0" />
                            </VBox.margin></Button>
-                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="537.0">
+                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="134.0" prefWidth="537.0">
                            <center>
                               <VBox maxHeight="-Infinity" prefHeight="122.0" prefWidth="373.0" BorderPane.alignment="CENTER">
                                  <children>
@@ -52,8 +52,8 @@
                                     <TextField fx:id="TextFieldEmail" onAction="#setEmail" prefHeight="26.0" prefWidth="90.0" />
                                     <ButtonBar prefHeight="40.0" prefWidth="396.0">
                                       <buttons>
-                                          <PasswordField fx:id="TextFieldPassword" />
-                                          <PasswordField fx:id="TextFieldConfirmPassword" />
+                                          <PasswordField fx:id="TextFieldPassword" onAction="#setChangePassword" />
+                                          <PasswordField fx:id="TextFieldConfirmPassword" onAction="#setChangePassword" />
                                         <Button fx:id="BtnChangePassword" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#setChangePassword" prefHeight="26.0" prefWidth="80.0" text="Changer de mot de passe" />
                                       </buttons>
                                     </ButtonBar>
@@ -61,18 +61,15 @@
                               </VBox>
                            </center>
                         </BorderPane>
+                        <Label fx:id="LabelError" textAlignment="CENTER" textFill="#ff2b00" />
                         <Label fx:id="LabelWallet" alignment="CENTER" prefHeight="30.0" prefWidth="176.0" text="Label">
                            <graphic>
-                           <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@../images/coin.png" />
-                              </image>
-                           </ImageView>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/coin.png" />
+                                 </image>
+                              </ImageView>
                            </graphic>
-                           <style>
-                              -fx-background-color: transparent;
-                              -fx-border-color: transparent;
-                           </style>
                         </Label>
                         <Label fx:id="LabelNote" alignment="CENTER" prefHeight="30.0" prefWidth="176.0" text="Label" />
                      </children>
