@@ -116,15 +116,19 @@ public class CreationController {
                 }
                 else{
                     if (!isPasswordValid(password)){
-                        errorLabel.setText("Le mot de passe ne vérifie pas les conditions");
+                        setErrorLabel("Le mot de passe ne vérifie pas les conditions");
+                        cleanPasswordLabel();
                     } else
-                        errorLabel.setText("Les mots de passe ne correspondent pas.");
+                        setErrorLabel("Les mots de passe ne correspondent pas.");
+                        cleanPasswordLabel();
                     }
                 } else {
                     if (!isEmailValid(email)){
-                        errorLabel.setText("L'adresse mail ne vérifie pas les conditions");
+                        setErrorLabel("L'adresse mail ne vérifie pas les conditions");
+                        cleanEmailLabel();
                     } else
-                    errorLabel.setText("Les adresses mail ne correspondent pas.");
+                        setErrorLabel("Les adresses mail ne correspondent pas.");
+                        cleanEmailLabel();
                 }
             }
             else{
@@ -166,4 +170,20 @@ public class CreationController {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    
+    private void setErrorLabel(String error) {
+        errorLabel.setText(error);
+    }
+
+    private void cleanEmailLabel() {
+        emailField.setText("");
+        emailConfirmField.setText("");
+    }
+
+    private void cleanPasswordLabel() {
+        mdpField.setText("");
+        mdpConfirmField.setText("");
+    }
+
+
 }

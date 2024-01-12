@@ -79,6 +79,10 @@ public class ConnexionController {
             primaryStage.show();
 
         }
+        else{
+            setErrorLabel("Email ou mot de passe incorrect");
+            cleanLabel();
+        }
     }
     private boolean infosExist(String email, String password){
         boolean res = false;
@@ -108,5 +112,14 @@ public class ConnexionController {
             e.printStackTrace();
         }
         return res;   
+    }
+
+    private void setErrorLabel(String error) {
+        errorLabel.setText(error);
+    }
+
+    private void cleanLabel() {
+        emailField.setText("");
+        mdpField.setText("");
     }
 }
