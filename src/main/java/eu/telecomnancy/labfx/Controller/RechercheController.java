@@ -65,7 +65,6 @@ public class RechercheController {
             e.printStackTrace();
         }
     }
-
     private boolean isDisponible(int ressource_id) throws SQLException {
         Connect connect = new Connect();
         try (Connection connection = connect.getConnection()) {

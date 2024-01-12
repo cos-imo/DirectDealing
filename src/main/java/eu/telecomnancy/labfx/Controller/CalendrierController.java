@@ -7,7 +7,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -17,9 +16,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
@@ -29,10 +25,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-
 //DateTime joda Time
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
@@ -63,82 +56,19 @@ public class CalendrierController {
     private Label leftLabel;
     @FXML
     private Label rightLabel;
-    @FXML
-    private Label viewLabel;
 
     @FXML
     private Integer weekNumber;
-    @FXML
-    private Button debugButton;
-
-    @FXML
-    private ComboBox<String> leftPicker;
-    @FXML
-    private ComboBox<Integer> rightPicker;
-    @FXML
-    private ComboBox<String> viewSelector;
-
     @FXML
     RowConstraints ligneContrainte;
 
     private Calendrier calendrier;
     private DateTime targetDate;
 
-    @FXML
-    private void debugButton(ActionEvent event) {
-        System.err.println("currentYearMonth.." + targetDate.getMonthOfYear());
-        
-        System.err.println("weekNumber........" + targetDate.getWeekOfWeekyear());
-        System.err.println("TODAY............." + targetDate);
-        System.err.println("viewSelector......" + viewSelector.getValue());
-        System.err.println("viewLabel........." + viewLabel.getText());
-        System.err.println("leftPicker........" + leftPicker.getValue());
-        System.err.println("leftLabel........." + leftLabel.getText());
-        System.err.println("rightPicker......." + rightPicker.getValue());
-        System.err.println("rightLabel........" + rightLabel.getText());
-
-
-    }
-
-    private void debug() {
-        System.err.println("currentYearMonth.." + targetDate.getMonthOfYear());
-        System.err.println("weekNumber........" + targetDate.getWeekOfWeekyear());
-        System.err.println("TODAY............." + targetDate);
-        System.err.println("viewSelector......" + viewSelector.getValue());
-        System.err.println("viewLabel........." + viewLabel.getText());
-        System.err.println("leftPicker........" + leftPicker.getValue());
-        System.err.println("leftLabel........." + leftLabel.getText());
-        System.err.println("rightPicker......." + rightPicker.getValue());
-        System.err.println("rightLabel........" + rightLabel.getText());
-    }
-
-
-    @FXML
-    private void handleViewSelector(ActionEvent event) throws SQLException {
-        String selectedView = viewSelector.getValue();
-        if ("Mois".equals(selectedView)) {
-            calendrier.setModeAffichage(ModeAffichage.Mois);
-        } else if (selectedView.equals("Semaine")) {
-            calendrier.setModeAffichage(ModeAffichage.Semaine);
-        }
-        viewLabel.setText(selectedView);
-        viewSelector.setValue(selectedView);
-        initializeBis();
-        debug();
-    }
-
-    @FXML
-    private void showViewSelector() {
-        viewSelector.show();
-    }
-
     public void initialize() throws SQLException {
         targetDate = DateTime.now();
-        viewLabel.setText("Mois");
-        viewSelector.getItems().addAll("Mois", "Semaine");
         weekNumber = targetDate.getWeekOfWeekyear();
         // weeklyYear = TODAY.getYear();
-        viewSelector.setValue("Mois");
         initializeBis();
     }    
     public void initializeBis() throws SQLException {
@@ -149,8 +79,13 @@ public class CalendrierController {
         else {
             this.calendrier = new Calendrier(Session.getInstance().getCurrentUser(), targetDate, ModeAffichage.Mois); //Dedans on a toutes les informations à afficher
         }
-        initializeLeftPicker();
-        initializeRightPicker();
+        int currentYearMonth = targetDate.getMonthOfYear();
+        ObservableList<String> months = FXCollections.observableArrayList(
+            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        );
+        leftLabel.setText(months.get(currentYearMonth - 1));
+        rightLabel.setText(""+targetDate.getYear());
         fillCalendar();
     }
 
@@ -181,14 +116,21 @@ public class CalendrierController {
         DayOfWeek[] days = DayOfWeek.values();
         for (int i = 0; i < days.length; i++) {
             String dayDisplayName = days[i].getDisplayName(TextStyle.FULL, Locale.FRENCH);
-            Label lblDay = new Label(dayDisplayName.substring(0, 1).toUpperCase() + dayDisplayName.substring(1)); // Capitalize the first letter
+            Label lblDay = null;
+            if (calendrier.getModeAffichage() == ModeAffichage.Semaine){
+                lblDay = new Label(dayDisplayName.substring(0, 1).toUpperCase() + dayDisplayName.substring(1) +" "+calendarStart.getDayOfMonth()); // Capitalize the first letter
+            } else if (calendrier.getModeAffichage() == ModeAffichage.Mois){
+                lblDay = new Label(dayDisplayName.substring(0, 1).toUpperCase() + dayDisplayName.substring(1)); // Capitalize the first letter
+            }
             lblDay.setAlignment(Pos.CENTER); // Centrer le texte dans le Label
             lblDay.setMaxWidth(Double.MAX_VALUE); // Permettre au Label de s'étendre à la largeur maximale
             lblDay.setStyle("-fx-background-color: grey; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5;-fx-pref-height:40px;");
             calendarGrid.add(lblDay, i, 0); // Ajoutez au GridPane
             GridPane.setHgrow(lblDay, Priority.ALWAYS); // Permettre au Label de croître horizontalement
             GridPane.setFillWidth(lblDay, true); // Le Label occupe toute la largeur de la cellule
+            calendarStart = calendarStart.plusDays(1);
         }
+        calendarStart = calendarStart.minusDays(7);
     
         while (calendarStart.isBefore(calendarEnd)) {
             for (int j = 0; j < 7; j++) { // Weekday columns
@@ -228,8 +170,6 @@ public class CalendrierController {
         dayBox.setOnMouseClicked((event) -> {
         targetDate = calendarStart;
         calendrier.setModeAffichage(ModeAffichage.Semaine);
-        viewLabel.setText("Semaine");
-        viewSelector.setValue("Semaine");
         try {
             initializeBis();
         } catch (SQLException e) {
@@ -297,8 +237,6 @@ public class CalendrierController {
         dayBox.setOnMouseClicked((event) -> {
         targetDate = calendarStart;
         calendrier.setModeAffichage(ModeAffichage.Mois);
-        viewLabel.setText("Mois");
-        viewSelector.setValue("Mois");
         try {
             initializeBis();
         } catch (SQLException e) {
@@ -368,6 +306,9 @@ public class CalendrierController {
         } else {
             dayBox.setStyle(dayBox.getStyle() + "-fx-background-color: white;");
         }
+        // System.out.println("heure regardée : "+ calendarStart);
+        // System.out.println("heure debut interval : "+ calendrier.getBetweenDate().getStart());
+        // System.out.println("heure fin interval : "+ calendrier.getBetweenDate().getEnd());
         if(!calendrier.getBetweenDate().contains(calendarStart)) {
             dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
         }
@@ -421,55 +362,6 @@ public class CalendrierController {
         return newEvent;
     }
 
-    private void initializeLeftPicker() {
-        int currentYearMonth = targetDate.getMonthOfYear();
-        ObservableList<String> months = FXCollections.observableArrayList(
-            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-        );
-
-        ObservableList<String> weeks = FXCollections.observableArrayList();
-        for (int i = 1; i <= 52; i++) {
-            String weekNumber = "Semaine " + String.valueOf(i);
-            weeks.add(weekNumber);
-        }
-
-        leftPicker.getItems().clear(); // Nettoyer les anciennes données avant de remplir
-
-        if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
-            leftLabel.setText(months.get(currentYearMonth - 1));
-            leftPicker.setItems(months);
-        } else if (calendrier.getModeAffichage() == ModeAffichage.Semaine) {
-            leftLabel.setText("Semaine " + targetDate.getWeekOfWeekyear());
-            leftPicker.setItems(weeks);
-        } else if (viewSelector.getValue() == "Jour") {
-            leftLabel.setText("Jour");
-        }
-        
-        leftPicker.setVisible(false); // Le ComboBox est initialement caché
-    }
-
-    private void initializeRightPicker() {
-        int currentYear = targetDate.getYear();
-        rightPicker.getItems().clear(); // Nettoyer les anciennes données avant de remplir
-        for (int year = Math.max(currentYear-5,2024); year <= currentYear + 5; year++) {
-            rightPicker.getItems().add(year);
-        }
-        // rightPicker.setVisible(false);
-        rightLabel.setText(""+currentYear);
-        rightPicker.setValue(currentYear); // Sélectionnez l'année actuelle par défaut
-    }
-
-    @FXML //Montrer le picker gauche lors du clic sur le label
-    private void leftLabelAction(MouseEvent event) {
-        leftPicker.show(); // Affiche le ComboBox lors du clic sur le label
-    }
-
-    @FXML //Montrer le picker droit lors du clic sur le label
-    private void rightLabelAction() {
-        rightPicker.show(); // Montrer le ComboBox lorsque l'utilisateur clique sur le label
-    }
-
     @FXML
     private void previousButton() throws SQLException {
         if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
@@ -499,42 +391,13 @@ public class CalendrierController {
 
     @FXML
     private void nextButton() throws SQLException {
-        if (viewSelector.getValue() == "Mois") {
+        if (calendrier.getModeAffichage()==ModeAffichage.Mois) {
             targetDate = targetDate.plusMonths(1);
-        } else if (viewSelector.getValue() == "Semaine") {
+        } else if (calendrier.getModeAffichage()==ModeAffichage.Semaine) {
             targetDate = targetDate.plusWeeks(1);
-        } else if (viewLabel.getText() == "Jour") {
+        } else if (calendrier.getModeAffichage()==ModeAffichage.Jour) {
             // Pas de vue jour pour le moment
         }
         initializeBis();
     }     
-    
-    @FXML
-    private void handleLeftPicker(ActionEvent event) throws SQLException {
-        String selectedMonth = leftPicker.getValue();
-        
-        if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
-            int actualweek = targetDate.getWeekOfWeekyear();
-            int targetweek = leftPicker.getItems().indexOf(selectedMonth)+1;
-            targetDate = targetDate.plusWeeks(targetweek - actualweek);
-            initializeBis();
-
-        } else if (calendrier.getModeAffichage() == ModeAffichage.Semaine) {
-            targetDate = targetDate.withWeekOfWeekyear(leftPicker.getItems().indexOf(selectedMonth)+1);
-            initializeBis();
-        }
-        leftLabel.setText(selectedMonth);
-        leftPicker.setValue(selectedMonth);
-    }
-
-    @FXML
-    private void handleRightPicker(ActionEvent event) throws SQLException {
-        int selectedYear = rightPicker.getValue();
-        rightLabel.setText(String.valueOf(selectedYear));
-        rightPicker.setValue(selectedYear);
-        if (selectedYear != targetDate.getYear()) {
-            targetDate = targetDate.plusYears(selectedYear-targetDate.getYear());
-            initializeBis();
-        }
-    }
 }
