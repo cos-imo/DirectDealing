@@ -13,11 +13,11 @@ Améliorer l'interface graphique.
 4. Améliorer l'interface graphique
 5. PRENDRE EN COMPTE LES RECURRENCES DANS LA RECHERCHE 
 6. Mdp en password fied <span style="color:red">DONE</span>.
-7. faire une liste des trucs à modifier en premier 
+7. faire une liste des trucs à modifier en premier <span style="color:red">DONE</span>.
 8. Ajouter icone pièces dans mon compte à côté du walltet <span style="color:red">DONE</span>.
 9. Le bouton MesAnnonces du header à mettre dans le même style que les autres boutons  <span style="color:red">DONE</span>.
-10. Lors du changement de taille de la fenêtre calendrier, le comportement n'est pas le même que pour les autres feneêtres
-11. lors de la touche "Entrér" pendant la connexion après le remplissage du mot de passe, si les informations sont bonnes, connecter l'utilisateur
+10. Lors du changement de taille de la fenêtre calendrier, le comportement n'est pas le même que pour les autres fenêtres 
+11. lors de la touche "Entrér" pendant la connexion après le remplissage du mot de passe, si les informations sont bonnes, connecter l'utilisateur Gabriel
 12. (Facultatif ?) Lier le label "Pas de compte ?" de la page de connexion à la page créer un compte
 13. mettre une icone loupe à côté de la barre de recherche pour une interface plus intuitive
 14. Initialisation affichage messagerie affiche tous les messages qui ont été envoyés au par avant (même des autres utilisateurs intéresés) dans la fenêtre de chat
