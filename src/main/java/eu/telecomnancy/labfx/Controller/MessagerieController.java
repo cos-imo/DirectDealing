@@ -20,12 +20,15 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.concurrent.RejectedExecutionHandler;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Duration;
 import org.joda.time.Interval;
 
 import eu.telecomnancy.labfx.Connect;
+import eu.telecomnancy.labfx.Recurrence;
 import eu.telecomnancy.labfx.Session;
 
 public class MessagerieController {
@@ -174,9 +177,10 @@ public class MessagerieController {
                 return;
             }
             else {
+                Recurrence rec = Recurrence.Non;
                 Connect connect = new Connect();
                 try (Connection connection = connect.getConnection()){
-                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT DateDebut, DateFin,type,Name,Owner_id,Prix FROM Ressource WHERE Ressource_id = ?");
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT DateDebut, DateFin,type,Name,Owner_id,Prix,Recurrence FROM Ressource WHERE Ressource_id = ?");
                     preparedStatement.setInt(1, RessourceActif);
                     ResultSet resultSet = preparedStatement.executeQuery();
                     if (resultSet.next()) {
@@ -186,12 +190,17 @@ public class MessagerieController {
                         nomRessource = resultSet.getString("Name");
                         owner_id = resultSet.getInt("Owner_id");
                         cout = resultSet.getString("Prix");
+                        rec = Recurrence.getRecurrence(resultSet.getInt("Recurrence"));
                     }
                     resultSet.close();
                     preparedStatement.close();
                     connection.close();
                 }
-                if (dateDebutTimestamp.before(dateDebutAnnonce) || dateFinTimestamp.after(dateFinAnnonce)) {
+                DateTime newDateDebut = new DateTime(dateDebutTimestamp);
+                DateTime newDateFin = new DateTime(dateFinTimestamp); 
+                Interval intervalNewDates = new Interval(newDateDebut,newDateFin);
+                Interval intervalAnnonce = new Interval(new DateTime(dateDebutAnnonce),new DateTime(dateFinAnnonce));
+                if (!isInOccurence(intervalNewDates, intervalAnnonce,rec)) {
                     System.out.println("Date de début ou de fin en dehors de la période de l'annonce");
                     return;
                 }
@@ -233,6 +242,41 @@ public class MessagerieController {
                 }
             }
         }
+    }
+    private boolean isInOccurence(Interval intervalNewDates, Interval intervalAnnonce, Recurrence rec) {
+        System.out.println("Début intervalle new : "+intervalNewDates.getStart());
+        System.out.println(intervalNewDates.getEnd());
+        System.out.println(intervalAnnonce.getStart());
+        System.out.println("Début intervalle annonce : "+intervalAnnonce.getEnd());
+        DateTime newDateDebut = new DateTime(intervalAnnonce.getStart());
+        DateTime newDateFin = new DateTime(intervalAnnonce.getEnd());
+        Interval newInterval = intervalNewDates;
+        while (newDateDebut.isBefore(intervalNewDates.getEnd())) {
+            if (newInterval.contains(intervalNewDates)) {
+                return true;
+            }
+            switch (rec) {
+                case Non:
+                    return newInterval.contains(intervalNewDates);
+                case Quotidien:
+                    newDateDebut = newDateDebut.plusDays(1);
+                    newDateFin = newDateFin.plusDays(1);
+                    break;
+                case Hebdomadaire:
+                    newDateDebut = newDateDebut.plusMonths(1);
+                    newDateFin = newDateFin.plusMonths(1);
+                    break;
+                case Mensuel:
+                    newDateDebut = newDateDebut.plusMonths(1);
+                    newDateFin = newDateFin.plusMonths(1);
+                    break;
+                default:
+                    break;
+            }
+            newInterval = new Interval(newDateDebut,newDateFin);
+        }
+        return false;
+
     }
 
     private void addElementToMessageList(int sender, String contenu, int ressource, java.sql.Timestamp date) throws SQLException {

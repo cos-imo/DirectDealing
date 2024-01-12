@@ -2,14 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -19,29 +17,16 @@
         <VBox alignment="TOP_CENTER" spacing="10.0">
             <fx:include source="Header.fxml" VBox.vgrow="NEVER" />
             <HBox alignment="CENTER" spacing="10">
-                <Pane HBox.hgrow="ALWAYS" />
-                <Button fx:id="debugButton" onAction="#debugButton" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;" text="Debug">
-                    <tooltip>
-                        <Tooltip text="Debug" />
-                    </tooltip>
-                </Button>
-                <StackPane alignment="CENTER_LEFT">
-                    <Label fx:id="viewLabel" onMouseClicked="#showViewSelector" style="-fx-font-size: 24px;" text="View" />
-                    <ComboBox fx:id="viewSelector" onAction="#handleViewSelector" visible="false" />
-                </StackPane>
-                <Pane HBox.hgrow="ALWAYS" />
                 <Button fx:id="previousButton" onAction="#previousButton" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;" text="⬅">
                     <tooltip>
                         <Tooltip text="previousText" />
                     </tooltip>
                 </Button>
                 <StackPane fx:id="leftLabelStackPane" alignment="CENTER">
-                    <Label fx:id="leftLabel" onMouseClicked="#leftLabelAction" style="-fx-font-size: 24px;" text="leftLabelText" />
-                    <ComboBox fx:id="leftPicker" onAction="#handleLeftPicker" visible="false" />
+                    <Label fx:id="leftLabel" style="-fx-font-size: 24px;" text="leftLabelText" />
                 </StackPane>
                 <StackPane>
-                    <Label fx:id="rightLabel" onMouseClicked="#rightLabelAction" style="-fx-font-size: 24px;" text="rightLabelText" />
-                    <ComboBox fx:id="rightPicker" onAction="#handleRightPicker" visible="false" />
+                    <Label fx:id="rightLabel" style="-fx-font-size: 24px;" text="rightLabelText" />
                 </StackPane>
                 <Button fx:id="currentDateButton" onAction="#currentDate" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;" text="•">
                     <tooltip>
@@ -53,7 +38,6 @@
                         <Tooltip text="rightButtonText" />
                     </tooltip>
                 </Button>
-                <Pane HBox.hgrow="ALWAYS" />
             </HBox>
             <GridPane fx:id="calendarGrid" alignment="CENTER" hgap="2" onSwipeLeft="#previousButton" onSwipeRight="#nextButton" vgap="2" VBox.vgrow="ALWAYS">
                 <padding>
