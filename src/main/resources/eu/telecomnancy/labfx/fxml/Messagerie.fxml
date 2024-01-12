@@ -87,7 +87,14 @@
                                  <Separator prefWidth="200.0" />
                               </children>
                            </VBox>
-                           <VBox fx:id="messagesContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="557.0" prefWidth="667.0" />
+                           <VBox fx:id="messagesContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="557.0" prefWidth="667.0">
+                              <children>
+                                 <VBox alignment="TOP_CENTER">
+                                    <children>
+                                       <Label fx:id="label_desc" text="Label" />
+                                    </children>
+                                 </VBox>
+                              </children></VBox>
                            <HBox prefHeight="100.0" prefWidth="667.0">
                               <children>
                                  <TextField fx:id="messageSaisi" prefHeight="25.0" prefWidth="596.0" promptText="Message" />

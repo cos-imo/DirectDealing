@@ -3,6 +3,7 @@ package eu.telecomnancy.labfx.Controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Region;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -25,6 +26,12 @@ public class MessageEnvoiController {
     private ImageView Imageuserid;
     
     protected void setMessage(String messageContent, java.sql.Timestamp messageHorodatage, int sender){
+        Rectangle clip = new Rectangle(
+            Imageuserid.getFitWidth(), Imageuserid.getFitHeight()
+        );
+        clip.setArcWidth(80);
+        clip.setArcHeight(80);
+        Imageuserid.setClip(clip);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM - HH:mm");
         String heureformatee = dateFormat.format(messageHorodatage);
         messageEnvoiBody.setText(messageContent);

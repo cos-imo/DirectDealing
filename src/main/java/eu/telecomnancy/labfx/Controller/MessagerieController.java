@@ -39,6 +39,9 @@ public class MessagerieController {
     private Label Label_desc;
 
     @FXML
+    private Label label_desc;
+
+    @FXML
     private VBox messagesContainer;
 
     @FXML
@@ -234,7 +237,7 @@ public class MessagerieController {
         int user_id = Session.getInstance().getCurrentUser().getId();
         try (Connection connection = connect.getConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT r.Ressource_id, " +
+                "SELECT r.Desc, r.Ressource_id, " +
                      "CASE WHEN m.Sender_id < m.Receiver_id THEN m.Sender_id ELSE m.Receiver_id END AS user1_id, " +
                      "CASE WHEN m.Sender_id < m.Receiver_id THEN m.Receiver_id ELSE m.Sender_id END AS user2_id, " +
                      "MAX(m.Date) AS last_message_date, " +
@@ -256,6 +259,7 @@ public class MessagerieController {
                 message = resultSet.getString("Contenu");
                 ressource_id = resultSet.getInt("Ressource_id");
                 java.sql.Timestamp heure = resultSet.getTimestamp("last_message_date");
+                label_desc.setText(resultSet.getString("Desc"));
                 addElementToMessageList(sender, message, ressource_id, heure);
                 }
             resultSet.close();
