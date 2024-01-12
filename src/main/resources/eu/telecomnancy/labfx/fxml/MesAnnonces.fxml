@@ -31,15 +31,33 @@
                            <Separator orientation="VERTICAL" prefHeight="200.0" />
                            <VBox prefHeight="40.0" prefWidth="684.0">
                               <children>
-                                 <Label text="Type" />
-                                 <ChoiceBox fx:id="type" prefHeight="24.0" prefWidth="698.0">
-                                    <items>
-                                       <FXCollections fx:factory="observableArrayList">
-                                          <String fx:value="Objet" />
-                                          <String fx:value="Service" />
-                                       </FXCollections>
-                                    </items>
-                                 </ChoiceBox>
+                                 <HBox prefHeight="100.0" prefWidth="200.0">
+                                    <children>
+                                       <Label maxWidth="-Infinity" minWidth="-Infinity" prefWidth="342.0" text="Type" />
+                                       <Label maxWidth="-Infinity" minWidth="-Infinity" prefWidth="342.0" text="Ressource/Event" />
+                                    </children>
+                                 </HBox>
+                                 <HBox prefHeight="100.0" prefWidth="200.0">
+                                    <children>
+                                       <ChoiceBox fx:id="type" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="342.0">
+                                          <items>
+                                             <FXCollections fx:factory="observableArrayList">
+                                                <String fx:value="Service et Objet" />
+                                                <String fx:value="Objet" />
+                                                <String fx:value="Service" />
+                                             </FXCollections>
+                                          </items>
+                                       </ChoiceBox>
+                                       <ChoiceBox fx:id="ressourceevent" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="342.0">
+                                          <items>
+                                             <FXCollections fx:factory="observableArrayList">
+                                                <String fx:value="Ressource" />
+                                                <String fx:value="Event" />
+                                             </FXCollections>
+                                          </items>
+                                       </ChoiceBox>
+                                    </children>
+                                 </HBox>
                               </children>
                            </VBox>
                            <Separator orientation="VERTICAL" prefHeight="200.0" />
@@ -55,7 +73,7 @@
                      </Separator>
                   <HBox maxHeight="-Infinity" minHeight="-Infinity" prefWidth="700.0">
                      <children>
-                        <VBox fx:id="MesAnnoncesContainer" prefHeight="500.0" prefWidth="1080.0" />
+                        <VBox fx:id="MesAnnoncesContainer" prefHeight="500.0" prefWidth="684.0" />
                         <ScrollBar orientation="VERTICAL" />
                      </children>
                         <VBox.margin>

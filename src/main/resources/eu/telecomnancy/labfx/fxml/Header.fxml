@@ -74,14 +74,18 @@
                      -fx-border-color: transparent;
                </style>
                   </Button>
-                  <Button fx:id="btnOpenMesAnnonces" minWidth="-Infinity" mnemonicParsing="false" onAction="#OpenMesAnnonces" style="&#10;               " text="MA">
+                  <Button fx:id="btnOpenMesAnnonces" minWidth="-Infinity" mnemonicParsing="false" onAction="#OpenMesAnnonces" text="Mes Annonces">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/calendar.png" />
+                              <Image url="@../images/annonce.png" />
                            </image>
                         </ImageView>
                      </graphic>
+                     <style>
+                     -fx-background-color: transparent;
+                     -fx-border-color: transparent;
+               </style>
                   </Button>
                   
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
