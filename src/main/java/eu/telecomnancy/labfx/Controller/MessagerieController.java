@@ -1,35 +1,34 @@
 package eu.telecomnancy.labfx.Controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.concurrent.RejectedExecutionHandler;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Duration;
 import org.joda.time.Interval;
 
 import eu.telecomnancy.labfx.Connect;
 import eu.telecomnancy.labfx.Recurrence;
 import eu.telecomnancy.labfx.Session;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 
 public class MessagerieController {
 
@@ -151,12 +150,22 @@ public class MessagerieController {
         selectedFinMinute = minuteFinComboBox.getValue();
     }
 
+    private void afficherPopupErreur(String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+
+    }
+
     @FXML
     private void setBtnReserver(ActionEvent event) throws SQLException{
         System.out.println(DatePickerDebut.getValue());
         System.out.println(DatePickerFin.getValue());
         if (DatePickerDebut.getValue() == null || DatePickerFin.getValue() == null || selectedDebutHour == -1 || selectedDebutMinute == -1 || selectedFinHour == -1 || selectedFinMinute == -1){
             System.out.println("Date invalide");
+            afficherPopupErreur("Dateinvalide");
             return;
         }
         else {
@@ -169,6 +178,7 @@ public class MessagerieController {
             Timestamp dateFinTimestamp = Timestamp.valueOf(dateFin);
             if (dateDebut.isAfter(dateFin)) {
                 System.out.println("Date de début après date de fin");
+                afficherPopupErreur("Date de début après date de fin");
                 return;
             }
             else {
@@ -197,6 +207,7 @@ public class MessagerieController {
                 Interval intervalAnnonce = new Interval(new DateTime(dateDebutAnnonce),new DateTime(dateFinAnnonce));
                 if (!isInOccurence(intervalNewDates, intervalAnnonce,rec)) {
                     System.out.println("Date de début ou de fin en dehors de la période de l'annonce");
+                    afficherPopupErreur("Date de début ou de fin en dehors de la période de l'annonce");
                     return;
                 }
                 else {                    
@@ -229,6 +240,7 @@ public class MessagerieController {
                         preparedStatement.setInt(2, owner_id);
                         preparedStatement.executeUpdate();
                         System.out.println("Réservation effectuée");
+                        afficherPopupErreur("Réservation effectuée");
                         Session.getInstance().getCurrentUser().getWallet().addFlorain(-Integer.parseInt(cout));
                         preparedStatement.close();
                         connection.commit();

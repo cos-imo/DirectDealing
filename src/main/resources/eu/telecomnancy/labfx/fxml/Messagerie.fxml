@@ -75,6 +75,11 @@
                                        <Button fx:id="BtnReserver" alignment="CENTER" mnemonicParsing="false" onAction="#setBtnReserver" prefHeight="25.0" prefWidth="92.0" text="Réserver" />
                                     </children>
                                  </VBox>
+                              </children></VBox>
+                           <HBox prefHeight="100.0" prefWidth="667.0">
+                              <children>
+                                 <TextField fx:id="messageSaisi" onAction="#envoyerMessage" prefHeight="25.0" prefWidth="596.0" promptText="Message" />
+                                 <Button fx:id="boutonEnvoyer" mnemonicParsing="false" onAction="#envoyerMessage" text="Envoyer" />
                               </children>
                            </HBox>
                            <Separator prefWidth="200.0" />

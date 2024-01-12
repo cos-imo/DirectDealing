@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'com.adarshr.test-logger' version '4.0.0'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 repositories {
@@ -40,7 +41,21 @@ dependencies {
     implementation 'joda-time:joda-time:2.12.6'
     implementation 'org.openjfx:javafx-controls:17'
     implementation 'org.openjfx:javafx-fxml:17'
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'ch.qos.logback:logback-classic:1.2.6'
+
 }
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+shadowJar {
+    archiveBaseName.set("labfx")
+    archiveClassifier.set(null)
+    archiveVersion.set(null)
+
+    mergeServiceFiles()
+}
+
 
 test {
     useJUnitPlatform()
@@ -78,3 +93,22 @@ jar {
 
     duplicatesStrategy = 'exclude'
 }
+
+startScripts {
+    dependsOn shadowJar
+}
+
+startShadowScripts {
+    dependsOn shadowJar
+}
+
+
+distZip.dependsOn shadowJar
+distTar.dependsOn shadowJar
+startScripts.dependsOn shadowJar
+startShadowScripts.dependsOn shadowJar
+startShadowScripts.mustRunAfter shadowJar
+
+distZip.dependsOn shadowJar
+distTar.dependsOn shadowJar
+startScripts.dependsOn shadowJar
