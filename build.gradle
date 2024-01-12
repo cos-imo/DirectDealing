@@ -98,17 +98,10 @@ startScripts {
     dependsOn shadowJar
 }
 
-startShadowScripts {
-    dependsOn shadowJar
-}
-
 
 distZip.dependsOn shadowJar
 distTar.dependsOn shadowJar
 startScripts.dependsOn shadowJar
-startShadowScripts.dependsOn shadowJar
-startShadowScripts.mustRunAfter shadowJar
-
 distZip.dependsOn shadowJar
 distTar.dependsOn shadowJar
 startScripts.dependsOn shadowJar
