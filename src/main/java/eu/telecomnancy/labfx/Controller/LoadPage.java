@@ -14,7 +14,7 @@ public final class LoadPage {
     public LoadPage() {}
 
     public static void loadPage(String PageName, ActionEvent event,Class class1){
-    BorderPane root = new BorderPane();
+        BorderPane root = new BorderPane();
         FXMLLoader loader = new FXMLLoader(class1.getResource("/eu/telecomnancy/labfx/fxml/" + PageName + ".fxml"));
 
         Scene scene = new Scene(root, 1080, 720);

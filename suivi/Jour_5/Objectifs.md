@@ -11,3 +11,6 @@ Améliorer l'interface graphique.
 2. Faire la vidéo de présentation
 3. Améliorer le code
 4. Améliorer l'interface graphique
+5. PRENDRE EN COMPTE LES RECURRENCES DANS LA RECHERCHE 
+6. Mdp en password fied
+7. faire une liste des trucs à modifier en premier

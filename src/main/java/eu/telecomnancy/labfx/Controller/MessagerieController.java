@@ -1,16 +1,22 @@
 package eu.telecomnancy.labfx.Controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import eu.telecomnancy.labfx.Connect;
 import eu.telecomnancy.labfx.Session;
@@ -27,7 +33,13 @@ public class MessagerieController {
     private Label contactName;
 
     @FXML
-    private Label eventName;
+    private Label RessourceName;
+
+    @FXML
+    private Label Label_desc;
+
+    @FXML
+    private Label label_desc;
 
     @FXML
     private VBox messagesContainer;
@@ -38,25 +50,185 @@ public class MessagerieController {
     @FXML
     private TextField messageSaisi;
 
+    @FXML
+    private Button BtnReserver;
+
+    @FXML
+    private DatePicker DatePickerDebut;
+
+    @FXML
+    private DatePicker DatePickerFin;
+
+    @FXML
+    private ComboBox<Integer> hourDebutComboBox;
+
+    @FXML
+    private ComboBox<Integer> minuteDebutComboBox;
+
+    @FXML
+    private ComboBox<Integer> hourFinComboBox;
+
+    @FXML
+    private ComboBox<Integer> minuteFinComboBox;
+
+    private int selectedDebutHour = -1;
+    private int selectedDebutMinute = -1;
+    private int selectedFinHour = -1;
+    private int selectedFinMinute = -1;
+
     private boolean isConversationInitialized;
     private String nomCorrespondant;
-    private String nomEvent;
+    private String nomRessource;
     private int correspondantActif;
-    private int eventActif;
+    private int RessourceActif;
+    private int ressource_id;
+    private String desc;
+    private String cout;
+    private int owner_id;
+    private Image image;
+    private Boolean type;
+    private java.sql.Date dateDebutAnnonce;
+    private java.sql.Date dateFinAnnonce;
 
     public void initialize() throws SQLException {
+        for (int i = 0; i < 24; i++) {
+            hourDebutComboBox.getItems().add(i);
+            hourFinComboBox.getItems().add(i);
+        }
+
+        for (int i = 0; i < 12; i++) {
+            minuteDebutComboBox.getItems().add(i*5);
+            minuteFinComboBox.getItems().add(i*5);
+        }
         getMessages();
+        int nb_discussion = messageListContainer.getChildren().size();
+        if (nb_discussion > 0) {
+            Node firstDiscussion = messageListContainer.getChildren().get(0);
+            BandeauConversationController controller = (BandeauConversationController) firstDiscussion.getUserData(); //getUserData() fonctionne grâce à TAG=999999 (dans ce fichier)
+            controller.openConversation();
+        }
     }
 
-    private void addElementToMessageList(int sender, String contenu, int event, java.sql.Timestamp date) throws SQLException {
+    //public void setElementData(String annonceName, String desc, Boolean type, String cout, Image image ,java.sql.Date dateDebut, java.sql.Date dateFin, int ressource_id, int owner_id) throws SQLException{
+    //    this.ressource_id = ressource_id;
+    //    this.nomRessource = annonceName;
+    //    this.desc = desc;
+    //    this.cout = cout;
+    //    this.owner_id = owner_id;
+    //    this.image = image;
+    //    this.dateDebutAnnonce = dateDebut;
+    //    this.dateFinAnnonce = dateFin;
+    //    this.type = type;
+    //    Label_desc.setText(desc);
+    //    RessourceName.setText(annonceName);
+    //    BtnReserver.setDisable(Session.getInstance().getCurrentUser().getId() == owner_id);
+    //    isConversationInitialized = false;
+    //}
+
+    @FXML
+    private void setHourDebutComboBox() {
+        selectedDebutHour = hourDebutComboBox.getValue();
+    }
+
+    @FXML
+    private void setMinuteDebutComboBox() {
+        selectedDebutMinute = minuteDebutComboBox.getValue();
+    }
+
+    @FXML
+    private void setHourFinComboBox() {
+        selectedFinHour = hourFinComboBox.getValue();
+    }
+
+    @FXML
+    private void setMinuteFinComboBox() {
+        selectedFinMinute = minuteFinComboBox.getValue();
+    }
+
+    @FXML
+    private void setBtnReserver(ActionEvent event) throws SQLException{
+        System.out.println(DatePickerDebut);
+        System.out.println(DatePickerFin);
+        if (DatePickerDebut == null || DatePickerFin == null || selectedDebutHour == -1 || selectedDebutMinute == -1 || selectedFinHour == -1 || selectedFinMinute == -1){
+            System.out.println("Date invalide");
+            return;
+        }
+        else {
+            LocalDate dateDebut = DatePickerDebut.getValue();
+            LocalDate dateFin = DatePickerFin.getValue();
+            if (dateDebut.isAfter(dateFin)) {
+                System.out.println("Date de début après date de fin");
+                return;
+            }
+            else {
+                if (dateDebut.isBefore(dateDebutAnnonce.toLocalDate()) || dateFin.isAfter(dateFinAnnonce.toLocalDate())) {
+                    System.out.println("Date de début ou de fin en dehors de la période de l'annonce");
+                    return;
+                }
+                else {
+
+                    
+                    Connect connect = new Connect();
+                    try (Connection connection = connect.getConnection()) {
+                        String query = "INSERT INTO Event (Ressource_id, isObjet, Name, preteur_id, acheteur_id, DateDebut, DateFin, Prix) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+                        PreparedStatement preparedStatement = connection.prepareStatement(query);
+                        preparedStatement.setInt(1, ressource_id);
+                        preparedStatement.setBoolean(2, type);
+                        preparedStatement.setString(3, nomRessource);
+                        preparedStatement.setInt(4, owner_id);
+                        preparedStatement.setInt(5, Session.getInstance().getCurrentUser().getId());
+                        int minuteDebutI = this.minuteDebutComboBox.getValue();
+                        int minuteFinI = this.minuteFinComboBox.getValue();
+                        int hourFinI = this.hourFinComboBox.getValue();
+                        int hourDebutI = this.hourDebutComboBox.getValue();
+
+
+                        // Créer les LocalDateTime
+                        LocalDateTime dateTimeDebut = LocalDateTime.of(DatePickerDebut.getValue().getYear(), DatePickerDebut.getValue().getMonth(), DatePickerDebut.getValue().getDayOfMonth(), hourDebutI, minuteDebutI);
+                        LocalDateTime dateTimeFin = LocalDateTime.of(DatePickerFin.getValue().getYear(), DatePickerFin.getValue().getMonth(), DatePickerFin.getValue().getDayOfMonth(), hourFinI, minuteFinI);
+
+
+
+                        // Convertir les LocalDateTime en java.sql.Date mais avec les secondes
+                        java.sql.Timestamp sqlTimestampDebut = java.sql.Timestamp.valueOf(dateTimeDebut);
+                        java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateTimeFin);
+                        // System.out.println("Date début (sqlTimestamp): " + sqlTimestampDebut);
+                        // System.out.println("Date fin (sqlTimestamp): " + sqlTimestampFin);
+                        preparedStatement.setTimestamp(6, sqlTimestampDebut);
+                        preparedStatement.setTimestamp(7, sqlTimestampFin);
+
+                        preparedStatement.setInt(8, Integer.parseInt(cout));
+                        preparedStatement.executeUpdate();
+                        query = "UPDATE User SET Wallet = Wallet - ? WHERE User_id = ?;";
+                        preparedStatement = connection.prepareStatement(query);
+                        preparedStatement.setInt(1, Integer.parseInt(cout));
+                        preparedStatement.setInt(2, Session.getInstance().getCurrentUser().getId());
+                        preparedStatement.executeUpdate();
+                        query = "UPDATE User SET Wallet = Wallet + ? WHERE User_id = ?;";
+                        preparedStatement = connection.prepareStatement(query);
+                        preparedStatement.setInt(1, Integer.parseInt(cout));
+                        preparedStatement.setInt(2, owner_id);
+                        preparedStatement.executeUpdate();
+                        System.out.println("Réservation effectuée");
+                        Session.getInstance().getCurrentUser().getWallet().addFlorain(-Integer.parseInt(cout));
+                        preparedStatement.close();
+                        connection.commit();
+                        connection.close();
+                    }
+                }
+            }
+        }
+    }
+
+    private void addElementToMessageList(int sender, String contenu, int ressource, java.sql.Timestamp date) throws SQLException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/eu/telecomnancy/labfx/fxml/BandeauConversation.fxml"));
             Node content = loader.load();
 
             BandeauConversationController objectController = loader.getController();
             objectController.setParent(this);
-            objectController.setElementData(sender, contenu, event, date);
-
+            objectController.setElementData(sender, contenu, ressource, date);
+            content.setUserData(objectController); //setUserData() fonctionne grâce à TAG=999999 (dans ce fichier)
             messageListContainer.getChildren().addAll(content);
 
             // Mettre à jour la position de la barre de défilement
@@ -71,29 +243,30 @@ public class MessagerieController {
         int user_id = Session.getInstance().getCurrentUser().getId();
         try (Connection connection = connect.getConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT e.Event_id, " +
+                "SELECT r.Desc, r.Ressource_id, " +
                      "CASE WHEN m.Sender_id < m.Receiver_id THEN m.Sender_id ELSE m.Receiver_id END AS user1_id, " +
                      "CASE WHEN m.Sender_id < m.Receiver_id THEN m.Receiver_id ELSE m.Sender_id END AS user2_id, " +
                      "MAX(m.Date) AS last_message_date, " +
                      "m.Contenu " +
                      "FROM Message m " +
-                     "JOIN Event e ON m.Event_lie_id = e.Event_id " +
+                     "JOIN Ressource r ON m.Ressource_liee_id = r.Ressource_id " +
                      "WHERE m.Sender_id = ? OR m.Receiver_id = ? " +
-                     "GROUP BY e.Event_id, user1_id, user2_id " +
+                     "GROUP BY r.Ressource_id, user1_id, user2_id " +
                      "ORDER BY m.Date DESC"
                 );
             preparedStatement.setInt(1, user_id);
             preparedStatement.setInt(2, user_id);
             ResultSet resultSet = preparedStatement.executeQuery();
             int sender = 0;
-            int event_id = 0;
+            int ressource_id = 0;
             String message = "";
             while (resultSet.next()) {
                 sender = resultSet.getInt("user2_id");
                 message = resultSet.getString("Contenu");
-                event_id = resultSet.getInt("Event_id");
+                ressource_id = resultSet.getInt("Ressource_id");
                 java.sql.Timestamp heure = resultSet.getTimestamp("last_message_date");
-                addElementToMessageList(sender, message, event_id, heure);
+                label_desc.setText(resultSet.getString("Desc"));
+                addElementToMessageList(sender, message, ressource_id, heure);
                 }
             resultSet.close();
         } catch (SQLException e) {
@@ -102,15 +275,17 @@ public class MessagerieController {
     }
 
     @FXML
-    protected void setChat(String nomCorrespondant, String nomEvent, int contactId, int eventId){
+    protected void setChat(String nomCorrespondant, String nomRessource, int contactId, int ressource_id){
         this.nomCorrespondant = nomCorrespondant;
-        this.nomEvent = nomEvent;
+        System.out.println(nomRessource);
+        this.nomRessource = nomRessource;
+        System.out.println(this.nomRessource);
         this.correspondantActif = contactId;
-        this.eventActif = eventId;
+        this.RessourceActif = ressource_id;
         messagesContainer.getChildren().clear();
 
         contactName.setText(nomCorrespondant);
-        eventName.setText(nomEvent);
+        RessourceName.setText(this.nomRessource);
 
         if (!isConversationInitialized){
             initConversation();
@@ -123,11 +298,11 @@ public class MessagerieController {
                 """
                 SELECT *
                 FROM Message
-                WHERE Event_lie_id = ?
+                WHERE Ressource_liee_id = ?
                 AND (Sender_id = ? OR Receiver_id = ?);
                 """
             );
-            preparedStatement.setInt(1, eventId);
+            preparedStatement.setInt(1, ressource_id);
             preparedStatement.setInt(2, contactId);
             preparedStatement.setInt(3, contactId);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -158,9 +333,9 @@ public class MessagerieController {
 
         Connect connect = new Connect();
         try (Connection connection = connect.getConnection()) {
-            String sql = "INSERT INTO Message (Event_lie_id, Sender_id, Receiver_id, Date, Contenu) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Message (Ressource_liee_id, Sender_id, Receiver_id, Date, Contenu) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, this.eventActif);
+            preparedStatement.setInt(1, this.RessourceActif);
             preparedStatement.setInt(2, user_id);
             preparedStatement.setInt(3, this.correspondantActif);
             preparedStatement.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
@@ -172,7 +347,7 @@ public class MessagerieController {
             connection.commit();
             connection.close();
             messageSaisi.clear();
-            this.setChat(this.nomCorrespondant, this.nomEvent, this.correspondantActif, this.eventActif);
+            this.setChat(this.nomCorrespondant, this.nomRessource, this.correspondantActif, this.RessourceActif);
             // Retourner vrai si une ligne a été insérée, faux sinon
             return rowsAffected > 0;
             }

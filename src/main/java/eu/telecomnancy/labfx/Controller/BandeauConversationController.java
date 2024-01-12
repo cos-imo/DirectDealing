@@ -31,14 +31,14 @@ public class BandeauConversationController{
     private String contactFirstName;
     private String contactLastName;
     private int contactId;
-    private int eventId;
-    private String eventName;
+    private int ressourceId;
+    private String ressourceName;
 
-    public void setElementData(int nom, String contenu, int event, java.sql.Timestamp date) throws SQLException{
-        this.eventId = event;
+    public void setElementData(int nom, String contenu, int ressource, java.sql.Timestamp date) throws SQLException{
+        this.ressourceId = ressource;
         this.contactId = nom;
         String query1 = "SELECT First_Name, Last_Name FROM User WHERE User_id = ?;";
-        String query2 = "SELECT Name FROM Event WHERE Event_id = ?;";
+        String query2 = "SELECT Name FROM Ressource WHERE Ressource_id = ?;";
         Connect connect = new Connect();
         try (Connection connection = connect.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query1);
@@ -50,11 +50,11 @@ public class BandeauConversationController{
                 label_nom.setText(this.contactFirstName + " " + this.contactLastName);
             }
             preparedStatement = connection.prepareStatement(query2);
-            preparedStatement.setInt(1, event);
+            preparedStatement.setInt(1, ressource);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                this.eventName = resultSet.getString("Name");
-                label_event.setText(this.eventName);
+                this.ressourceName = resultSet.getString("Name");
+                label_event.setText(this.ressourceName);
             }
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM - HH:mm");
@@ -68,7 +68,7 @@ public class BandeauConversationController{
     }
 
     @FXML
-    private void openConversation(){
-        this.controller.setChat(this.contactFirstName + " " + this.contactLastName, this.eventName, this.contactId, this.eventId);
+    public void openConversation(){
+        this.controller.setChat(this.contactFirstName + " " + this.contactLastName, this.ressourceName, this.contactId, this.ressourceId);
     }
 }

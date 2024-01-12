@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -31,29 +33,72 @@
                <Separator orientation="VERTICAL" prefHeight="200.0" />
                <ScrollPane fx:id="scrollPaneConversation" maxWidth="670.0" minWidth="670.0" prefWidth="670.0">
                   <content>
-                     <VBox fx:id="messagesContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="667.0">
+                     <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="667.0">
                         <children>
-                           <VBox prefHeight="70.0" prefWidth="667.0">
+                           <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="667.0">
                               <children>
-                                 <Label fx:id="contactName" text="Contact">
-                                    <font>
-                                       <Font size="30.0" />
-                                    </font>
-                                 </Label>
-                                 <Label fx:id="eventName" text="Event">
-                                    <font>
-                                       <Font size="18.0" />
-                                    </font>
-                                 </Label>
+                                 <HBox prefHeight="100.0" prefWidth="200.0">
+                                    <children>
+                                       <VBox prefHeight="53.0" prefWidth="92.0">
+                                          <children>
+                                             <Label fx:id="contactName" text="Contact">
+                                                <font>
+                                                   <Font size="24.0" />
+                                                </font>
+                                             </Label>
+                                             <Label fx:id="RessourceName" text="Event">
+                                                <font>
+                                                   <Font size="14.0" />
+                                                </font>
+                                             </Label>
+                                          </children>
+                                       </VBox>
+                                       <VBox fx:id="messagesContainer" prefHeight="100.0" prefWidth="214.0">
+                                          <children>
+                                             <Label fx:id="Label_desc" text="Label" wrapText="true" />
+                                          </children>
+                                       </VBox>
+                                       <VBox prefHeight="66.0" prefWidth="278.0">
+                                          <children>
+                                             <HBox prefHeight="33.0" prefWidth="253.0">
+                                                <children>
+                                                   <DatePicker fx:id="DatePickerDebut" promptText="Date début" />
+                                                   <DatePicker fx:id="DatePickerFin" promptText="Date de fin" />
+                                                </children>
+                                             </HBox>
+                                             <HBox prefHeight="100.0" prefWidth="200.0">
+                                                <children>
+                                                   <ComboBox fx:id="hourDebutComboBox" onAction="#setHourDebutComboBox" prefHeight="26.0" prefWidth="129.0" />
+                                                   <ComboBox fx:id="minuteDebutComboBox" onAction="#setMinuteDebutComboBox" prefHeight="26.0" prefWidth="118.0" />
+                                                   <ComboBox fx:id="hourFinComboBox" onAction="#setHourFinComboBox" prefHeight="26.0" prefWidth="119.0" />
+                                                   <ComboBox fx:id="minuteFinComboBox" onAction="#setMinuteFinComboBox" prefHeight="26.0" prefWidth="133.0" />
+                                                </children>
+                                             </HBox>
+                                          </children>
+                                       </VBox>
+                                       <VBox alignment="CENTER" prefHeight="66.0" prefWidth="70.0">
+                                          <children>
+                                             <Button fx:id="BtnReserver" alignment="CENTER" mnemonicParsing="false" onAction="#setBtnReserver" prefHeight="0.0" prefWidth="100.0" text="Réserver" />
+                                          </children>
+                                       </VBox>
+                                    </children>
+                                 </HBox>
                                  <Separator prefWidth="200.0" />
                                  <Separator prefWidth="200.0" />
                               </children>
                            </VBox>
-                           <VBox fx:id="messagesContainer" prefHeight="625.0" prefWidth="667.0" />
-                           <HBox prefHeight="100.0" prefWidth="200.0">
+                           <VBox fx:id="messagesContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="557.0" prefWidth="667.0">
+                              <children>
+                                 <VBox alignment="TOP_CENTER">
+                                    <children>
+                                       <Label fx:id="label_desc" text="Label" />
+                                    </children>
+                                 </VBox>
+                              </children></VBox>
+                           <HBox prefHeight="100.0" prefWidth="667.0">
                               <children>
                                  <TextField fx:id="messageSaisi" prefHeight="25.0" prefWidth="596.0" promptText="Message" />
-                                 <Button fx:id="boutonEnvoyer" mnemonicParsing="false" text="Envoyer" onAction="#envoyerMessage" />
+                                 <Button fx:id="boutonEnvoyer" mnemonicParsing="false" onAction="#envoyerMessage" text="Envoyer" />
                               </children>
                            </HBox>
                         </children>

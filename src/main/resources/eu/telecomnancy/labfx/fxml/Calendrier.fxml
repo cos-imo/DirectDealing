@@ -1,73 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.cell.*?>
-<?import javafx.collections.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.CalendrierController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.telecomnancy.labfx.Controller.CalendrierController">
     <children>
         <VBox alignment="TOP_CENTER" spacing="10.0">
-            <fx:include source="Header.fxml" VBox.vgrow="NEVER"/>
+            <fx:include source="Header.fxml" VBox.vgrow="NEVER" />
             <HBox alignment="CENTER" spacing="10">
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Button fx:id="debugButton" text="Debug" onAction="#debugButton" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;">
+                <Pane HBox.hgrow="ALWAYS" />
+                <Button fx:id="debugButton" onAction="#debugButton" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;" text="Debug">
                     <tooltip>
                         <Tooltip text="Debug" />
                     </tooltip>
                 </Button>
                 <StackPane alignment="CENTER_LEFT">
-                    <Label fx:id="viewLabel" text="View" style="-fx-font-size: 24px;" onMouseClicked="#showViewSelector"/>
-                    <ComboBox fx:id="viewSelector" visible="false" onAction="#handleViewSelector"/>
+                    <Label fx:id="viewLabel" onMouseClicked="#showViewSelector" style="-fx-font-size: 24px;" text="View" />
+                    <ComboBox fx:id="viewSelector" onAction="#handleViewSelector" visible="false" />
                 </StackPane>
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Button fx:id="previousButton" text="⬅" onAction="#previousButton" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;">
+                <Pane HBox.hgrow="ALWAYS" />
+                <Button fx:id="previousButton" onAction="#previousButton" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;" text="⬅">
                     <tooltip>
                         <Tooltip text="previousText" />
                     </tooltip>
                 </Button>
                 <StackPane fx:id="leftLabelStackPane" alignment="CENTER">
-                    <Label fx:id="leftLabel" text="leftLabelText" style="-fx-font-size: 24px;" onMouseClicked="#leftLabelAction"/>
-                    <ComboBox fx:id="leftPicker" onAction="#handleLeftPicker" visible="false"/>
+                    <Label fx:id="leftLabel" onMouseClicked="#leftLabelAction" style="-fx-font-size: 24px;" text="leftLabelText" />
+                    <ComboBox fx:id="leftPicker" onAction="#handleLeftPicker" visible="false" />
                 </StackPane>
                 <StackPane>
-                    <Label fx:id="rightLabel" text="rightLabelText" style="-fx-font-size: 24px;" onMouseClicked="#rightLabelAction"/>
-                    <ComboBox fx:id="rightPicker" visible="false" onAction="#handleRightPicker"/>
+                    <Label fx:id="rightLabel" onMouseClicked="#rightLabelAction" style="-fx-font-size: 24px;" text="rightLabelText" />
+                    <ComboBox fx:id="rightPicker" onAction="#handleRightPicker" visible="false" />
                 </StackPane>
-                <Button fx:id="currentDateButton" text="•" onAction="#currentDate" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;">
+                <Button fx:id="currentDateButton" onAction="#currentDate" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;" text="•">
                     <tooltip>
                         <Tooltip text="Date actuelle" />
                     </tooltip>
                 </Button>
-                <Button fx:id="nextButton" text="➡" onAction="#nextButton" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;">
+                <Button fx:id="nextButton" onAction="#nextButton" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 24px;" text="➡">
                     <tooltip>
                         <Tooltip text="rightButtonText" />
                     </tooltip>
                 </Button>
-                <Pane HBox.hgrow="ALWAYS"/>
+                <Pane HBox.hgrow="ALWAYS" />
             </HBox>
-            <GridPane fx:id="calendarGrid" alignment="CENTER" hgap="2" vgap="2" VBox.vgrow="ALWAYS">
+            <GridPane fx:id="calendarGrid" alignment="CENTER" hgap="2" onSwipeLeft="#previousButton" onSwipeRight="#nextButton" vgap="2" VBox.vgrow="ALWAYS">
                 <padding>
-                    <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
                 <columnConstraints>
-                    <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="SOMETIMES"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                    <RowConstraints fx:id="ligneContrainte" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                    <RowConstraints fx:id="ligneContrainte" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                    <RowConstraints fx:id="ligneContrainte" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                    <RowConstraints fx:id="ligneContrainte" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                    <RowConstraints fx:id="ligneContrainte" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                    <RowConstraints fx:id="ligneContrainte" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
 
                 </rowConstraints>
             </GridPane>
