@@ -35,7 +35,7 @@ public class User {
         this.wallet = new Florain(wallet);
         this.note = note;
         this.ressources = createRessources();
-        getEventRessource(); //Initialise ressources // TODO : Changer ca sans dupliquer la réquête SQL
+        // getEventRessource(); //Initialise ressources // TODO : Changer ca sans dupliquer la réquête SQL
     }
 
     public String getEmail() {
