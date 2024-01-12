@@ -34,14 +34,20 @@ https://gitlab.telecomnancy.univ-lorraine.fr/pcd2k24/codingweek-24.git
 ##### Compilation
 Depuis la racine du projet (dossier `codingweek-24`), utilisez gradlew pour installer les dépendances requises:
 ```
-./gradlew build
+./gradlew clean build
 ```
 
 
-##### Lancement
-Depuis la racine du projet (dossier `codingweek-24`) exécuter gradlew:
+##### Création du jar
+Depuis la racine du projet (dossier `codingweek-24`) créer un jar à l'aide de gradlew:
 ```
-./gradlew run
+./gradlew jar
+```
+
+#### Lancement du jar:
+Vous pouvez désormais lancer le jar, en spécifiant la localisation de javafx:
+```
+java --module-path /chemin/vers/le/javafx/sdk/lib --add-modules javafx.controls,javafx.fxml -jar build/libs/nomdujar.jar
 ```
 
 ## Utilisation

@@ -27,3 +27,4 @@ Améliorer l'interface graphique.
 18. Si le nom prenom de l'utilsateur et bien trop long, peut être afficher que les initales, actuellemnt l'affichage prend le dessus sur le reste (bloquant l'accès à certains boutons aussi)
 19. afficher des message d'erreur dans l'onglet mon compte si un changement ne peut pas être pris en compte, ou si un changement a bien été pris en compte
 20. Calendrier : les pickers ne prennent pas bien en compte les changements de point de vue
+21. eviter de spamm un preteur/vendeur lorsque l'on le contact depuis les annonces, regarder si on a déjà envoyé un message par défaut avant de l'envoyer, si déjà envoyer, simplement ouvrir la conversation 
