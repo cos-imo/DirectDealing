@@ -11,3 +11,4 @@ Améliorer l'interface graphique.
 2. Faire la vidéo de présentation
 3. Améliorer le code
 4. Améliorer l'interface graphique
+5. PRENDRE EN COMPTE LES RECURRENCES DANS LA RECHERCHE 
