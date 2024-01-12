@@ -36,7 +36,7 @@ Depuis la racine du projet (dossier `codingweek-24`), utilisez gradlew pour inst
 ```
 ./gradlew clean build
 ```
-
+**Note**: Il y a alors un message d'erreur  `BUILD FAILED` que nous ne parvenons pas à faire disparaître, cependant cela ne semble pas gêner le bon déroulement de la suite
 
 ##### Création du jar
 Depuis la racine du projet (dossier `codingweek-24`) créer un jar à l'aide de gradlew:
