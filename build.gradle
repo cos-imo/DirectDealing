@@ -15,8 +15,7 @@ version '1.0-SNAPSHOT'
 ext {
     junitVersion = '5.10.1'
     javafxVersion = '21'
-    jdkVersion = '21
-    '
+    jdkVersion = '21'
 }
 
 java {
