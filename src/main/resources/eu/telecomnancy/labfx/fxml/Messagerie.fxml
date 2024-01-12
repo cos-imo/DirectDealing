@@ -31,76 +31,81 @@
          <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
                <Separator orientation="VERTICAL" prefHeight="200.0" />
-               <ScrollPane fx:id="scrollPaneConversation" maxWidth="670.0" minWidth="670.0" prefWidth="670.0">
-                  <content>
-                     <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="667.0">
+               <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="667.0">
+                  <children>
+                     <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="667.0">
                         <children>
-                           <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="667.0">
+                           <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="654.0">
                               <children>
-                                 <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="654.0">
+                                 <VBox prefHeight="64.0" prefWidth="147.0">
                                     <children>
-                                       <VBox prefHeight="64.0" prefWidth="147.0">
-                                          <children>
-                                             <Label fx:id="contactName" text="Contact">
-                                                <font>
-                                                   <Font size="24.0" />
-                                                </font>
-                                             </Label>
-                                             <Label fx:id="RessourceName" text="Event">
-                                                <font>
-                                                   <Font size="14.0" />
-                                                </font>
-                                             </Label>
-                                          </children>
-                                       </VBox>
-                                       <VBox alignment="CENTER" prefHeight="64.0" prefWidth="87.0" />
-                                       <VBox alignment="CENTER" prefHeight="66.0" prefWidth="278.0">
-                                          <children>
-                                             <HBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="300.0">
-                                                <children>
-                                                   <DatePicker fx:id="DatePickerDebut" prefWidth="150.0" promptText="Date début" />
-                                                   <DatePicker fx:id="DatePickerFin" prefHeight="25.0" prefWidth="150.0" promptText="Date de fin" />
-                                                </children>
-                                             </HBox>
-                                             <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="28.0" prefWidth="300.0">
-                                                <children>
-                                                   <ComboBox fx:id="hourDebutComboBox" maxWidth="-Infinity" minWidth="-Infinity" onAction="#setHourDebutComboBox" prefHeight="26.0" prefWidth="75.0" />
-                                                   <ComboBox fx:id="minuteDebutComboBox" maxWidth="-Infinity" minWidth="-Infinity" onAction="#setMinuteDebutComboBox" prefHeight="26.0" prefWidth="75.0" />
-                                                   <ComboBox fx:id="hourFinComboBox" maxWidth="-Infinity" minHeight="-Infinity" onAction="#setHourFinComboBox" prefHeight="26.0" prefWidth="75.0" />
-                                                   <ComboBox fx:id="minuteFinComboBox" maxWidth="-Infinity" minHeight="-Infinity" onAction="#setMinuteFinComboBox" prefHeight="26.0" prefWidth="75.0" />
-                                                </children>
-                                             </HBox>
-                                          </children>
-                                       </VBox>
-                                       <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="66.0" prefWidth="100.0">
-                                          <children>
-                                             <Button fx:id="BtnReserver" alignment="CENTER" mnemonicParsing="false" onAction="#setBtnReserver" prefHeight="25.0" prefWidth="92.0" text="Réserver" />
-                                          </children>
-                                       </VBox>
-                                    </children>
-                                 </HBox>
-                                 <Separator prefWidth="200.0" />
-                                 <Separator prefWidth="200.0" />
-                              </children>
-                           </VBox>
-                           <VBox fx:id="messagesContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="557.0" prefWidth="667.0">
-                              <children>
-                                 <VBox alignment="TOP_CENTER">
-                                    <children>
-                                       <Label fx:id="label_desc" alignment="TOP_CENTER" prefHeight="555.0" prefWidth="650.0" text="Label" />
+                                       <Label fx:id="contactName" text="Contact">
+                                          <font>
+                                             <Font size="24.0" />
+                                          </font>
+                                       </Label>
+                                       <Label fx:id="RessourceName" text="Event">
+                                          <font>
+                                             <Font size="14.0" />
+                                          </font>
+                                       </Label>
                                     </children>
                                  </VBox>
-                              </children></VBox>
-                           <HBox prefHeight="100.0" prefWidth="667.0">
-                              <children>
-                                 <TextField fx:id="messageSaisi" prefHeight="25.0" prefWidth="596.0" promptText="Message" />
-                                 <Button fx:id="boutonEnvoyer" mnemonicParsing="false" onAction="#envoyerMessage" text="Envoyer" />
+                                 <VBox alignment="CENTER" prefHeight="64.0" prefWidth="87.0" />
+                                 <VBox alignment="CENTER" prefHeight="66.0" prefWidth="278.0">
+                                    <children>
+                                       <HBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="300.0">
+                                          <children>
+                                             <DatePicker fx:id="DatePickerDebut" prefWidth="150.0" promptText="Date début" />
+                                             <DatePicker fx:id="DatePickerFin" prefHeight="25.0" prefWidth="150.0" promptText="Date de fin" />
+                                          </children>
+                                       </HBox>
+                                       <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="28.0" prefWidth="300.0">
+                                          <children>
+                                             <ComboBox fx:id="hourDebutComboBox" maxWidth="-Infinity" minWidth="-Infinity" onAction="#setHourDebutComboBox" prefHeight="26.0" prefWidth="75.0" />
+                                             <ComboBox fx:id="minuteDebutComboBox" maxWidth="-Infinity" minWidth="-Infinity" onAction="#setMinuteDebutComboBox" prefHeight="26.0" prefWidth="75.0" />
+                                             <ComboBox fx:id="hourFinComboBox" maxWidth="-Infinity" minHeight="-Infinity" onAction="#setHourFinComboBox" prefHeight="26.0" prefWidth="75.0" />
+                                             <ComboBox fx:id="minuteFinComboBox" maxWidth="-Infinity" minHeight="-Infinity" onAction="#setMinuteFinComboBox" prefHeight="26.0" prefWidth="75.0" />
+                                          </children>
+                                       </HBox>
+                                    </children>
+                                 </VBox>
+                                 <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="66.0" prefWidth="100.0">
+                                    <children>
+                                       <Button fx:id="BtnReserver" alignment="CENTER" mnemonicParsing="false" onAction="#setBtnReserver" prefHeight="25.0" prefWidth="92.0" text="Réserver" />
+                                    </children>
+                                 </VBox>
                               </children>
                            </HBox>
+                           <Separator prefWidth="200.0" />
+                           <Separator prefWidth="200.0" />
                         </children>
                      </VBox>
-                  </content>
-               </ScrollPane>
+                     <ScrollPane fx:id="scrollPaneConversation" prefHeight="641.0" prefWidth="667.0">
+                       <content>
+                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                              <children>
+                                 <VBox fx:id="messagesContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="557.0" prefWidth="667.0">
+                                    <children>
+                                       <VBox alignment="TOP_CENTER">
+                                          <children>
+                                             <Label fx:id="label_desc" alignment="TOP_CENTER" prefHeight="502.0" prefWidth="619.0" text="Label" />
+                                          </children>
+                                       </VBox>
+                                    </children>
+                                 </VBox>
+                              </children>
+                           </AnchorPane>
+                       </content>
+                     </ScrollPane>
+                     <HBox prefHeight="100.0" prefWidth="667.0">
+                        <children>
+                           <TextField fx:id="messageSaisi" prefHeight="25.0" prefWidth="596.0" promptText="Message" />
+                           <Button fx:id="boutonEnvoyer" mnemonicParsing="false" onAction="#envoyerMessage" text="Envoyer" />
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
             </children>
          </HBox>
       </center>
