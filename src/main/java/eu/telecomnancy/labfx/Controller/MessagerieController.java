@@ -212,9 +212,7 @@ public class MessagerieController {
 
                         // Convertir les LocalDateTime en java.sql.Date mais avec les secondes
                         java.sql.Timestamp sqlTimestampDebut = java.sql.Timestamp.valueOf(dateDebut);
-                        java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateDebut);
-                        // System.out.println("Date début (sqlTimestamp): " + sqlTimestampDebut);
-                        // System.out.println("Date fin (sqlTimestamp): " + sqlTimestampFin);
+                        java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateFin);
                         preparedStatement.setTimestamp(6, sqlTimestampDebut);
                         preparedStatement.setTimestamp(7, sqlTimestampFin);
 

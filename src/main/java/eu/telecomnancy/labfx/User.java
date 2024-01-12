@@ -178,7 +178,7 @@ public class User {
             int idAcheteur = resultSet.getInt("acheteur_id");
             boolean isObject = resultSet.getBoolean("isObject");
             Ressource ressource = new Ressource(resultSet.getString("ressourceName"), resultSet.getString("Desc"), new DateTime(resultSet.getInt("RDateDebut")), new DateTime(resultSet.getInt("RDateFin")), idRessource, idPreteur, idAcheteur, new Florain(resultSet.getInt("RPrix")), Recurrence.getRecurrence(resultSet.getInt("Recurrence")), id, pdp,isObject);
-            EventRessource eventRessource = new EventRessource(ressource, id,idPreteur, idAcheteur, new DateTime(resultSet.getInt("eventDateDebut")), new DateTime(resultSet.getInt("eventDateFin")));
+            EventRessource eventRessource = new EventRessource(ressource, id,idPreteur, idAcheteur, new DateTime(resultSet.getLong("eventDateDebut")), new DateTime(resultSet.getLong("eventDateFin")));
             eventRessources.add(eventRessource);
             System.out.println("Event (getEventRessource) : " + eventRessource.getName() + " Date de début : " + eventRessource.getDateDebut() + " Date de fin : " + eventRessource.getDateFin());
         }
