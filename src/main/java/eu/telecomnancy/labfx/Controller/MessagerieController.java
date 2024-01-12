@@ -192,10 +192,6 @@ public class MessagerieController {
                     connection.close();
                 }
                 if (dateDebutTimestamp.before(dateDebutAnnonce) || dateFinTimestamp.after(dateFinAnnonce)) {
-                    System.out.println("Date debut timestamp: " + dateDebutTimestamp);
-                    System.out.println("Date fin timestamp: " + dateFinTimestamp);
-                    System.out.println("Date debut annonce: " + dateDebutAnnonce);
-                    System.out.println("Date fin annonce: " + dateFinAnnonce);
                     System.out.println("Date de début ou de fin en dehors de la période de l'annonce");
                     return;
                 }
@@ -204,7 +200,7 @@ public class MessagerieController {
                     try (Connection connection = connect.getConnection()) {
                         String query = "INSERT INTO Event (Ressource_id, isObjet, Name, preteur_id, acheteur_id, DateDebut, DateFin, Prix) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
                         PreparedStatement preparedStatement = connection.prepareStatement(query);
-                        preparedStatement.setInt(1, ressource_id);
+                        preparedStatement.setInt(1, RessourceActif);
                         preparedStatement.setBoolean(2, type);
                         preparedStatement.setString(3, nomRessource);
                         preparedStatement.setInt(4, owner_id);
@@ -212,9 +208,7 @@ public class MessagerieController {
 
                         // Convertir les LocalDateTime en java.sql.Date mais avec les secondes
                         java.sql.Timestamp sqlTimestampDebut = java.sql.Timestamp.valueOf(dateDebut);
-                        java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateDebut);
-                        // System.out.println("Date début (sqlTimestamp): " + sqlTimestampDebut);
-                        // System.out.println("Date fin (sqlTimestamp): " + sqlTimestampFin);
+                        java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateFin);
                         preparedStatement.setTimestamp(6, sqlTimestampDebut);
                         preparedStatement.setTimestamp(7, sqlTimestampFin);
 

@@ -325,6 +325,7 @@ public class CalendrierController {
         for (EventRessource event : calendrier.getEventActif()) {
             if (thisDay.contains(event.getDateDebut()) || thisDay.contains(event.getDateFin()) || event.getDateDebut().isBefore(thisDay.getStart()) && event.getDateFin().isAfter(thisDay.getEnd())) {
                 EventRessource newEvent = EventReducedToAffichage(event, thisDay);
+
                 eventActif.add(newEvent);
             }
         }
