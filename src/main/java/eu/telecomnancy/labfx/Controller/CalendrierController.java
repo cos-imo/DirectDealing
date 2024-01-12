@@ -90,6 +90,20 @@ public class CalendrierController {
 
 
     }
+
+    private void debug() {
+        System.err.println("currentYearMonth.." + targetDate.getMonthOfYear());
+        System.err.println("weekNumber........" + targetDate.getWeekOfWeekyear());
+        System.err.println("TODAY............." + targetDate);
+        System.err.println("viewSelector......" + viewSelector.getValue());
+        System.err.println("viewLabel........." + viewLabel.getText());
+        System.err.println("leftPicker........" + leftPicker.getValue());
+        System.err.println("leftLabel........." + leftLabel.getText());
+        System.err.println("rightPicker......." + rightPicker.getValue());
+        System.err.println("rightLabel........" + rightLabel.getText());
+    }
+
+
     @FXML
     private void handleViewSelector(ActionEvent event) throws SQLException {
         String selectedView = viewSelector.getValue();
@@ -101,6 +115,7 @@ public class CalendrierController {
         viewLabel.setText(selectedView);
         viewSelector.setValue(selectedView);
         initializeBis();
+        debug();
     }
 
     @FXML
@@ -457,8 +472,7 @@ public class CalendrierController {
     @FXML
     private void handleLeftPicker(ActionEvent event) throws SQLException {
         String selectedMonth = leftPicker.getValue();
-        leftLabel.setText(selectedMonth);
-        leftPicker.setValue(selectedMonth);
+        
         if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
             int actualweek = targetDate.getWeekOfWeekyear();
             int targetweek = leftPicker.getItems().indexOf(selectedMonth)+1;
@@ -469,6 +483,8 @@ public class CalendrierController {
             targetDate = targetDate.withWeekOfWeekyear(leftPicker.getItems().indexOf(selectedMonth)+1);
             initializeBis();
         }
+        leftLabel.setText(selectedMonth);
+        leftPicker.setValue(selectedMonth);
     }
 
     @FXML
