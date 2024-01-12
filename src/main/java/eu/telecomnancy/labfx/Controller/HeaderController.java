@@ -51,9 +51,9 @@ public class HeaderController extends HBox {
         LoadPage.loadPage("Calendrier", event,getClass());
         // AfficheAllEvents();
         // AfficheAllRessources();
-        // Calendrier calendrier = new Calendrier(Session.getInstance().getCurrentUser(), DateTime.now(),ModeAffichage.Mois);
-        // AfficheAllRessources(calendrier.getRessourceActif());
-        // AfficheAllEvents(calendrier.getEventActif());
+        Calendrier calendrier = new Calendrier(Session.getInstance().getCurrentUser(), DateTime.now(),ModeAffichage.Mois);
+        AfficheAllRessources(calendrier.getRessourceActif());
+        AfficheAllEvents(calendrier.getEventActif());
         // AfficheInterval(calendrier.getBetweenDate());
     }
 

@@ -110,14 +110,14 @@ public class Calendrier {
         return newEvent;
     }
     
-    public DateTime minDate(DateTime date1, DateTime date2){
+    public static DateTime minDate(DateTime date1, DateTime date2){
         if (date1.isBefore(date2)){
             return date1;
         } else {
             return date2;
         }
     }
-    public DateTime maxDate(DateTime date1, DateTime date2){
+    public static DateTime maxDate(DateTime date1, DateTime date2){
         if (date1.isAfter(date2)){
             return date1;
         } else {
@@ -157,7 +157,6 @@ public class Calendrier {
     public Ressource ressourceReducedToAffichage(Ressource r){
         Ressource newRessource = new Ressource(r,reduceDebutDate(r.getDateDebut()),reduceFinDate(r.getDateFin()));
         return newRessource;
-
     }
     public ArrayList<Ressource> getRessourceActif() {
         return ressourceActif;

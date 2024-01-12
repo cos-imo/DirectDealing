@@ -130,7 +130,7 @@ public class CalendrierController {
         fillCalendar();
     }
 
-    private void fillCalendar() {
+    private void fillCalendar() throws SQLException {
         // Clear previous calendar entries
         // Determine the starting day for the calendar
         DateTime calendarStart = calendrier.getBetweenDate().getStart();
@@ -187,7 +187,7 @@ public class CalendrierController {
             weekRow++;
         }
     }
-    private DateTime addDayToCalenderAsMonth(DateTime calendarStart, int weekRow, int dayColumn) {
+    private DateTime addDayToCalenderAsMonth(DateTime calendarStart, int weekRow, int dayColumn) throws SQLException {
 
         Label dayLabel = new Label(String.valueOf(calendarStart.getDayOfMonth()));
         dayLabel.setAlignment(Pos.TOP_LEFT);
@@ -198,12 +198,12 @@ public class CalendrierController {
         Label testEvent = new Label("Test");
         testEvent.setAlignment(Pos.BOTTOM_CENTER);
         testEvent.setContentDisplay(ContentDisplay.TOP);
-        testEvent.setStyle("-fx-text-fill: black;-fx-background-color: grey; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-border-radius:10px;");
+        testEvent.setStyle("-fx-text-fill: black;-fx-background-color: grey; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-background-radius:10px;");
         testEvent.setMaxHeight(5);
         Label testEvent2= new Label("Test");
         testEvent2.setAlignment(Pos.BOTTOM_CENTER);
         testEvent2.setContentDisplay(ContentDisplay.TOP);
-        testEvent2.setStyle("-fx-text-fill: black;-fx-background-color: grey; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-border-radius:10px;");
+        testEvent2.setStyle("-fx-text-fill: black;-fx-background-color: grey; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-background-radius:10px;");
         testEvent2.setMaxHeight(5);
 
 
@@ -226,13 +226,37 @@ public class CalendrierController {
         });
 
         VBox eventBox = new VBox();
-        eventBox.getChildren().add(testEvent);
-        eventBox.getChildren().add(testEvent2);
         eventBox.setAlignment(Pos.CENTER);
         eventBox.setMaxWidth(350);
         eventBox.setSpacing(3);
-
         dayBox.getChildren().add(eventBox);
+
+        ArrayList<EventRessource> todayEvent = getTodayEvent(calendarStart);
+        for (EventRessource event : todayEvent) {
+            event.AfficheEvent();
+        }
+        ArrayList<Ressource> todayRessource = getTodayRessource(calendarStart,todayEvent);
+        for (Ressource ressource : todayRessource) {
+            ressource.AfficheRessource();
+        }
+        for (EventRessource event : todayEvent) {
+            Label eventLabel = new Label(event.getRessource().getName());
+            eventLabel.setAlignment(Pos.TOP_LEFT);
+            eventLabel.setContentDisplay(ContentDisplay.TOP);
+            eventLabel.setGraphicTextGap(0.0);
+            eventLabel.setStyle("-fx-text-fill: black;-fx-background-color: #f7921a; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-background-radius:10px;");
+            eventLabel.setMaxHeight(5);
+            eventBox.getChildren().add(eventLabel);
+        }
+        for (Ressource ressource : todayRessource) {
+            Label ressourceLabel = new Label(ressource.getName());
+            ressourceLabel.setAlignment(Pos.TOP_LEFT);
+            ressourceLabel.setContentDisplay(ContentDisplay.TOP);
+            ressourceLabel.setGraphicTextGap(0.0);
+            ressourceLabel.setStyle("-fx-text-fill: black;-fx-background-color: #c1adff; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-background-radius:10px;");
+            ressourceLabel.setMaxHeight(5);
+            eventBox.getChildren().add(ressourceLabel);
+        }
 
         // Label dayLabel = new Label(String.valueOf(calendarStart.getDayOfMonth()));
         // dayLabel.setAlignment(Pos.TOP_LEFT); // Aligner le texte en haut à gauche
@@ -270,17 +294,56 @@ public class CalendrierController {
         calendarGrid.add(dayLabel, dayColumn, 1);
         return calendarStart.plusDays(1);
     }
-    // }
-    // private ArrayList<EventRessource> getTodayEvent(DateTime newDay) throws SQLException {
-    //     ArrayList<EventRessource> eventActif = new ArrayList<EventRessource>();
-    //     for (EventRessource event : calendrier.getEventActif()) {
-    //         Interval thisDay = new Interval(newDay.withTimeAtStartOfDay(), newDay.plusDays(1).withTimeAtStartOfDay().minusSeconds(1));
-    //         if () {
-    //             eventActif.add(event);
-    //         }
-    //     }
-    //     return eventActif;
-    // }
+
+    private ArrayList<EventRessource> getTodayEvent(DateTime newDay) throws SQLException {
+        ArrayList<EventRessource> eventActif = new ArrayList<EventRessource>();
+        for (EventRessource event : calendrier.getEventActif()) {
+            Interval thisDay = new Interval(newDay.withTimeAtStartOfDay(), newDay.plusDays(1).withTimeAtStartOfDay().minusSeconds(1));
+            System.out.println(thisDay);
+            if (thisDay.contains(event.getDateDebut()) || thisDay.contains(event.getDateFin()) || event.getDateDebut().isBefore(thisDay.getStart()) && event.getDateFin().isAfter(thisDay.getEnd())) {
+                EventRessource newEvent = EventReducedToAffichage(event, thisDay);
+                System.out.println("Pour le jour "+newDay+" l'event ");
+                newEvent.AfficheEvent();
+                eventActif.add(newEvent);
+            }
+        }
+        return eventActif;
+    }
+    private ArrayList<Ressource> getTodayRessource(DateTime newDay,ArrayList<EventRessource> todayEvent) throws SQLException {
+        ArrayList<Ressource> ressourcesActifs = new ArrayList<Ressource>();
+        for (Ressource ressource : calendrier.getRessourceActif()) {
+            Interval thisDay = new Interval(newDay.withTimeAtStartOfDay(), newDay.plusDays(1).withTimeAtStartOfDay().minusSeconds(1));
+            if (thisDay.contains(ressource.getDateDebut()) || thisDay.contains(ressource.getDateFin()) || ressource.getDateDebut().isBefore(thisDay.getStart()) && ressource.getDateFin().isAfter(thisDay.getEnd())) {
+                boolean alreadyHereAsEvent = false;
+                for (EventRessource event : todayEvent){
+                    if (event.getRessource().getId() == ressource.getId()){
+                        alreadyHereAsEvent = true;
+                        break;
+                    }
+                }
+                if (alreadyHereAsEvent == false){
+                    ressourcesActifs.add(ressourceReducedToAffichage(ressource, thisDay));
+                }
+            }
+        }
+        return ressourcesActifs;
+    }
+
+
+    public DateTime reduceDebutDate(DateTime date1,Interval betweenDate){
+        return Calendrier.maxDate(date1, betweenDate.getStart());
+    }
+    public DateTime reduceFinDate(DateTime date1,Interval betweenDate){
+        return Calendrier.minDate(date1, betweenDate.getEnd());
+    }
+    public Ressource ressourceReducedToAffichage(Ressource r,Interval betweenDate){
+        Ressource newRessource = new Ressource(r,reduceDebutDate(r.getDateDebut(),betweenDate),reduceFinDate(r.getDateFin(),betweenDate));
+        return newRessource;
+    }
+    public EventRessource EventReducedToAffichage(EventRessource r,Interval betweenDate){
+        EventRessource newEvent = new EventRessource(r,reduceDebutDate(r.getDateDebut(),betweenDate),reduceFinDate(r.getDateFin(),betweenDate));
+        return newEvent;
+    }
 
     private void initializeLeftPicker() {
         int currentYearMonth = targetDate.getMonthOfYear();

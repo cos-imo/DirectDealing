@@ -103,8 +103,8 @@ public class Ressource {
         if (rs.next()){ //Se ferme si la requête est vide
             String name = rs.getString("Name");
             String desc = rs.getString("Desc");
-            DateTime dateDebut = new DateTime(rs.getInt("DateDebut"));//TODO: Récupérer dans le bon format en joda Time
-            DateTime dateFin = new DateTime(rs.getInt("DateFin")); //TODO : Récupérer le bon format en Joda Time
+            DateTime dateDebut = new DateTime(rs.getLong("DateDebut"));//TODO: Récupérer dans le bon format en joda Time
+            DateTime dateFin = new DateTime(rs.getLong("DateFin")); //TODO : Récupérer le bon format en Joda Time
             float longitude = rs.getFloat("LocalisationLongitude");
             float latitude = rs.getFloat("LocalisationLatitude");
             int id = rs.getInt("Ressource_id");
