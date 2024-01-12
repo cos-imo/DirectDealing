@@ -19,6 +19,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import eu.telecomnancy.labfx.Connect;
+import eu.telecomnancy.labfx.Recurrence;
 import eu.telecomnancy.labfx.Session;
 
 import java.text.SimpleDateFormat;
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import org.joda.time.DateTime;
 
 public class UneDeMesAnnoncesController{
 
@@ -54,20 +57,34 @@ public class UneDeMesAnnoncesController{
     ImageView image_annonce;
 
 
-    public void setElementData(Image image,String annonceName, Boolean type,  java.sql.Date dateDebut, java.sql.Date dateFin, String cout,Boolean reccurence){
-   
-
-        label_nom.setText(annonceName);
-        label_type.setText(type ? "Objet" : "Service");
-        prix_florains.setText(cout);
-        label_Recurence.setText(reccurence ? "Oui" : "Non");   
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date dateDebutAnnonce = dateDebut;
-        Date dateFinAnnonce = dateFin;
-        label_date.setText("Du " + dateFormat.format(dateDebutAnnonce.getTime()) + " au " + dateFormat.format(dateFinAnnonce.getTime()));
+    public void setElementData(String annonceName, Boolean type, int Prix, Image image, DateTime dateDebut, DateTime dateFin, Recurrence reccurence){
+        System.out.println(annonceName);
+        //____Image____
         if (image_annonce!=null){
             image_annonce.setImage(image);
         }
+        System.out.println(("1"));
+
+        //____Nom____
+        label_nom.setText(annonceName);
+        System.out.println(("2"));
+        //____Type____
+        label_type.setText(type ? "Objet" : "Service");
+        System.out.println(("3"));
+
+        //____Date____
+        DateTime dateDebutAnnonce = dateDebut;
+        DateTime dateFinAnnonce = dateFin;
+        label_date.setText("Du " + dateDebutAnnonce.getYear() + "-" + dateDebutAnnonce.getMonthOfYear() + "-" + dateDebutAnnonce.getDayOfMonth() + " " + dateDebutAnnonce.getHourOfDay() + ":" + dateDebutAnnonce.getMinuteOfHour() + ":" + dateDebutAnnonce.getSecondOfMinute() + " au " + dateFinAnnonce.getYear() + "-" + dateFinAnnonce.getMonthOfYear() + "-" + dateFinAnnonce.getDayOfMonth() + " " + dateFinAnnonce.getHourOfDay() + ":" + dateFinAnnonce.getMinuteOfHour() + ":" + dateFinAnnonce.getSecondOfMinute());
+        System.out.println(("4"));
+
+        //____Prix_____
+        prix_florains.setText(Prix+"");
+        System.out.println(("5"));
+
+        //____Recurrence_____
+        label_Recurence.setText(reccurence.toString());   
+        System.out.println(("on est ici"));
     }
 
 }

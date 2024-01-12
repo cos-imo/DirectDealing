@@ -31,4 +31,19 @@ public enum Recurrence {
                 return 0;
         }
     }
+
+    public String toString() {
+        switch (this) {
+            case Non:
+                return "Non";
+            case Quotidien:
+                return "Quotidien";
+            case Hebdomadaire:
+                return "Hebdomadaire";
+            case Mensuel:
+                return "Mensuel";
+            default:
+                return "Non";
+        }
+    }
 }

@@ -42,6 +42,11 @@
                            <Font size="10.0" />
                         </font>
                      </Label>
+                     <Label fx:id="label_Recurence" text="Recurrence" textFill="#000000a3">
+                        <font>
+                           <Font size="10.0" />
+                        </font>
+                     </Label>
                 </children>
             </VBox>
             <VBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="320.0">
