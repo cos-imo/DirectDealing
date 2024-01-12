@@ -1,5 +1,7 @@
 package eu.telecomnancy.labfx.Controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +19,11 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Interval;
 
 import eu.telecomnancy.labfx.Connect;
 import eu.telecomnancy.labfx.Session;
@@ -60,13 +67,13 @@ public class MessagerieController {
     private DatePicker DatePickerFin;
 
     @FXML
-    private ComboBox<Integer> hourDebutComboBox;
+    private ComboBox<String> hourDebutComboBox;
 
     @FXML
     private ComboBox<Integer> minuteDebutComboBox;
 
     @FXML
-    private ComboBox<Integer> hourFinComboBox;
+    private ComboBox<String> hourFinComboBox;
 
     @FXML
     private ComboBox<Integer> minuteFinComboBox;
@@ -87,13 +94,14 @@ public class MessagerieController {
     private int owner_id;
     private Image image;
     private Boolean type;
-    private java.sql.Date dateDebutAnnonce;
-    private java.sql.Date dateFinAnnonce;
+    private Timestamp dateDebutAnnonce;
+    private Timestamp dateFinAnnonce;
 
     public void initialize() throws SQLException {
-        for (int i = 0; i < 24; i++) {
-            hourDebutComboBox.getItems().add(i);
-            hourFinComboBox.getItems().add(i);
+        for (int i = 0; i <= 24; i++) {
+            String hoursNumber = String.valueOf(i) + "H";
+            hourDebutComboBox.getItems().add(hoursNumber);
+            hourFinComboBox.getItems().add(hoursNumber);
         }
 
         for (int i = 0; i < 12; i++) {
@@ -127,7 +135,7 @@ public class MessagerieController {
 
     @FXML
     private void setHourDebutComboBox() {
-        selectedDebutHour = hourDebutComboBox.getValue();
+        selectedDebutHour = Integer.parseInt(hourDebutComboBox.getValue().substring(0, hourDebutComboBox.getValue().length()-1));
     }
 
     @FXML
@@ -137,7 +145,7 @@ public class MessagerieController {
 
     @FXML
     private void setHourFinComboBox() {
-        selectedFinHour = hourFinComboBox.getValue();
+        selectedFinHour = Integer.parseInt(hourFinComboBox.getValue().substring(0, hourFinComboBox.getValue().length()-1));
     }
 
     @FXML
@@ -147,53 +155,60 @@ public class MessagerieController {
 
     @FXML
     private void setBtnReserver(ActionEvent event) throws SQLException{
-        System.out.println(DatePickerDebut);
-        System.out.println(DatePickerFin);
-        if (DatePickerDebut == null || DatePickerFin == null || selectedDebutHour == -1 || selectedDebutMinute == -1 || selectedFinHour == -1 || selectedFinMinute == -1){
+        System.out.println(DatePickerDebut.getValue());
+        System.out.println(DatePickerFin.getValue());
+        if (DatePickerDebut.getValue() == null || DatePickerFin.getValue() == null || selectedDebutHour == -1 || selectedDebutMinute == -1 || selectedFinHour == -1 || selectedFinMinute == -1){
             System.out.println("Date invalide");
             return;
         }
         else {
-            LocalDate dateDebut = DatePickerDebut.getValue();
-            LocalDate dateFin = DatePickerFin.getValue();
+
+            // Créer les LocalDateTime
+            LocalDateTime dateDebut = LocalDateTime.of(DatePickerDebut.getValue().getYear(), DatePickerDebut.getValue().getMonth(), DatePickerDebut.getValue().getDayOfMonth(), selectedDebutHour, selectedDebutMinute);
+            LocalDateTime dateFin = LocalDateTime.of(DatePickerFin.getValue().getYear(), DatePickerFin.getValue().getMonth(), DatePickerFin.getValue().getDayOfMonth(), selectedFinHour,selectedFinMinute );
+            // Interval interval = new Interval(dateDebut, dateFin);
+            Timestamp dateDebutTimestamp = Timestamp.valueOf(dateDebut);
+            Timestamp dateFinTimestamp = Timestamp.valueOf(dateFin);
             if (dateDebut.isAfter(dateFin)) {
                 System.out.println("Date de début après date de fin");
                 return;
             }
             else {
-                if (dateDebut.isBefore(dateDebutAnnonce.toLocalDate()) || dateFin.isAfter(dateFinAnnonce.toLocalDate())) {
+                Connect connect = new Connect();
+                try (Connection connection = connect.getConnection()){
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT DateDebut, DateFin,type,Name,Owner_id,Prix FROM Ressource WHERE Ressource_id = ?");
+                    preparedStatement.setInt(1, RessourceActif);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    if (resultSet.next()) {
+                        dateDebutAnnonce = new Timestamp(resultSet.getLong("DateDebut"));
+                        dateFinAnnonce = new Timestamp(resultSet.getLong("DateFin"));
+                        type = resultSet.getBoolean("type");
+                        nomRessource = resultSet.getString("Name");
+                        owner_id = resultSet.getInt("Owner_id");
+                        cout = resultSet.getString("Prix");
+                    }
+                    resultSet.close();
+                    preparedStatement.close();
+                    connection.close();
+                }
+                if (dateDebutTimestamp.before(dateDebutAnnonce) || dateFinTimestamp.after(dateFinAnnonce)) {
                     System.out.println("Date de début ou de fin en dehors de la période de l'annonce");
                     return;
                 }
-                else {
-
-                    
-                    Connect connect = new Connect();
+                else {                    
+                    connect = new Connect();
                     try (Connection connection = connect.getConnection()) {
                         String query = "INSERT INTO Event (Ressource_id, isObjet, Name, preteur_id, acheteur_id, DateDebut, DateFin, Prix) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
                         PreparedStatement preparedStatement = connection.prepareStatement(query);
-                        preparedStatement.setInt(1, ressource_id);
+                        preparedStatement.setInt(1, RessourceActif);
                         preparedStatement.setBoolean(2, type);
                         preparedStatement.setString(3, nomRessource);
                         preparedStatement.setInt(4, owner_id);
                         preparedStatement.setInt(5, Session.getInstance().getCurrentUser().getId());
-                        int minuteDebutI = this.minuteDebutComboBox.getValue();
-                        int minuteFinI = this.minuteFinComboBox.getValue();
-                        int hourFinI = this.hourFinComboBox.getValue();
-                        int hourDebutI = this.hourDebutComboBox.getValue();
-
-
-                        // Créer les LocalDateTime
-                        LocalDateTime dateTimeDebut = LocalDateTime.of(DatePickerDebut.getValue().getYear(), DatePickerDebut.getValue().getMonth(), DatePickerDebut.getValue().getDayOfMonth(), hourDebutI, minuteDebutI);
-                        LocalDateTime dateTimeFin = LocalDateTime.of(DatePickerFin.getValue().getYear(), DatePickerFin.getValue().getMonth(), DatePickerFin.getValue().getDayOfMonth(), hourFinI, minuteFinI);
-
-
 
                         // Convertir les LocalDateTime en java.sql.Date mais avec les secondes
-                        java.sql.Timestamp sqlTimestampDebut = java.sql.Timestamp.valueOf(dateTimeDebut);
-                        java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateTimeFin);
-                        // System.out.println("Date début (sqlTimestamp): " + sqlTimestampDebut);
-                        // System.out.println("Date fin (sqlTimestamp): " + sqlTimestampFin);
+                        java.sql.Timestamp sqlTimestampDebut = java.sql.Timestamp.valueOf(dateDebut);
+                        java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateFin);
                         preparedStatement.setTimestamp(6, sqlTimestampDebut);
                         preparedStatement.setTimestamp(7, sqlTimestampFin);
 

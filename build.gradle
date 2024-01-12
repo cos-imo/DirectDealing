@@ -38,6 +38,8 @@ dependencies {
 	testImplementation('org.junit.jupiter:junit-jupiter')
     implementation 'org.xerial:sqlite-jdbc:3.36.0.1'
     implementation 'joda-time:joda-time:2.12.6'
+    implementation 'org.openjfx:javafx-controls:17'
+    implementation 'org.openjfx:javafx-fxml:17'
 }
 
 test {
@@ -64,4 +66,19 @@ testlogger {
     showPassedStandardStreams true
     showSkippedStandardStreams true
     showFailedStandardStreams true
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'eu.telecomnancy.labfx.Main',
+            'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' ')
+        )
+    }
+
+    duplicatesStrategy = 'exclude'
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
