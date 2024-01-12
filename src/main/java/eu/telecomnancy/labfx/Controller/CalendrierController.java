@@ -195,18 +195,6 @@ public class CalendrierController {
         dayLabel.setGraphicTextGap(0.0);
         dayLabel.setStyle("-fx-padding: 5;");
 
-        Label testEvent = new Label("Test");
-        testEvent.setAlignment(Pos.BOTTOM_CENTER);
-        testEvent.setContentDisplay(ContentDisplay.TOP);
-        testEvent.setStyle("-fx-text-fill: black;-fx-background-color: grey; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-background-radius:10px;");
-        testEvent.setMaxHeight(5);
-        Label testEvent2= new Label("Test");
-        testEvent2.setAlignment(Pos.BOTTOM_CENTER);
-        testEvent2.setContentDisplay(ContentDisplay.TOP);
-        testEvent2.setStyle("-fx-text-fill: black;-fx-background-color: grey; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-background-radius:10px;");
-        testEvent2.setMaxHeight(5);
-
-
         // Add the Label to a VBox
         VBox dayBox = new VBox();
         dayBox.getChildren().add(dayLabel);
@@ -268,24 +256,68 @@ public class CalendrierController {
         calendarGrid.add(dayBox, dayColumn, weekRow);
         return calendarStart.plusDays(1);
     }
-    private DateTime addDayToCalenderAsWeek(DateTime calendarStart, int dayColumn){
+    private DateTime addDayToCalenderAsWeek(DateTime calendarStart, int dayColumn) throws SQLException{
 
+        
         Label dayLabel = new Label(String.valueOf(calendarStart.getDayOfMonth()));
-        dayLabel.setAlignment(Pos.TOP_LEFT); // Aligner le texte en haut à gauche
-        dayLabel.setContentDisplay(ContentDisplay.TOP); // Positionner le texte au-dessus de tout autre contenu graphique
-        dayLabel.setGraphicTextGap(0.0); // Pas d'écart entre le texte et le graphique (si vous en utilisez un)
-        dayLabel.setStyle("-fx-border-color: black; -fx-padding: 5; -fx-pref-width: 400px; -fx-pref-height: 400px;");            
+        dayLabel.setAlignment(Pos.TOP_LEFT);
+        dayLabel.setContentDisplay(ContentDisplay.TOP);
+        dayLabel.setGraphicTextGap(0.0);
+        dayLabel.setStyle("-fx-padding: 5;");
+
+        // Add the Label to a VBox
+        VBox dayBox = new VBox();
+        dayBox.getChildren().add(dayLabel);
+        dayBox.setAlignment(Pos.TOP_LEFT);
+        dayBox.setMaxWidth(Double.MAX_VALUE);
+        dayBox.setStyle("-fx-border-color: black; -fx-pref-width: 400px; -fx-pref-height: 400px; -fx-padding:3px;");
+        dayBox.setOnMouseClicked((event) -> {
+        targetDate = calendarStart;
+        calendrier.setModeAffichage(ModeAffichage.Mois);
+        viewLabel.setText("Mois");
+        viewSelector.setValue("Mois");
+        try {
+            initializeBis();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        });
+
+        VBox eventBox = new VBox();
+        eventBox.setAlignment(Pos.CENTER);
+        eventBox.setMaxWidth(350);
+        eventBox.setSpacing(3);
+        dayBox.getChildren().add(eventBox);
+
+        ArrayList<EventRessource> todayEvent = getTodayEvent(calendarStart);
+        ArrayList<Ressource> todayRessource = getTodayRessource(calendarStart,todayEvent);
+        for (EventRessource event : todayEvent) {
+            Label eventLabel = new Label(event.getRessource().getName());
+            eventLabel.setAlignment(Pos.TOP_LEFT);
+            eventLabel.setContentDisplay(ContentDisplay.TOP);
+            eventLabel.setGraphicTextGap(0.0);
+            eventLabel.setStyle("-fx-text-fill: black;-fx-background-color: #f7921a; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-background-radius:10px;");
+            eventLabel.setMaxHeight(5);
+            eventBox.getChildren().add(eventLabel);
+        }
+        for (Ressource ressource : todayRessource) {
+            Label ressourceLabel = new Label(ressource.getName());
+            ressourceLabel.setAlignment(Pos.TOP_LEFT);
+            ressourceLabel.setContentDisplay(ContentDisplay.TOP);
+            ressourceLabel.setGraphicTextGap(0.0);
+            ressourceLabel.setStyle("-fx-text-fill: black;-fx-background-color: #c1adff; -fx-pref-width: 350px; -fx-pref-height: 5px;-fx-background-radius:10px;");
+            ressourceLabel.setMaxHeight(5);
+            eventBox.getChildren().add(ressourceLabel);
+        }          
         if (DateTime.now().getDayOfYear() == calendarStart.getDayOfYear() && DateTime.now().getYear() == calendarStart.getYear()) {
-            dayLabel.setStyle(dayLabel.getStyle() + "-fx-background-color: #d7c162;");
+            dayBox.setStyle(dayBox.getStyle() + "-fx-background-color: #d7c162;");
         } else {
-            dayLabel.setStyle(dayLabel.getStyle() + "-fx-background-color: white;");
+            dayBox.setStyle(dayBox.getStyle() + "-fx-background-color: white;");
         }
-        if(targetDate.getMonthOfYear() != calendarStart.getMonthOfYear()) {
+        if(!calendrier.getBetweenDate().contains(calendarStart)) {
             dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: lightgrey;");
-        } else {
-            dayLabel.setStyle(dayLabel.getStyle() + "-fx-text-fill: black;");
         }
-        calendarGrid.add(dayLabel, dayColumn, 1);
+        calendarGrid.add(dayBox, dayColumn, 1);
         return calendarStart.plusDays(1);
     }
 
@@ -388,11 +420,17 @@ public class CalendrierController {
     @FXML
     private void previousButton() throws SQLException {
         if (calendrier.getModeAffichage() == ModeAffichage.Mois) {
-            targetDate = targetDate.minusMonths(1);
+            if (targetDate.getMonthOfYear() != 1 || targetDate.getYear() != 2024) {
+                targetDate = targetDate.minusMonths(1);
+            }
         } else if (calendrier.getModeAffichage() == ModeAffichage.Semaine) {
-            targetDate = targetDate.minusWeeks(1);
+            if (targetDate.getWeekOfWeekyear() != 1 || targetDate.getYear() != 2024) {
+                targetDate = targetDate.minusWeeks(1);
+            }
         } else if (calendrier.getModeAffichage() == ModeAffichage.Jour) {
-            // Pas de vue jour pour le moment
+            if (targetDate.getDayOfYear() != 1 || targetDate.getYear() != 2024) {
+                targetDate = targetDate.minusDays(1);
+            }
         }
         initializeBis();
         

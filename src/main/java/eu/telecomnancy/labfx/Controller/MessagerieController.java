@@ -96,11 +96,17 @@ public class MessagerieController {
             hourFinComboBox.getItems().add(i);
         }
 
-        for (int i = 0; i < 60; i++) {
-            minuteDebutComboBox.getItems().add(i);
-            minuteFinComboBox.getItems().add(i);
+        for (int i = 0; i < 12; i++) {
+            minuteDebutComboBox.getItems().add(i*5);
+            minuteFinComboBox.getItems().add(i*5);
         }
         getMessages();
+        int nb_discussion = messageListContainer.getChildren().size();
+        if (nb_discussion > 0) {
+            Node firstDiscussion = messageListContainer.getChildren().get(0);
+            BandeauConversationController controller = (BandeauConversationController) firstDiscussion.getUserData(); //getUserData() fonctionne grâce à TAG=999999 (dans ce fichier)
+            controller.openConversation();
+        }
     }
 
     //public void setElementData(String annonceName, String desc, Boolean type, String cout, Image image ,java.sql.Date dateDebut, java.sql.Date dateFin, int ressource_id, int owner_id) throws SQLException{
@@ -222,7 +228,7 @@ public class MessagerieController {
             BandeauConversationController objectController = loader.getController();
             objectController.setParent(this);
             objectController.setElementData(sender, contenu, ressource, date);
-
+            content.setUserData(objectController); //setUserData() fonctionne grâce à TAG=999999 (dans ce fichier)
             messageListContainer.getChildren().addAll(content);
 
             // Mettre à jour la position de la barre de défilement

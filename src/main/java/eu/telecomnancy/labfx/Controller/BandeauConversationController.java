@@ -68,7 +68,7 @@ public class BandeauConversationController{
     }
 
     @FXML
-    private void openConversation(){
+    public void openConversation(){
         this.controller.setChat(this.contactFirstName + " " + this.contactLastName, this.ressourceName, this.contactId, this.ressourceId);
     }
 }
