@@ -165,7 +165,7 @@ public class MessagerieController {
         System.out.println(DatePickerFin.getValue());
         if (DatePickerDebut.getValue() == null || DatePickerFin.getValue() == null || selectedDebutHour == -1 || selectedDebutMinute == -1 || selectedFinHour == -1 || selectedFinMinute == -1){
             System.out.println("Date invalide");
-            afficherPopupErreur("Dateinvalide");
+            afficherPopupErreur("Date invalide");
             return;
         }
         else {
