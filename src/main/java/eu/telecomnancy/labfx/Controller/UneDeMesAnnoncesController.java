@@ -39,48 +39,31 @@ public class UneDeMesAnnoncesController{
     Label label_nomPreteur;
 
     @FXML
+    Label label_nomAcheteur;
+
+    @FXML
+    Label label_date;
+
+    @FXML
+    Label label_Recurence;
+
+    @FXML
     Label prix_florains;
 
     @FXML
     ImageView image_annonce;
 
-    @FXML
-    Label label_date;
 
-
-    private int ressource_id;
-    private String annonceName;
-    private Boolean type;
-    private String desc;
-    private String cout;
-    private int owner_id;
-    private Date dateDebutAnnonce;
-    private Date dateFinAnnonce;
-
-    private int selectedDebutHour = -1;
-    private int selectedDebutMinute = -1;
-    private int selectedFinHour = -1;
-    private int selectedFinMinute = -1;
-    private boolean notEnoughFlorains = true;
-
-    public void setElementData(String annonceName,String desc, Boolean type, String cout, Image image, java.sql.Date dateDebut, java.sql.Date dateFin, int ressource_id, int owner_id){
-        
-        this.ressource_id = ressource_id;
-        this.annonceName = annonceName;
-        this.type = type;
-        this.desc = desc;
-        this.cout = cout;
-        this.owner_id = owner_id;
-
-    
+    public void setElementData(Image image,String annonceName, Boolean type,  java.sql.Date dateDebut, java.sql.Date dateFin, String cout,Boolean reccurence){
+   
 
         label_nom.setText(annonceName);
         label_type.setText(type ? "Objet" : "Service");
-        label_nomPreteur.setText(desc);
         prix_florains.setText(cout);
+        label_Recurence.setText(reccurence ? "Oui" : "Non");   
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateDebutAnnonce = dateDebut;
-        dateFinAnnonce = dateFin;
+        Date dateDebutAnnonce = dateDebut;
+        Date dateFinAnnonce = dateFin;
         label_date.setText("Du " + dateFormat.format(dateDebutAnnonce.getTime()) + " au " + dateFormat.format(dateFinAnnonce.getTime()));
         if (image_annonce!=null){
             image_annonce.setImage(image);
