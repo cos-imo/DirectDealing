@@ -9,10 +9,15 @@ import java.nio.file.Files;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.io.ByteArrayInputStream;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.FileChooser;
 import java.time.LocalDate;
@@ -26,7 +31,14 @@ import javafx.util.converter.IntegerStringConverter;
 import java.time.LocalDateTime;
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
+
+
+
 import java.sql.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 import org.joda.time.DateTime;
 
@@ -141,54 +153,86 @@ public class AjoutItemControler {
         return max_id;
     }
 
-    @FXML   
-    private void ajouterItem(Event event) {
+    private void afficherPopupErreur(String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+
+    }
+
+    private void afficherPopupValidation(ActionEvent event, String message) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Validation");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+    
+        // Ajouter un bouton OK personnalisé pour rediriger vers la page d'accueil
+        ButtonType okButton = new ButtonType("OK");
+        alert.getButtonTypes().setAll(okButton);
+    
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == okButton) {
+            // netttoyer les champs
+            // DescriptionField.setText("");
+            // NomAnnonce.setText("");
+            // prix_florain.setText("");
+            // DatePickerDebut.setValue(null);
+            // DatePickerFin.setValue(null);
+            // hourDebut.setValue(null);
+            // minuteDebut.setValue(null);
+            // hourFin.setValue(null);
+            // minuteFin.setValue(null);
+            // choixType.setValue(null);
+            // choixRecurrence.setValue(null);
+            // image_annonce.setImage(new Image("/eu/telecomnancy/labfx/images/kawai.png"));
+            LoadPage.loadPage("AjoutItem", event ,getClass());
+    }
+}
+
+
+    @FXML
+    private void ajouterItem(ActionEvent event) {
         String Description = DescriptionField.getText();
         LocalDate DateDebut = DatePickerDebut.getValue();
         LocalDate DateFin = DatePickerFin.getValue();
         String Nom = NomAnnonce.getText();
-        int Prix = Integer.valueOf(prix_florain.getText());
-        boolean type = choixType.getSelectionModel().getSelectedIndex() == 0; //Le premier choix est "objet"
-        Recurrence rec = Recurrence.getRecurrence(choixRecurrence.getSelectionModel().getSelectedIndex());
-        // Convertir les heures et les minutes en entiers
-        String minuteDebutS = this.minuteDebut.getValue();
-        String minuteFinS = this.minuteFin.getValue();
-        int hourDebutI = Integer.parseInt(hourDebut.getValue().substring(0, hourDebut.getValue().length()-1));
-        int minuteDebutI = Integer.parseInt(minuteDebutS);
-        int hourFinI = Integer.parseInt(hourFin.getValue().substring(0, hourFin.getValue().length()-1));
-        int minuteFinI = Integer.parseInt(minuteFinS);
+        String prixFlorainText = prix_florain.getText();
+        String minuteDebutValue = minuteDebut.getValue();
+        String minuteFinValue = minuteFin.getValue();
+        String hourDebutValue = hourDebut.getValue();
+        String hourFinValue = hourFin.getValue();
 
-        // System.out.println("Heure début (entier): " + hourDebutI);
-        // System.out.println("Minute début (entier): " + minuteDebutI);
-        // System.out.println("Heure fin (entier): " + hourFinI);
-        // System.out.println("Minute fin (entier): " + minuteFinI);
+        if (Description != null && DateDebut != null && DateFin != null && Nom != null && prixFlorainText != "" && minuteDebutValue != null && minuteFinValue != null && hourDebutValue != null && hourFinValue != null && choixRecurrence.getSelectionModel().getSelectedItem() != null && choixType.getSelectionModel().getSelectedItem() != null) {
 
-        // Créer les LocalDateTime
-        LocalDateTime dateTimeDebut = LocalDateTime.of(DatePickerDebut.getValue().getYear(), DatePickerDebut.getValue().getMonth(), DatePickerDebut.getValue().getDayOfMonth(), hourDebutI, minuteDebutI);
-        LocalDateTime dateTimeFin = LocalDateTime.of(DatePickerFin.getValue().getYear(), DatePickerFin.getValue().getMonth(), DatePickerFin.getValue().getDayOfMonth(), hourFinI, minuteFinI);
-        // System.out.println("Date début: " + dateTimeDebut);
-        // System.out.println("Date fin: " + dateTimeFin);
+            int Prix = Integer.valueOf(prixFlorainText);
+            boolean type = choixType.getSelectionModel().getSelectedIndex() == 0; // Le premier choix est "objet"
+            Recurrence rec = Recurrence.getRecurrence(choixRecurrence.getSelectionModel().getSelectedIndex());
 
-        // Convertir les LocalDateTime en java.sql.Date
-        // System.out.println("Date début (toLocateDate): " + dateTimeDebut.toLocalDate());
-        // System.out.println("Date fin (toLocateDate): " + dateTimeFin.toLocalDate());
-        // java.sql.Date sqlDateDebut = java.sql.Date.valueOf(dateTimeDebut.toLocalDate());
-        // java.sql.Date sqlDateFin = java.sql.Date.valueOf(dateTimeFin.toLocalDate());
-        // System.out.println("Date début (sqlDate): " + sqlDateDebut);
-        // System.out.println("Date fin (sqlDate): " + sqlDateFin);
+            int hourDebutI = Integer.parseInt(hourDebutValue.substring(0, hourDebutValue.length() - 1));
+            int minuteDebutI = Integer.parseInt(minuteDebutValue);
+            int hourFinI = Integer.parseInt(hourFinValue.substring(0, hourFinValue.length() - 1));
+            int minuteFinI = Integer.parseInt(minuteFinValue);
 
-        // Convertir les LocalDateTime en java.sql.Date mais avec les secondes
-        java.sql.Timestamp sqlTimestampDebut = java.sql.Timestamp.valueOf(dateTimeDebut);
-        java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateTimeFin);
-        // System.out.println("Date début (sqlTimestamp): " + sqlTimestampDebut);
-        // System.out.println("Date fin (sqlTimestamp): " + sqlTimestampFin);
+            LocalDateTime dateTimeDebut = LocalDateTime.of(DateDebut.getYear(), DateDebut.getMonth(), DateDebut.getDayOfMonth(), hourDebutI, minuteDebutI);
+            LocalDateTime dateTimeFin = LocalDateTime.of(DateFin.getYear(), DateFin.getMonth(), DateFin.getDayOfMonth(), hourFinI, minuteFinI);
 
+            java.sql.Timestamp sqlTimestampDebut = java.sql.Timestamp.valueOf(dateTimeDebut);
+            java.sql.Timestamp sqlTimestampFin = java.sql.Timestamp.valueOf(dateTimeFin);
 
-        try {
-            this.insertDatabase(Nom, Description, sqlTimestampDebut, sqlTimestampFin, 0.0f, 0.0f, type, Prix,rec);
-            Session.getInstance().getCurrentUser().getRessources().add(Ressource.newRessourceFromId(getMaxId()));
-        } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                this.insertDatabase(Nom, Description, sqlTimestampDebut, sqlTimestampFin, 0.0f, 0.0f, type, Prix, rec);
+                Session.getInstance().getCurrentUser().getRessources().add(Ressource.newRessourceFromId(getMaxId()));
+                afficherPopupValidation(event, "Votre annonce a bien été ajoutée.");
+                //revenir à a page d'accueil   LoadPage.loadPage("Accueil", event,getClass());
+                
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            afficherPopupErreur("Veuillez remplir tous les champs.");
         }
     }
+
 }
