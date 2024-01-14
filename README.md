@@ -17,6 +17,9 @@ Extrait du sujet:
 > TelecomNancy DirectDealing est une application d’économie circulaire en ligne permettant à des personnes de prêter/emprunter du matériel (...) et/ou de proposer/demander des services (...)
 
 La présente application est constituée d'une interface implémentée en JavaFX ainsi que d'une base de donnée sqlite.
+La vidéo suivante présente les principales fonctionnalités de l'application:
+![Sample Video](https://www.youtube.com/embed/DZXy6CB0uWA?si=FyCGJZeUcE6SaMW6&amp;controls=0)
+[![Static Badge](https://img.shields.io/badge/Voir_sur_Youtube-red?logo=youtube)](https://www.youtube.com/embed/DZXy6CB0uWA?si=FyCGJZeUcE6SaMW6&amp;controls=0)
 
 ## Installation
 
