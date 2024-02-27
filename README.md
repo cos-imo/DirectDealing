@@ -18,7 +18,7 @@ Extrait du sujet:
 
 La présente application est constituée d'une interface implémentée en JavaFX ainsi que d'une base de donnée sqlite.
 La vidéo suivante présente les principales fonctionnalités de l'application:
-![Sample Video](https://www.youtube.com/embed/DZXy6CB0uWA?si=FyCGJZeUcE6SaMW6&amp;controls=0)
+[![Vidéo de présentation](https://img.youtube.com/vi/DZXy6CB0uWA/0.jpg)](https://www.youtube.com/watch?v=DZXy6CB0uWA)   
 [![Static Badge](https://img.shields.io/badge/Voir_sur_Youtube-red?logo=youtube)](https://www.youtube.com/embed/DZXy6CB0uWA?si=FyCGJZeUcE6SaMW6&amp;controls=0)
 
 ## Installation
